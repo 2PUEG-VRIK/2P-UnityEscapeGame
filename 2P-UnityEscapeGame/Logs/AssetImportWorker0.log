@@ -220,3 +220,4 @@ Received Import Request.
   path: Assets/Scripts/Scripts_com/Man.cs
   artifactKey: Guid(e982aecc52c06dc4c98d440065b96136) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
 Start importing Assets/Scripts/Scripts_com/Man.cs using Guid(e982aecc52c06dc4c98d440065b96136) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4b3cd288ff50452a966a82f980306500') in 0.036702 seconds 
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file
