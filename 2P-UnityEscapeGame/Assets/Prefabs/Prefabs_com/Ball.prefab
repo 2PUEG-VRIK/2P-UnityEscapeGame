@@ -55,14 +55,16 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9cefbf0299db19c4fada13b31759cbff, type: 2}
+  - {fileID: 2100000, guid: 947d0618e7d9ff843a1080753d8159da, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -83,6 +85,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!135 &1505185587489249999
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -137,7 +140,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bc3dd830d49b2c4e861e697e83b70cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ballPos: {fileID: 0}
-  ball: {fileID: 0}
-  damage: 10
-  buff: 0
+  type: 0

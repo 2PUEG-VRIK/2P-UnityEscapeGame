@@ -70,12 +70,12 @@
     <Compile Include="Assets\Scripts\Scripts_com\Air.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Exit.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\GameMnager.cs" />
+    <Compile Include="Assets\QuarterView 3D Action BE5\ReadMe\Scripts\ReadmeBE5.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Bridge.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Waman.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Door.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\FollowCam.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Button.cs" />
-    <Compile Include="Assets\QuarterView 3D Action BE5\ReadMe\Scripts\ReadmeBE5.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -696,6 +696,9 @@
     <Reference Include="VSSettingsProvider">
       <HintPath>Library\ScriptAssemblies\VSSettingsProvider.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VisualScripting.Flow">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.dll</HintPath>
     </Reference>
@@ -716,9 +719,6 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.Core">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
