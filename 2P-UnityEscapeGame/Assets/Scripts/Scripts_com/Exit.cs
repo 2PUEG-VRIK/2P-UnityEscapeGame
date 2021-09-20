@@ -8,7 +8,7 @@ public class Exit : MonoBehaviour
 {
     public GameObject result;
     public GameObject GameManager;
-    GameMnager mnager;
+    GameMNG GameMNG;
 
     private int finPlayer = 0;
 
@@ -20,7 +20,7 @@ public class Exit : MonoBehaviour
     private void Start()
     {
         players = new GameObject[2];
-        mnager = GameManager.GetComponent<GameMnager>();
+        GameMNG = GameManager.GetComponent<GameMNG>();
         isFinish = false;
     }
 
@@ -50,7 +50,7 @@ public class Exit : MonoBehaviour
         if (finPlayer == 2)
         {
             players[1] = other.gameObject;
-            mnager.Timer_Stop();
+            GameMNG.Timer_Stop();
 
             StartCoroutine("StageFinish");
         }
@@ -78,7 +78,7 @@ public class Exit : MonoBehaviour
         // 결과창 띄우기
         yield return new WaitForSeconds(2f);
         result.SetActive(true);
-        mnager.Game_Clear(); 
+        GameMNG.Game_Clear(); 
     }
  
 

@@ -206,16 +206,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1868604703}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: FirstScene
+      - m_Target: {fileID: 1826731558}
+        m_TargetAssemblyTypeName: StartMNG, Assembly-CSharp
+        m_MethodName: Mode2_Start
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: md2_1
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &18863770
@@ -339,16 +339,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1868604703}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: FirstScene
+      - m_Target: {fileID: 1826731558}
+        m_TargetAssemblyTypeName: StartMNG, Assembly-CSharp
+        m_MethodName: Mode3_Start
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: md3_1
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &277807443
@@ -1124,10 +1124,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1826731557}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe1ecdcdc3fd082458daf24e090c68e9, type: 3}
+  m_Script: {fileID: 11500000, guid: e5bd199e3826b93489b9d626a3fbd0eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scene: 
 --- !u!4 &1826731559
 Transform:
   m_ObjectHideFlags: 0
@@ -1154,7 +1153,6 @@ GameObject:
   - component: {fileID: 1868604701}
   - component: {fileID: 1868604700}
   - component: {fileID: 1868604699}
-  - component: {fileID: 1868604703}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1250,19 +1248,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1868604703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1868604698}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe1ecdcdc3fd082458daf24e090c68e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scene: 
 --- !u!1 &1931140719
 GameObject:
   m_ObjectHideFlags: 0
@@ -1504,16 +1489,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1868604703}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: FirstScene
+      - m_Target: {fileID: 1826731558}
+        m_TargetAssemblyTypeName: StartMNG, Assembly-CSharp
+        m_MethodName: Mode1_Start
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: md1_1
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &2105422478

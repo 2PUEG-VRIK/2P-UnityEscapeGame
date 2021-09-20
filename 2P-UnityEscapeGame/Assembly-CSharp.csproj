@@ -69,13 +69,14 @@
     <Compile Include="Assets\Scripts\Scripts_com\Box.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Air.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Exit.cs" />
-    <Compile Include="Assets\Scripts\Scripts_com\GameMnager.cs" />
+    <Compile Include="Assets\Scripts\Scripts_com\GameMNG.cs" />
     <Compile Include="Assets\QuarterView 3D Action BE5\ReadMe\Scripts\ReadmeBE5.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Bridge.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Waman.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Door.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\FollowCam.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Button.cs" />
+    <Compile Include="Assets\Scripts\Scripts_com\StartMNG.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
