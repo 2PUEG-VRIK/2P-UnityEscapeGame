@@ -152,6 +152,8 @@ public class Man : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
+       
         if (other.tag == "Item")
         {
             Item item = other.GetComponent<Item>();
@@ -167,6 +169,7 @@ public class Man : MonoBehaviour
                     break;
             }
         }
+
     }
 
     private void OnTriggerExit(Collider other)
@@ -185,6 +188,11 @@ public class Man : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.tag=="Wall")
+        {
+            Debug.Log("벽이랑 닿았다.!");
+        }
+
         if (collision.gameObject.tag == "Player")
         {
             // 플레이어끼리 부딪히면 튕기기 애니메이션

@@ -17,4 +17,19 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Mode3/md3_1.unity
     guid: 3bec0fbe5fb229b49b35334a5d7a5b32
+  - enabled: 1
+    path: Assets/Scenes/Mode3/md3_2.unity
+    guid: b3f6400caf01c7a4e84825be6e6f2c4a
+  - enabled: 1
+    path: Assets/Scenes/Mode3/md3_3.unity
+    guid: 1d013e5bf5861f9468de0bc9e9979761
+  - enabled: 1
+    path: Assets/Scenes/Mode3/md3_4.unity
+    guid: ed0bee8fe1cb1174286880d53731b56b
+  - enabled: 1
+    path: Assets/Scenes/Mode3/md3_5.unity
+    guid: 26f3722edf0accb4181e8e1d9118091a
+  - enabled: 1
+    path: Assets/Scenes/Mode3/md3_6.unity
+    guid: 2999121ec580e8c48b1629119c8d3240
   m_configObjects: {}

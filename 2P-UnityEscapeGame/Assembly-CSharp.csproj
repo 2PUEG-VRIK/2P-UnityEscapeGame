@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\Scripts_com\Lever.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Weapon.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Item.cs" />
+    <Compile Include="Assets\Scripts\Scripts_com\StartMNG.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Box.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Air.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Exit.cs" />
@@ -76,7 +77,6 @@
     <Compile Include="Assets\Scripts\Scripts_com\Door.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\FollowCam.cs" />
     <Compile Include="Assets\Scripts\Scripts_com\Button.cs" />
-    <Compile Include="Assets\Scripts\Scripts_com\StartMNG.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
