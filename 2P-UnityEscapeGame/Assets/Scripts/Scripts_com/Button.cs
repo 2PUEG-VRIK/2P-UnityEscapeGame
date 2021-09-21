@@ -15,9 +15,6 @@ public class Button : MonoBehaviour
         particle = GetComponentInChildren<ParticleSystem>();
         particle.gameObject.SetActive(false);
         mat = GetComponent<MeshRenderer>().material;
-
-
-
     }
     private void OnTriggerStay(Collider other)
     {
@@ -39,6 +36,8 @@ public class Button : MonoBehaviour
         {
             if (!door.GetComponent<Door>().isOpen)
             {
+                //Rigidbody doorRigid = door.GetComponent<Rigidbody>();
+                //doorRigid.AddForce(new Vector3(0, 500.0f, 0));
                 door.transform.position += Vector3.up * 15;
                 door.GetComponent<Door>().isOpen = true;
             }
