@@ -15,6 +15,8 @@ public class Man : MonoBehaviour
     Animator anim;
     Rigidbody rigid;
 
+     
+
     bool isSwap; // 스왑할땐 아무런 뭣도 안하도록 함.
     bool isBump;
     bool isJump;
