@@ -15,8 +15,6 @@ public class Man : MonoBehaviour
     Animator anim;
     Rigidbody rigid;
 
-     
-
     bool isSwap; // 스왑할땐 아무런 뭣도 안하도록 함.
     bool isBump;
     bool isJump;
@@ -34,7 +32,6 @@ public class Man : MonoBehaviour
 
     void Start()
     {
-
     }
 
     void Awake()
@@ -65,6 +62,7 @@ public class Man : MonoBehaviour
     {
         hAxis = Input.GetAxis("Horizontal");
         vAxis = Input.GetAxis("Vertical");
+
         jDown = Input.GetButtonDown("Jump");
 
         AttackDown = Input.GetButtonDown("Attack");
@@ -154,8 +152,6 @@ public class Man : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
-       
         if (other.tag == "Item")
         {
             Item item = other.GetComponent<Item>();
@@ -206,6 +202,11 @@ public class Man : MonoBehaviour
         {
             isJump = false;
         }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+       
     }
 
     void Bump()

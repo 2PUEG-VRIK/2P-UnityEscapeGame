@@ -18,7 +18,7 @@ public class Button : MonoBehaviour
 
 
 
-    } 
+    }
     private void OnTriggerStay(Collider other)
     {
         // 꼭 플레이어가 누를 필요없음. 그냥 뭐가 누르고 있으면 문 열어
@@ -32,7 +32,7 @@ public class Button : MonoBehaviour
 
             particle.gameObject.SetActive(true);
 
-            
+
         }
 
         if (isPushed)
@@ -64,11 +64,11 @@ public class Button : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-     
+
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        
+
     }
 }
