@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public enum Type { Melee, Range };//m은 근거리, r은 원거리
+    public enum Type { Melee, Range};//m은 근거리, r은 원거리
     public Type type;
     public int damage;
     public float rate;
-    // public int maxAmmo;
-    //  private int curAmmo = GameObject.Find("Man").GetComponent<Man>().ammo;
+   // public int maxAmmo;
+   // private int curAmmo = GameObject.Find("Man").GetComponent<Man>().ammo;
 
     public BoxCollider meleeArea;//공격 범위
     public TrailRenderer trailEffect;//휘두를 때 나타나는 효과
@@ -20,7 +20,7 @@ public class Weapon : MonoBehaviour
 
     //private void Start()
     //{
-    //   // Debug.Log(curAmmo);
+    //     Debug.Log(curAmmo);
     //}
     public void init()
     {
@@ -37,15 +37,15 @@ public class Weapon : MonoBehaviour
 
         else if (type == Type.Range)//&& curAmmo >0
         {
-            // Debug.Log("curAmmo is more than 0");
-            //  curAmmo--;
+           // Debug.Log("curAmmo is more than 0");
+          //  curAmmo--;
             StartCoroutine("Shot");
         }
     }
     IEnumerator Swing()
     {
         trailEffect.enabled = true;
-
+        
         yield return new WaitForSeconds(0.2f);
         meleeArea.enabled = true;
         trailEffect.enabled = true;
@@ -66,13 +66,17 @@ public class Weapon : MonoBehaviour
         bulletRigid.velocity = bulletPos.forward * 50;
 
         yield return null; // 한 프레임 쉬어
-
+        
         //2. 탄피 배출
         GameObject instantCase = Instantiate(bulletCase, bulletCasePos.position, bulletCasePos.rotation);
         Rigidbody caseRigid = instantCase.GetComponent<Rigidbody>();//인스턴스화 된 총알에 속도 적용하기
         Vector3 caseVec = bulletCasePos.forward * Random.Range(-3, -2) + Vector3.up * Random.Range(2, 3);
         caseRigid.AddForce(caseVec, ForceMode.Impulse);//즉각적인
-        caseRigid.AddTorque(Vector3.up * 10, ForceMode.Impulse);//회전축은 마음대로
+        caseRigid.AddTorque(Vector3.up*10, ForceMode.Impulse);//회전축은 마음대로
+
+
+
+
 
 
 

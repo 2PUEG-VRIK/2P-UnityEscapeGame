@@ -36,7 +36,7 @@ public class Man : MonoBehaviour
     public int health;
     public int maxHealth;
 
-    public int ammo;
+    public int ammo = 2;
     public int maxAmmo;
 
     bool AttackDown; // 공격키

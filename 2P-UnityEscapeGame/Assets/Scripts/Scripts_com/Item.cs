@@ -11,20 +11,20 @@ public class Item : MonoBehaviour
     //필요에 의해 Heart 추가(김보현)
 
     public Type type;
-    public int value;
+    public int value; 
 
 
     Rigidbody rigid;
     SphereCollider sphereCollider;
 
-
+     
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
         sphereCollider = GetComponent<SphereCollider>();
         // 이렇게 하면 첫번째 콜라이더를 가져옴 암묵적으로. 이건 선택못하나봄 ㅇㅁㅇ 직접 순서 바꿔야대
     }
-
+     
 
     // Update is called once per frame
     void Update()

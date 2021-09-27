@@ -11,6 +11,10 @@ TagManager:
   - Box
   - Buff
   - Item
+  - Bullet
+  - Melee
+  - Enemy
+  - EnemyDead
   layers:
   - Default
   - TransparentFX
@@ -21,8 +25,8 @@ TagManager:
   - Wall
   - Floor
   - Player
-  - 
-  - 
+  - Enemy
+  - EnemyDead
   - 
   - 
   - 

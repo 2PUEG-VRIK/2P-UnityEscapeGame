@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/Mode3/md3_wjj/Stage 6.unity
+- path: Assets/Scenes/Mode1/md1_kbh/md1_1.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
