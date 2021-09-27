@@ -28,8 +28,6 @@ public class Button : MonoBehaviour
             mat.color = Color.yellow;
 
             particle.gameObject.SetActive(true);
-
-
         }
 
         if (isPushed)

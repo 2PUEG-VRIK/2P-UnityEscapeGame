@@ -18,14 +18,28 @@ public class Man : MonoBehaviour
     bool isSwap; // 스왑할땐 아무런 뭣도 안하도록 함.
     bool isBump;
     bool isJump;
+    bool sDown1; //무기바꾸는 변수
+    bool sDown2;
+    bool sDown3;
+    bool iDown;
     bool jDown;
 
     // 무기 부분
-    public GameObject weapon; // 이게 손에 들려있는 가려진 무기
+    public GameObject[] weapons; // 이게 손에 들려있는 가려진 무기
+    public bool[] hasWeapons;
     Weapon equipWeapon; // 무기의 스크립트를 가져오겠다는 거임.
+    //장착중인 weapon
+
+    int equipWeaponIndex = -1;
+
+    public int health;
+    public int maxHealth;
+
+    public int ammo;
+    public int maxAmmo;
 
     bool AttackDown; // 공격키
-    GameObject nearObject; 
+    GameObject nearObject;  //트리거 된 아이템 저장하는 변수
 
     bool isFireReady = true;
     float fireDelay;
@@ -40,7 +54,6 @@ public class Man : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
     }
 
-
     void Update()
     {
         GetInput();
@@ -48,6 +61,8 @@ public class Man : MonoBehaviour
         Turn();
         Jump();
         Attack();
+        Swap();
+        Interaction();
     }
     private void FixedUpdate()
     {
@@ -64,10 +79,13 @@ public class Man : MonoBehaviour
         vAxis = Input.GetAxis("Vertical");
 
         jDown = Input.GetButtonDown("Jump");
-
-        AttackDown = Input.GetButtonDown("Attack");
+        //   iDown = Input.GetButtonDown("Interaction");
+        AttackDown = Input.GetButton("Attack");
+        sDown1 = Input.GetButtonDown("Swap1");
+        sDown2 = Input.GetButtonDown("Swap2");
+        sDown3 = Input.GetButtonDown("Swap3");
     }
-     
+
     void Move()
     {
         if (isBump || isSwap)
@@ -75,13 +93,16 @@ public class Man : MonoBehaviour
             return;
         }
 
+        if (!isFireReady)
+            moveVec = Vector3.zero;
+
         moveVec = new Vector3(hAxis, 0, vAxis).normalized;
 
         if (isJump)
         {
             moveVec *= 0.5f;
         }
-        
+
         if (moveVec != Vector3.zero)
         {
             preVec = moveVec;
@@ -97,6 +118,7 @@ public class Man : MonoBehaviour
         // 가는 방향 보기.
         transform.LookAt(transform.position + moveVec);
     }
+
     void Jump()
     {
         // 점프 키 눌렀을 때 아이템 있으면 아이템 먹음.
@@ -107,14 +129,13 @@ public class Man : MonoBehaviour
                 // 아이템 먹기
                 Destroy(nearObject);
 
-                equipWeapon = weapon.GetComponent<Weapon>();
+                equipWeapon = weapons[equipWeaponIndex].GetComponent<Weapon>();//여기 한번 보기..------------------
                 equipWeapon.gameObject.SetActive(true);
                 equipWeapon.init();
 
-                anim.SetTrigger("Swap");
-                isSwap = true;
+                //anim.SetTrigger("Swap");
+                //isSwap = true;
 
-                Invoke("SwapOut", 0.5f);
             }
             else if (!isJump)
             {
@@ -127,26 +148,79 @@ public class Man : MonoBehaviour
         }
     }
 
+    void Swap()
+    {
+
+        if (sDown1 && (!hasWeapons[0] || equipWeaponIndex == 0))
+            return;
+        if (sDown2 && (!hasWeapons[1] || equipWeaponIndex == 1))
+            return;
+        if (sDown3 && (!hasWeapons[2] || equipWeaponIndex == 2))
+            return;
+
+        int weaponIndex = -1;
+        if (sDown1) weaponIndex = 0;
+        if (sDown2) weaponIndex = 1;
+        if (sDown3) weaponIndex = 2;
+
+        if ((sDown1 || sDown2 || sDown3))//점프할때 금지되어있었음
+        {
+            if (equipWeapon != null)
+                equipWeapon.gameObject.SetActive(false);
+
+            equipWeaponIndex = weaponIndex;
+            equipWeapon = weapons[weaponIndex].GetComponent<Weapon>();
+            equipWeapon.gameObject.SetActive(true);
+
+            anim.SetTrigger("Swap");
+            isSwap = true;
+
+            Invoke("SwapOut", 0.5f);
+
+        }
+    }
+
 
     void SwapOut()
     {
         isSwap = false;
     }
+
     void Attack()
     {
-        if (equipWeapon == null)
+        if (equipWeapon == null) //먹은 무기가 없으면
         {
             return;
         }
 
         fireDelay += Time.deltaTime;
         isFireReady = equipWeapon.rate < fireDelay; // 공격속도(쿨타임)보다 파이어딜레이(지난 시간)가 크면 된다고..?
-  
-        if (AttackDown && isFireReady)
+
+        if (AttackDown && isFireReady && !isSwap)
         {
             equipWeapon.Use();
-            anim.SetTrigger("Swing");
-            fireDelay = 0;
+            anim.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "Swing" : "Shot");
+            fireDelay = 0; //다음 공격까지 기다리도록
+        }
+    }
+
+
+    void Interaction()
+    {
+        if (nearObject != null) //&&iDown
+        {
+            if (nearObject.tag == "Item")
+            {
+                Item item = nearObject.GetComponent<Item>();
+                int weaponIndex;
+                if (item.type == Item.Type.Weapon)
+                {
+                    weaponIndex = item.value;
+                    hasWeapons[weaponIndex] = true;
+                }
+
+                // Destroy(nearObject);
+            }
         }
     }
 
@@ -165,7 +239,24 @@ public class Man : MonoBehaviour
                     Destroy(other.gameObject);
                     this.transform.localScale *= 2;
                     break;
+
+                case Item.Type.Heart:
+                    health += item.value;
+                    if (health > maxHealth)
+                        health = maxHealth;
+                    break;
+
+                case Item.Type.Ammo:
+                    ammo += item.value;
+                    Debug.Log(ammo);
+                    if (ammo > maxAmmo)
+                        ammo = maxAmmo;
+                    break;
+
             }
+            Interaction();
+            Destroy(other.gameObject);//원래 exit에 있었음
+
         }
 
     }
@@ -178,7 +269,15 @@ public class Man : MonoBehaviour
             switch (item.type)
             {
                 case Item.Type.Weapon:
-                    nearObject = null;
+                    // nearObject = null;
+                    break;
+                case Item.Type.Ammo:
+
+                    // nearObject = null;
+                    break;
+                case Item.Type.Heart:
+
+                    //nearObject = null;
                     break;
 
             }
@@ -186,7 +285,7 @@ public class Man : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag=="Wall")
+        if (collision.gameObject.tag == "Wall")
         {
             Debug.Log("벽이랑 닿았다.!");
         }
@@ -206,7 +305,7 @@ public class Man : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-       
+
     }
 
     void Bump()
