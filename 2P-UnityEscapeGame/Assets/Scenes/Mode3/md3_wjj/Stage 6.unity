@@ -451,7 +451,7 @@ Transform:
   m_GameObject: {fileID: 290583164}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 22.8, y: 13.2, z: 0}
-  m_LocalScale: {x: 10, y: 11.8, z: 5}
+  m_LocalScale: {x: 10, y: 13.6, z: 5}
   m_Children: []
   m_Father: {fileID: 1839068444}
   m_RootOrder: 9
@@ -1307,7 +1307,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7355169978702382609, guid: 77b5d7786bf4b9449972ace8ae37253a, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8065106341333879954, guid: 77b5d7786bf4b9449972ace8ae37253a, type: 3}
       propertyPath: m_RootOrder
@@ -1979,6 +1979,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door
       objectReference: {fileID: 0}
+    - target: {fileID: 19627012771728622, guid: fe1a81c773807104ba3d92fc02c44226, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1456748277705226146, guid: fe1a81c773807104ba3d92fc02c44226, type: 3}
       propertyPath: m_Name
       value: Space
@@ -2402,7 +2406,7 @@ GameObject:
   - component: {fileID: 1575478292}
   - component: {fileID: 1575478291}
   - component: {fileID: 1575478290}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: Box (2)
   m_TagString: Box
   m_Icon: {fileID: 0}
@@ -2985,7 +2989,7 @@ GameObject:
   - component: {fileID: 1753731221}
   - component: {fileID: 1753731220}
   - component: {fileID: 1753731219}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: Box (1)
   m_TagString: Box
   m_Icon: {fileID: 0}
@@ -3098,7 +3102,7 @@ GameObject:
   - component: {fileID: 1774319175}
   - component: {fileID: 1774319174}
   - component: {fileID: 1774319173}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: Box (3)
   m_TagString: Box
   m_Icon: {fileID: 0}
@@ -3878,7 +3882,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 516544359761091931, guid: 415443421b605554f8a9d8e61cb33c27, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 692666937862339156, guid: 415443421b605554f8a9d8e61cb33c27, type: 3}
       propertyPath: m_Layer

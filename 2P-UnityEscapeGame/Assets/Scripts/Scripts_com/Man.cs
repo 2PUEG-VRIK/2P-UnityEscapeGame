@@ -15,14 +15,15 @@ public class Man : MonoBehaviour
     Animator anim;
     Rigidbody rigid;
 
-    bool isSwap; // 스왑할땐 아무런 뭣도 안하도록 함.
+    bool isSwap;        // 스왑할땐 아무런 뭣도 안하도록 함.
     bool isBump;
     bool isJump;
-    bool sDown1; //무기바꾸는 변수
+    bool sDown1;        //무기바꾸는 변수
     bool sDown2;
     bool sDown3;
     bool iDown;
     bool jDown;
+    bool isBorder;      // 벽 통과 못하게 막는 플래그      
 
     // 무기 부분
     public GameObject[] weapons; // 이게 손에 들려있는 가려진 무기
@@ -66,13 +67,21 @@ public class Man : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        FreezeRotation(); // 플레이어가 탄피나 그런거에 닿으면 회전을 하기 시작.. 그거 없애려고 해주는것임
+        FreezeRotation();   // 플레이어가 탄피나 그런거에 닿으면 회전을 하기 시작.. 그거 없애려고 해주는것임
+        StoptoWall();       // 벽 or 박스 통과 방지
     }
 
     void FreezeRotation()
     {
         rigid.angularVelocity = Vector3.zero;
     }
+
+    void StoptoWall()
+    {
+        // 플레이어에서 길이 3만큼의 Raycast 쐈을 때 Wall 레이어와 닿으면 isBorder ON
+        isBorder = Physics.Raycast(transform.position, transform.forward, 3, LayerMask.GetMask("Wall"));
+    }
+
     void GetInput()
     {
         hAxis = Input.GetAxis("Horizontal");
@@ -108,7 +117,8 @@ public class Man : MonoBehaviour
             preVec = moveVec;
         }
 
-        transform.position += moveVec * speed * 1f * Time.deltaTime;
+        if(!isBorder)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정
+            transform.position += moveVec * speed * 1f * Time.deltaTime;
 
         anim.SetBool("isWalk", (moveVec != Vector3.zero));  // 속도가 0이 아니면 걸어라.
     }
