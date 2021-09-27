@@ -78,6 +78,7 @@ public class Man : MonoBehaviour
 
     void StoptoWall()
     {
+        // 2021-09-27 원종진 수정
         // 플레이어에서 길이 3만큼의 Raycast 쐈을 때 Wall 레이어와 닿으면 isBorder ON
         isBorder = Physics.Raycast(transform.position, transform.forward, 3, LayerMask.GetMask("Wall"));
     }
