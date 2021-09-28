@@ -15,6 +15,7 @@ TagManager:
   - Melee
   - Enemy
   - EnemyDead
+  - rise
   layers:
   - Default
   - TransparentFX

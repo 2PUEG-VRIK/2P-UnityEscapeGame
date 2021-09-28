@@ -36,7 +36,7 @@ public class Man : MonoBehaviour
     public int health;
     public int maxHealth;
 
-    public int ammo = 2;
+    public int ammo;
     public int maxAmmo;
 
     bool AttackDown; // 공격키
@@ -65,6 +65,9 @@ public class Man : MonoBehaviour
         Swap();
         Interaction();
     }
+
+
+
     private void FixedUpdate()
     {
         FreezeRotation();   // 플레이어가 탄피나 그런거에 닿으면 회전을 하기 시작.. 그거 없애려고 해주는것임
@@ -118,7 +121,8 @@ public class Man : MonoBehaviour
             preVec = moveVec;
         }
 
-        if(!isBorder)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정
+
+        if (!isBorder)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정
             transform.position += moveVec * speed * 1f * Time.deltaTime;
 
         anim.SetBool("isWalk", (moveVec != Vector3.zero));  // 속도가 0이 아니면 걸어라.
@@ -312,7 +316,19 @@ public class Man : MonoBehaviour
         {
             isJump = false;
         }
+
+        if (collision.gameObject.tag == "Enemy")
+        {
+            health--;
+            if (health == 0)
+            {
+                Debug.Log("Game Over~");
+                Quit();
+            }
+
+        }
     }
+
 
     private void OnCollisionExit(Collision collision)
     {
@@ -344,4 +360,12 @@ public class Man : MonoBehaviour
     //    }
 
     //}
+
+    public void Quit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+    }
+
 }
