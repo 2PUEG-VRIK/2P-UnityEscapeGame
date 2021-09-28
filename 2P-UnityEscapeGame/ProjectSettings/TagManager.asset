@@ -16,6 +16,8 @@ TagManager:
   - Enemy
   - EnemyDead
   - rise
+  - cube
+  - Enemy2
   layers:
   - Default
   - TransparentFX

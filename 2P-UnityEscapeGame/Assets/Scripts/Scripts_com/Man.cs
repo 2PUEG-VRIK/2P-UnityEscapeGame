@@ -144,7 +144,7 @@ public class Man : MonoBehaviour
                 // 아이템 먹기
                 Destroy(nearObject);
 
-                equipWeapon = weapons[equipWeaponIndex].GetComponent<Weapon>();//여기 한번 보기..------------------
+                equipWeapon = weapons[equipWeaponIndex].GetComponent<Weapon>();
                 equipWeapon.gameObject.SetActive(true);
                 equipWeapon.init();
 
@@ -215,14 +215,22 @@ public class Man : MonoBehaviour
         {
             equipWeapon.Use();
             anim.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "Swing" : "Shot");
+            if (equipWeapon.type != Weapon.Type.Melee)//총이면 총알 -1
+            { 
+                ammo--;
+                if (ammo <= 0)
+                    ammo = 0;
+            }
             fireDelay = 0; //다음 공격까지 기다리도록
         }
+
+        
     }
 
 
     void Interaction()
     {
-        if (nearObject != null) //&&iDown
+        if (nearObject != null) 
         {
             if (nearObject.tag == "Item")
             {
@@ -266,6 +274,7 @@ public class Man : MonoBehaviour
                     Debug.Log(ammo);
                     if (ammo > maxAmmo)
                         ammo = maxAmmo;
+
                     break;
 
             }
@@ -317,7 +326,7 @@ public class Man : MonoBehaviour
             isJump = false;
         }
 
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag=="Enemy2")
         {
             health--;
             if (health == 0)

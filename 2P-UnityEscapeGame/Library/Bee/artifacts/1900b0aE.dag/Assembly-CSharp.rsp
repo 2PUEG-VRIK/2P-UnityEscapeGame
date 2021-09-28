@@ -340,7 +340,9 @@
 "Assets/Scripts/Scripts_com/Weapon.cs"
 "Assets/Scripts/Scripts_kbh/Bullet.cs"
 "Assets/Scripts/Scripts_kbh/Enemy.cs"
+"Assets/Scripts/Scripts_kbh/hitDoor.cs"
 "Assets/Scripts/Scripts_kbh/Permanent.cs"
+"Assets/Scripts/Scripts_kbh/Steps.cs"
 -langversion:8.0
 
 /deterministic
