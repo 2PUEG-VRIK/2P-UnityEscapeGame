@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -258,6 +258,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Box
       objectReference: {fileID: 0}
+    - target: {fileID: 65338665385010268, guid: 4e4201574597821409cd2115d22cbca0, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e4201574597821409cd2115d22cbca0, type: 3}
 --- !u!1 &181292130
@@ -400,6 +404,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 19627012771728622, guid: fe1a81c773807104ba3d92fc02c44226, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1456748277705226146, guid: fe1a81c773807104ba3d92fc02c44226, type: 3}
       propertyPath: m_Name
       value: Space
@@ -6662,7 +6670,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edc9418414a78f74ab38010b7c34f01c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 0}
+  weapons: []
+  hasWeapons: 
+  health: 0
+  maxHealth: 0
+  ammo: 0
+  maxAmmo: 0
 --- !u!136 &1391575483
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6918,7 +6931,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e982aecc52c06dc4c98d440065b96136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 0}
+  weapons: []
+  hasWeapons: 
+  health: 0
+  maxHealth: 0
+  ammo: 0
+  maxAmmo: 0
 --- !u!136 &1424568010
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -215,7 +215,6 @@ public class Man : MonoBehaviour
         }
     }
 
-
     void Interaction()
     {
         if (nearObject != null) //&&iDown
@@ -269,7 +268,6 @@ public class Man : MonoBehaviour
             Destroy(other.gameObject);//원래 exit에 있었음
 
         }
-
     }
 
     private void OnTriggerExit(Collider other)
