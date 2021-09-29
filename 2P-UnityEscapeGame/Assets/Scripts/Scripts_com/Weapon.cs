@@ -42,7 +42,6 @@ public class Weapon : MonoBehaviour
 
         else if (type == Type.Range && curAmmo > 0)
         {
-            Debug.Log("curAmmo is more than 0");
             curAmmo--;
             StartCoroutine("Shot");
         }

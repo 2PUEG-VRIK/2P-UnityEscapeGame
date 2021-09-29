@@ -7,32 +7,29 @@ public class Permanent : MonoBehaviour
     public GameObject Parent;//올리는 애들(뭉텅이)
     //Transform[] Children;//부모 속 각 객체들
     GameObject[] m;//초록 몬스터 배열
-    GameObject[] m2;//보라색 몬스터
 
     GameObject[] Cubes; // 징검다리들
     GameObject wall7;//떨굴 벽
     //GameObject[] allChildren;
 
-    GameObject player;
-    GameObject Floor; //플레이어가 도착하면 몬스터 생기는 땅(오른쪽 거)
-    Enemy monster;
+
+    public int num;
 
     private void Awake()
     {
         wall7 = GameObject.Find("Wall (7)");
         //Children = Parent.gameObject.GetComponentsInChildren<Transform>();
         Parent = GameObject.FindWithTag("rise");
-        player = GameObject.FindWithTag("Player");
+
     }
+    
     private void FixedUpdate()
     {
         m = GameObject.FindGameObjectsWithTag("Enemy");
 
+        //for(int i=0;i<num;i++)
 
-    }
-    private void Update()
-    {
-        if (m.Length == 0)
+        if (m.Length == 3)
         {
             wall7.transform.Translate(Vector3.down, Space.Self);
             if (wall7.transform.position.y < -60)
@@ -48,23 +45,16 @@ public class Permanent : MonoBehaviour
 
     }
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //        Debug.Log("됏땅1");
+    private void OnCollisionEnter(Collision collision)
+    {
 
-    //    if (collision.transform.name == "floor (1)")
-    //    {
-    //        for (int i = 0; i < 5; i++)
-    //            GameObject.Find("MONSTER").transform.GetChild(i).gameObject.SetActive(true);
-    //    }
+        if (collision.transform.name == "Floor (1)")
+        {
+            Debug.Log("됏땅1");
 
-
-        //}
-        //private void LateUpdate()
-        //{
-        //    m2 = GameObject.FindGameObjectsWithTag("Enemy");//보라색 애들 수 파악
-        //}
-
-
-    
+            for (int i = 0; i < num-4; i++)
+                GameObject.Find("Monster").transform.GetChild(i).gameObject.SetActive(true);
+           
+        }
+    }
 }
