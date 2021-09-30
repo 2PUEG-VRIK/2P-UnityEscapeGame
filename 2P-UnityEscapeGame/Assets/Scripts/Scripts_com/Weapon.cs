@@ -10,6 +10,7 @@ public class Weapon : MonoBehaviour
     public float rate;
     // public int maxAmmo;
     //  private int curAmmo = GameObject.Find("Man").GetComponent<Man>().ammo;
+    private int curAmmo;
 
     public BoxCollider meleeArea;//공격 범위
     public TrailRenderer trailEffect;//휘두를 때 나타나는 효과
@@ -22,6 +23,12 @@ public class Weapon : MonoBehaviour
     //{
     //   // Debug.Log(curAmmo);
     //}
+
+    private void Update()
+    {
+        curAmmo = GameObject.Find("Man").GetComponent<Man>().ammo;
+
+    }
     public void init()
     {
         trailEffect.enabled = false;
@@ -35,12 +42,14 @@ public class Weapon : MonoBehaviour
             StartCoroutine("Swing");
         }
 
-        else if (type == Type.Range)//&& curAmmo >0
+        else if (type == Type.Range && curAmmo > 0)
         {
-            // Debug.Log("curAmmo is more than 0");
-            //  curAmmo--;
+            curAmmo--;
             StartCoroutine("Shot");
         }
+
+        else if (type == Type.Range && curAmmo < 0)
+            curAmmo = 0;
     }
     IEnumerator Swing()
     {

@@ -211,6 +211,12 @@ public class Man : MonoBehaviour
         {
             equipWeapon.Use();
             anim.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "Swing" : "Shot");
+            if (equipWeapon.type != Weapon.Type.Melee)//총이면 총알 -1
+            {
+                ammo--;
+                if (ammo <= 0)
+                    ammo = 0;
+            }
             fireDelay = 0; //다음 공격까지 기다리도록
         }
     }
@@ -310,6 +316,17 @@ public class Man : MonoBehaviour
         {
             isJump = false;
         }
+
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Enemy2")
+        {
+            health--;
+            if (health == 0)
+            {
+                Debug.Log("Game Over~");
+                Quit();
+            }
+
+        }
     }
 
     private void OnCollisionExit(Collision collision)
@@ -342,4 +359,11 @@ public class Man : MonoBehaviour
     //    }
 
     //}
+
+    public void Quit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+    }
 }
