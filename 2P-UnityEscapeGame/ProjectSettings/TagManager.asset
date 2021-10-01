@@ -11,18 +11,21 @@ TagManager:
   - Box
   - Buff
   - Item
+  - Enemy
+  - Bullet
+  - Melee
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - particle
   - Water
   - UI
   - Wall
   - Floor
   - Player
-  - 
-  - 
+  - miniMap
+  - playerCube
   - 
   - 
   - 

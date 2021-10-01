@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Permanent : MonoBehaviour
 {
-    public GameObject Parent;//올리는 애들(뭉텅이)
+   // public GameObject Parent;//올리는 애들(뭉텅이)
     //Transform[] Children;//부모 속 각 객체들
     GameObject[] m;//초록 몬스터 배열
 
@@ -19,7 +19,7 @@ public class Permanent : MonoBehaviour
     {
         wall7 = GameObject.Find("Wall (7)");
         //Children = Parent.gameObject.GetComponentsInChildren<Transform>();
-        Parent = GameObject.FindWithTag("rise");
+        //Parent = GameObject.FindWithTag("rise");
         Step = GameObject.Find("Steps");
 
     }
@@ -28,8 +28,6 @@ public class Permanent : MonoBehaviour
     {
         m = GameObject.FindGameObjectsWithTag("Enemy");
         Gnum = m.Length;
-        //for(int i=0;i<num;i++)
-
         if (m.Length == 0)
         {
             wall7.transform.Translate(Vector3.down, Space.Self);
