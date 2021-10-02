@@ -14,6 +14,7 @@ TagManager:
   - Enemy
   - Bullet
   - Melee
+  - Ladder
   layers:
   - Default
   - TransparentFX

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Permanent : MonoBehaviour
 {
+
+    //몬스터와 징검다리 관할
+
    // public GameObject Parent;//올리는 애들(뭉텅이)
     //Transform[] Children;//부모 속 각 객체들
     GameObject[] m;//초록 몬스터 배열

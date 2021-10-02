@@ -69,6 +69,13 @@ public class Man : MonoBehaviour
     {
         FreezeRotation();   // 플레이어가 탄피나 그런거에 닿으면 회전을 하기 시작.. 그거 없애려고 해주는것임
         StoptoWall();       // 벽 or 박스 통과 방지
+
+
+        if (isLadder)
+        {
+            transform.Translate(0, speed * 1f * Time.deltaTime, speed* -0.5f * Time.deltaTime);
+            rigid.useGravity=false;
+        }
     }
 
     void FreezeRotation()
@@ -140,12 +147,10 @@ public class Man : MonoBehaviour
                 // 아이템 먹기
                 Destroy(nearObject);
 
-                equipWeapon = weapons[equipWeaponIndex].GetComponent<Weapon>();//여기 한번 보기..------------------
+                equipWeapon = weapons[equipWeaponIndex].GetComponent<Weapon>();
                 equipWeapon.gameObject.SetActive(true);
                 equipWeapon.init();
 
-                //anim.SetTrigger("Swap");
-                //isSwap = true;
 
             }
             else if (!isJump)
@@ -234,12 +239,11 @@ public class Man : MonoBehaviour
                     weaponIndex = item.value;
                     hasWeapons[weaponIndex] = true;
                 }
-
-                // Destroy(nearObject);
             }
         }
     }
 
+    private bool isLadder;
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Item")
@@ -274,6 +278,12 @@ public class Man : MonoBehaviour
             Destroy(other.gameObject);//원래 exit에 있었음
 
         }
+
+        else if (other.tag == "Ladder")
+        {
+            isLadder = true;
+            Debug.Log("사다리~");
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -297,6 +307,12 @@ public class Man : MonoBehaviour
 
             }
         }
+
+        else if (other.tag == "Ladder")
+        {
+            isLadder = false;
+            rigid.useGravity = true;
+        }
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -315,6 +331,11 @@ public class Man : MonoBehaviour
         if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Box")
         {
             isJump = false;
+        }
+
+        if(collision.gameObject.tag=="Ladder")
+        {
+            
         }
 
     }
