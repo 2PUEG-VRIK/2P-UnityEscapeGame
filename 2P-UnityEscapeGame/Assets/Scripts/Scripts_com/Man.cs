@@ -45,8 +45,10 @@ public class Man : MonoBehaviour
     bool isFireReady = true;
     float fireDelay;
 
+    IEnumerator enu1; //ladder에 필요
     void Start()
     {
+
     }
 
     void Awake()
@@ -71,12 +73,24 @@ public class Man : MonoBehaviour
         StoptoWall();       // 벽 or 박스 통과 방지
 
 
-        if (isLadder)
-        {
-            transform.Translate(0, speed * 1f * Time.deltaTime, speed* -0.5f * Time.deltaTime);
-            rigid.useGravity=false;
-        }
+        //if (isLadder)
+        //{
+        //    rigid.useGravity = false;
+
+        //    if (Input.GetKeyDown(KeyCode.UpArrow))
+        //        34 82 69
+        //       transform.Translate()
+        //            // transform.Translate(new Vector3(0, speed * 1f * Time.deltaTime, speed* -0.5f * Time.deltaTime).normalized);
+        //    else if(Input.GetKeyDown(KeyCode.DownArrow))
+        //    {34 3 28
+                
+        //        //transform.Translate(new Vector3(0, speed * -1f * Time.deltaTime, speed * -2f * Time.deltaTime).normalized);
+        //    }
+
+        //}
     }
+
+    
 
     void FreezeRotation()
     {
@@ -243,7 +257,7 @@ public class Man : MonoBehaviour
         }
     }
 
-    private bool isLadder;
+    private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Item")
@@ -279,11 +293,19 @@ public class Man : MonoBehaviour
 
         }
 
-        else if (other.tag == "Ladder")
+        if (other.tag == "Ladder")//사다리
         {
             isLadder = true;
-            Debug.Log("사다리~");
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                Debug.Log("사다리에 닿았고 upㅎ ㅘ살표 눌러짐");
+
+                enu1 = LadderUp(transform.position, new Vector3(34, 82, 69), 2f);
+                //StartCoroutine(LadderUp, transform.position, new Vector3(34,82,69), 2f);
+                StartCoroutine(enu1);
+            }
         }
+
     }
 
     private void OnTriggerExit(Collider other)
@@ -312,8 +334,12 @@ public class Man : MonoBehaviour
         {
             isLadder = false;
             rigid.useGravity = true;
+            StopCoroutine(enu1);
+            
         }
     }
+
+    
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Wall")
@@ -333,10 +359,9 @@ public class Man : MonoBehaviour
             isJump = false;
         }
 
-        if(collision.gameObject.tag=="Ladder")
-        {
-            
-        }
+      
+
+        
 
     }
 
@@ -345,6 +370,34 @@ public class Man : MonoBehaviour
 
     }
 
+    private IEnumerator LadderUp(Vector3 startPos, Vector3 targetPos, float duration)
+    {
+        Debug.Log("코루틴 실행");
+        float timer = 0f;
+
+        // 이동 시작 위치 설정
+        Vector3 position = startPos;
+        //rectTransform.anchoredPosition = position;
+
+        // 시간에 따른 위치 설정
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+
+            position.x = Mathf.Lerp(startPos.x, targetPos.x, timer / duration);
+            position.y = Mathf.Lerp(startPos.y, targetPos.y, timer / duration);
+            position.x = Mathf.Lerp(startPos.z, targetPos.z, timer / duration);
+
+            transform.localPosition = position;
+
+            yield return null;
+        }
+
+        // 이동 종료 위치 설정
+        position = targetPos;
+        transform.localPosition = position;
+
+    }
     void Bump()
     {
         anim.SetTrigger("Bump");
