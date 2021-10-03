@@ -71,5 +71,5 @@ crashlytics-build.properties
 /2P-UnityEscapeGame/[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # Firebase documents _sj 
-/2P-UnityEscapeGame/[Aa]ssets/Firebase/*
+/2P-UnityEscapeGame/[Aa]ssets/Firebase/
 /2P-UnityEscapeGame/[Aa]ssets/Firebase.meta
