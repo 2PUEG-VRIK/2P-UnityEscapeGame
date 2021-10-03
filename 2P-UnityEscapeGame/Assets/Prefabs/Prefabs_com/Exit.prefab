@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5419845796406342216}
   - component: {fileID: 5419845796406342217}
   - component: {fileID: 5419845796406342214}
-  - component: {fileID: 6559202564359800743}
+  - component: {fileID: 6057586829140088122}
   m_Layer: 0
   m_Name: Exit
   m_TagString: Untagged
@@ -98,7 +98,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 10, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6559202564359800743
+--- !u!114 &6057586829140088122
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,11 +107,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5419845796406342215}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b5573bd38ec81b46b43e1786f868f95, type: 3}
+  m_Script: {fileID: 11500000, guid: eccb8a09453a62642ba98ddaf95333fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scene: -input next scene-
   result: {fileID: 0}
-  GameManager: {fileID: 0}
 --- !u!1 &7070405245401769497
 GameObject:
   m_ObjectHideFlags: 0
