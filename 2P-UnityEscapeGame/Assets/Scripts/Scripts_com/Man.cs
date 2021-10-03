@@ -270,7 +270,6 @@ public class Man : MonoBehaviour
                     break;
 
                 case Item.Type.Coin:
-                    Destroy(other.gameObject);
                     this.transform.localScale *= 2;
                     break;
 
@@ -282,7 +281,6 @@ public class Man : MonoBehaviour
 
                 case Item.Type.Ammo:
                     ammo += item.value;
-                    Debug.Log(ammo);
                     if (ammo > maxAmmo)
                         ammo = maxAmmo;
                     break;
@@ -293,18 +291,7 @@ public class Man : MonoBehaviour
 
         }
 
-        if (other.tag == "Ladder")//사다리
-        {
-            isLadder = true;
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                Debug.Log("사다리에 닿았고 upㅎ ㅘ살표 눌러짐");
-
-                enu1 = LadderUp(transform.position, new Vector3(34, 82, 69), 2f);
-                //StartCoroutine(LadderUp, transform.position, new Vector3(34,82,69), 2f);
-                StartCoroutine(enu1);
-            }
-        }
+       
 
     }
 
@@ -330,13 +317,6 @@ public class Man : MonoBehaviour
             }
         }
 
-        else if (other.tag == "Ladder")
-        {
-            isLadder = false;
-            rigid.useGravity = true;
-            StopCoroutine(enu1);
-            
-        }
     }
 
     
@@ -359,15 +339,36 @@ public class Man : MonoBehaviour
             isJump = false;
         }
 
-      
+        if (collision.gameObject.tag == "Ladder")//사다리
+        {
 
-        
+            isLadder = true;
+            Debug.Log("사다리에 닿았다");
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                Debug.Log("화살표 눌러짐");
+
+                enu1 = LadderUp(transform.position, new Vector3(34, 82, 69), 2f);
+                //StartCoroutine(LadderUp, transform.position, new Vector3(34,82,69), 2f);
+                StartCoroutine(enu1);
+            }
+        }
+
+
 
     }
 
     private void OnCollisionExit(Collision collision)
     {
 
+
+        if (collision.gameObject.tag == "Ladder")
+        {
+            isLadder = false;
+            rigid.useGravity = true;
+            StopCoroutine(enu1);
+
+        }
     }
 
     private IEnumerator LadderUp(Vector3 startPos, Vector3 targetPos, float duration)
