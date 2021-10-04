@@ -19208,7 +19208,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Cubes: []
-  input: {fileID: 0}
+  input: {fileID: 2125587222}
   text: {fileID: 814577708}
   monNum: 9
 --- !u!1 &547435428621511594 stripped

@@ -81,7 +81,7 @@ public class mngWhole1_2 : MonoBehaviour
             _obj.SetActive(true);
         }
 
-            
+        //주석주석주석이~
 
         
     }
