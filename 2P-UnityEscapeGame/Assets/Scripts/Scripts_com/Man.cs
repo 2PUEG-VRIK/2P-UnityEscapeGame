@@ -170,7 +170,7 @@ public class Man : MonoBehaviour
             else if (!isJump)
             {
                 // 점프는 그냥 위로 속도주기.
-                rigid.AddForce(Vector3.up * 150, ForceMode.Impulse);
+                rigid.AddForce(Vector3.up * 200, ForceMode.Impulse);
 
                 anim.SetTrigger("Jump");
                 isJump = true;
