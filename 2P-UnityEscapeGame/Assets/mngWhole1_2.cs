@@ -19,17 +19,19 @@ public class mngWhole1_2 : MonoBehaviour
     //2층
     GameObject _obj;
     GameObject scrLight;
-    public InputField input;//light 입력받는 
+    public GameObject input;//light 입력받는 
     public Text text;
     SpriteRenderer sr;//sprite renderer 
     int check = -1;
     Image img;
+    public int monNum;
 
     private void Start()
     {
         holding = GameObject.Find("WeaponPoint").transform.GetChild(0).gameObject;
         W = GameObject.Find("teleA");
         rigid = GameObject.FindWithTag("Player").GetComponent<Rigidbody>();
+        input = GameObject.Find("Canvas_2").transform.GetChild(1).gameObject;
         scrLight = GameObject.Find("Directional Light");
         sr = input.GetComponent<SpriteRenderer>();
         img = input.GetComponent<Image>();
@@ -42,24 +44,50 @@ public class mngWhole1_2 : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return))//엔터누르면 
         {
-            Debug.Log(input.text);
             //문자열이랑 light랑 비교
-            if (string.Compare("light", text.ToString(), true) == 0)//정답
+            if (string.Compare("light", text.text, true) == 0)//정답
             {
-                Destroy(input.gameObject);
-
-                scrLight.transform.rotation = Quaternion.Euler(90, 0, 0);//암전
-                _obj.SetActive(false);//What we need 없애
-
+                Answer();
             }
             else //lightㄱㅏ 아니면~
             {
-                //sr.color = Color.red;
-                img.color = Color.red;
-                text = null;
+                Wrong();
+                Invoke("tryAgain", 0.5f);
+
             }
         }
 
+    }
+
+    private void Wrong()
+    {
+        img.color = Color.red;
+        text.text="";
+    }
+    private void Answer()
+    {
+        Destroy(input.gameObject);
+
+        scrLight.transform.rotation = Quaternion.Euler(90, 0, 0);//암전
+        _obj.SetActive(false);//What we need 없애
+        _obj = null;
+
+        _obj = GameObject.Find("Weapons").transform.GetChild(0).gameObject;  
+            _obj.SetActive(true);
+
+        for (int j = 0; j < monNum; j++)
+        {
+            _obj = GameObject.Find("Monsters").transform.GetChild(j).gameObject;
+            _obj.SetActive(true);
+        }
+
+            
+
+        
+    }
+    private void tryAgain()
+    {
+        img.color = new Color(168,206,255,192);
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -118,8 +146,8 @@ public class mngWhole1_2 : MonoBehaviour
                 _obj = GameObject.Find("Canvas_2").transform.GetChild(0).gameObject;//text임
                 _obj.SetActive(true);//what we need 켜
 
-                input.enabled=true;//입력받는 창 켜
-
+                input.SetActive(true);//입력받는 창 켜
+               
                 check = 2;
             }
 
