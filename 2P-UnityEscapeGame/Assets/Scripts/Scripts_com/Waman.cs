@@ -151,7 +151,7 @@ public class Waman : MonoBehaviour
             else if (!isJump)
             {
                 // 점프는 그냥 위로 속도주기.
-                rigid.AddForce(Vector3.up * 50, ForceMode.Impulse); //anim.SetBool("isJump", true);
+                rigid.AddForce(Vector3.up * 30, ForceMode.Impulse); //anim.SetBool("isJump", true);
                 
                 anim.SetTrigger("Jump");
                 isJump = true;
