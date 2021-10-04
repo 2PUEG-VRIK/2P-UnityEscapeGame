@@ -62,6 +62,7 @@ public class Exit : MonoBehaviour
         }
         if (finPlayer == 2)
         {
+            Debug.Log("두명 다 올라왔따");
             players[1] = other.gameObject;
             SingleGameMNG.Instance.Timer_Stop();
 
