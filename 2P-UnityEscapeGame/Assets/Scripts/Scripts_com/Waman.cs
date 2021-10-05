@@ -319,16 +319,16 @@ public class Waman : MonoBehaviour
 
     void Bump()
     {
-        anim.SetTrigger("Bump");
-        isBump = true;
-        transform.position += preVec * -7;
+        //anim.SetTrigger("Bump");
+        //isBump = true;
+        //transform.position += preVec * -7;
 
-        Invoke("BumpOut", 1.5f);
+        //Invoke("BumpOut", 1.5f);
     }
 
     void BumpOut()
     {
-        isBump = false;
+        //isBump = false;
     }
 
 

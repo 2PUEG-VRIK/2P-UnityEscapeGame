@@ -46,6 +46,8 @@ public class Man : MonoBehaviour
     float fireDelay;
 
     IEnumerator enu1; //ladder에 필요
+    private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
+
     void Start()
     {
 
@@ -257,7 +259,7 @@ public class Man : MonoBehaviour
         }
     }
 
-    private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Item")
@@ -410,16 +412,16 @@ public class Man : MonoBehaviour
     }
     void Bump()
     {
-        anim.SetTrigger("Bump");
-        isBump = true;
-        transform.position += preVec * -7;
+        //anim.SetTrigger("Bump");
+        //isBump = true;
+        //transform.position += preVec * -7;
 
-        Invoke("BumpOut", 1.5f);
+        //Invoke("BumpOut", 1.5f);
     }
 
     void BumpOut()
     {
-        isBump = false;
+        //isBump = false;
     }
 
 
