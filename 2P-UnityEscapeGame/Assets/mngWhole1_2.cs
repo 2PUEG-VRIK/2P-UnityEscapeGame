@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class mngWhole1_2 : MonoBehaviour
 {
@@ -11,14 +12,31 @@ public class mngWhole1_2 : MonoBehaviour
     private GameObject Cube;
     private int addingWeight = 0;//합친 큐브들의 무게
     private bool isHold = false;//상자 들고있나여~
-    int holdinhCubeIndex = -1;//지금 들고있는 큐브의 인덱스
+    //int holdinhCubeIndex = -1;//지금 들고있는 큐브의 인덱스
 
     Rigidbody rigid;
-    GameObject nearObject;
+    private GameObject W; //저울
+    //GameObject nearObject;
+
+    //2층
+    GameObject _obj;
+    GameObject scrLight;
+    public GameObject input;//light 입력받는 
+    public Text text;
+    //SpriteRenderer sr;//sprite renderer 
+    int check = -1;
+    Image img;
+    public int monNum;
 
     private void Start()
     {
         holding = GameObject.Find("WeaponPoint").transform.GetChild(0).gameObject;
+        W = GameObject.Find("teleA");
+        rigid = GameObject.FindWithTag("Player").GetComponent<Rigidbody>();
+        input = GameObject.Find("Canvas_2").transform.GetChild(1).gameObject;
+        scrLight = GameObject.Find("Directional Light");
+        //sr = input.GetComponent<SpriteRenderer>();
+        img = input.GetComponent<Image>();
 
     }
     // Update is called once per frame

@@ -13,7 +13,7 @@ public class Air : MonoBehaviour
         {
             Rigidbody rigid = collision.gameObject.GetComponent<Rigidbody>();
 
-            rigid.AddForce(Vector3.up * 100, ForceMode.Impulse);
+            rigid.AddForce(Vector3.up * 300, ForceMode.Impulse);
         }
     }
 }
