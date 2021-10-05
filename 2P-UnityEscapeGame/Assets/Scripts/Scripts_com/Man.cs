@@ -292,8 +292,17 @@ public class Man : MonoBehaviour
             Destroy(other.gameObject);//원래 exit에 있었음
 
         }
+        else if (other.tag == "Enemy")
+        {
+            health--;
+            //Vector3 reactVec = transform.forward * Random.Range(-15, -20) + Vector3.up * Random.Range(5,10);
+            //rigid.AddForce(reactVec*3, ForceMode.Impulse);
 
-       
+            if (health <= 0)
+                Quit();
+        }
+
+
 
     }
 

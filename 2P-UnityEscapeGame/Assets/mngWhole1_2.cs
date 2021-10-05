@@ -5,28 +5,28 @@ using UnityEngine.UI;
 
 public class mngWhole1_2 : MonoBehaviour
 {
-    //1Ãş- Àú¿ï, Å¥ºêµé°ü·Ã
-    private int CubeNum;//1Ãş¿¡ ÀÖ´Â Å¥ºêµé °³¼ö
-    private GameObject holding;//µé°íÀÖ´Â Å¥ºê
+    //1ì¸µ- ì €ìš¸, íë¸Œë“¤ê´€ë ¨
+    private GameObject holding;//ë“¤ê³ ìˆëŠ” íë¸Œ
     public GameObject[] Cubes;
-    private GameObject Cube;
-    private int addingWeight = 0;//ÇÕÄ£ Å¥ºêµéÀÇ ¹«°Ô
-    private bool isHold = false;//»óÀÚ µé°íÀÖ³ª¿©~
-    //int holdinhCubeIndex = -1;//Áö±İ µé°íÀÖ´Â Å¥ºêÀÇ ÀÎµ¦½º
+    private int addingWeight = 25;//í•©ì¹œ íë¸Œë“¤ì˜ ë¬´ê²Œ
+    private bool isHold = false;//ìƒì ë“¤ê³ ìˆë‚˜ì—¬~
+    //int holdinhCubeIndex = -1;//ì§€ê¸ˆ ë“¤ê³ ìˆëŠ” íë¸Œì˜ ì¸ë±ìŠ¤
 
     Rigidbody rigid;
-    private GameObject W; //Àú¿ï
-    //GameObject nearObject;
-
-    //2Ãş
+    private GameObject W; //ì €ìš¸
+     //2ì¸µ
     GameObject _obj;
     GameObject scrLight;
-    public GameObject input;//light ÀÔ·Â¹Ş´Â 
+    public GameObject input;//light ì…ë ¥ë°›ëŠ” 
     public Text text;
     //SpriteRenderer sr;//sprite renderer 
     int check = -1;
     Image img;
     public int monNum;
+ 
+    GameObject nearObject;
+ 
+   
 
     private void Start()
     {
@@ -34,14 +34,62 @@ public class mngWhole1_2 : MonoBehaviour
         W = GameObject.Find("teleA");
         rigid = GameObject.FindWithTag("Player").GetComponent<Rigidbody>();
         input = GameObject.Find("Canvas_2").transform.GetChild(1).gameObject;
-        scrLight = GameObject.Find("Directional Light");
-        //sr = input.GetComponent<SpriteRenderer>();
-        img = input.GetComponent<Image>();
+        scrLight = GameObject.Find("Directional Light"); 
+        sr = input.GetComponent<SpriteRenderer>();
+         img = input.GetComponent<Image>();
 
     }
     // Update is called once per frame
-    private void FixedUpdate()
+    private Vector3 velocity = -Vector3.up.normalized;
+
+    private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Return))//ì—”í„°ëˆ„ë¥´ë©´ 
+        {
+            //ë¬¸ìì—´ì´ë‘ lightë‘ ë¹„êµ
+            if (string.Compare("light", text.text, true) == 0)//ì •ë‹µ
+            {
+                Answer();
+            }
+            else //lightã„±ã… ì•„ë‹ˆë©´~
+            {
+                Wrong();
+                Invoke("tryAgain", 0.5f);
+
+            }
+        }
+
+    }
+
+    private void Wrong()
+    {
+        img.color = Color.red;
+        text.text="";
+    }
+    private void Answer()
+    {
+        Destroy(input.gameObject);
+
+        scrLight.transform.rotation = Quaternion.Euler(90, 0, 0);//ì•”ì „
+        _obj.SetActive(false);//What we need ì—†ì• 
+        _obj = null;
+
+        _obj = GameObject.Find("Weapons").transform.GetChild(0).gameObject;  
+            _obj.SetActive(true);
+
+        for (int j = 0; j < monNum; j++)
+        {
+            _obj = GameObject.Find("Monsters").transform.GetChild(j).gameObject;
+            _obj.SetActive(true);
+        }
+
+        //ì£¼ì„ì£¼ì„ì£¼ì„ì´~
+
+        
+    }
+    private void tryAgain()
+    {
+        img.color = new Color(168,206,255,192);
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -50,49 +98,70 @@ public class mngWhole1_2 : MonoBehaviour
             if (other.name == "Cube")
             {
                 if (!isHold)
-                {//¾Èµé°íÀÖ´Â Ã¤·Î Å¥ºê ¸¸³ª¸é
+                {//ì•ˆë“¤ê³ ìˆëŠ” ì±„ë¡œ íë¸Œ ë§Œë‚˜ë©´
                     theCubes cube = other.GetComponent<theCubes>();
                     addingWeight += cube.value;
-                    Destroy(other.gameObject);
                     holding.SetActive(true);
                     isHold = true;
-                    //Å¥ºê µé°í ¹Ù´Ú¿¡ ÀÖ´ø Å¥ºê »ç¶óÁü
-                    Debug.Log("¾Èµé°íÀÖ´Âµ¥ ¸¸³µ¾î¿ä");
+                    other.gameObject.SetActive(false);
+                    //íë¸Œ ë“¤ê³  ë°”ë‹¥ì— ìˆë˜ íë¸Œ ì‚¬ë¼ì§
 
 
                 }
 
-                else //µé°íÀÖÀ» ¶§
+                else //ë“¤ê³ ìˆì„ ë•Œ
                 {
                     theCubes cube = other.GetComponent<theCubes>();
-                    other.isTrigger = false;
-                    cube.transform.localScale += new Vector3(0.7f,0.7f,0.75f);
+                    other.isTrigger = true;
                     holding.SetActive(false);
-                    Vector3 reactVec = transform.position - other.transform.position;
-                    reactVec = reactVec.normalized;
-                    reactVec += Vector3.back;
-                    
-                    Debug.Log("µé°íÀÖ´Âµ¥ ¸¸³µ¾î¿ä");
-                    isHold = false;
 
+                    Vector3 reactVec = transform.forward * Random.Range(-10, -20) + Vector3.up * Random.Range(10, 20);
+                    rigid.AddForce(reactVec, ForceMode.Impulse);
+                    cube.gameObject.SetActive(true);
+                    cube.transform.localScale += new Vector3(1f, 1f, 1f);
+
+                    //Vector3 target = -Vector3.forward.normalized*7f;
+                    //transform.position = Vector3.Lerp(transform.position, transform.position+target, 0.1f);
+                    isHold = false;
 
                 }
 
             }
+
+            if (other.name == "PTK_Cuboid_4" && addingWeight == 25)
+            {
+                W.transform.position = new Vector3(W.transform.position.x, 2.5f, W.transform.position.z);
+
+                if (transform.position.y > 3)//
+                {
+                    holding.SetActive(false);
+                    isHold = false;
+                }
+            }
+
+            if (other.name == "teleB")//
+            {
+                Debug.Log("ë‹¿ì•˜ë‹¤");
+                Destroy(other.gameObject);
+
+                scrLight.transform.rotation = Quaternion.Euler(-90, 0, 0);//ë¹› off
+                _obj = GameObject.Find("Canvas_2").transform.GetChild(0).gameObject;//textì„
+                _obj.SetActive(true);//what we need ì¼œ
+
+                input.SetActive(true);//ì…ë ¥ë°›ëŠ” ì°½ ì¼œ
+               
+                check = 2;
+            }
+
         }
+
 
     }
 
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Things")
-        {
-            if (other.name == "Cube")
-            {
-                other.isTrigger = true;
-
-            }
-        }
+        if (other.name == "PTK_Cuboid_4")
+            check = -1;
     }
 }
