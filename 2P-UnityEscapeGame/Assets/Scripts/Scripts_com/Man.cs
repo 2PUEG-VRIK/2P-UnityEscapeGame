@@ -259,7 +259,8 @@ public class Man : MonoBehaviour
         }
     }
 
-
+ //public int check = -1;
+    //private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Item")
@@ -273,6 +274,7 @@ public class Man : MonoBehaviour
 
                 case Item.Type.Coin:
                     this.transform.localScale *= 2;
+                    check = 1;
                     break;
 
                 case Item.Type.Heart:
@@ -350,20 +352,20 @@ public class Man : MonoBehaviour
             isJump = false;
         }
 
-        if (collision.gameObject.tag == "Ladder")//사다리
-        {
+        //if (collision.gameObject.tag == "Ladder")//사다리
+      // {
 
-            isLadder = true;
-            Debug.Log("사다리에 닿았다");
-            if (Input.GetKey(KeyCode.UpArrow))
-            {
-                Debug.Log("화살표 눌러짐");
+        //    isLadder = true;
+        //    Debug.Log("사다리에 닿았다");
+        //    if (Input.GetKey(KeyCode.UpArrow))
+       //     {
+         //       Debug.Log("화살표 눌러짐");
 
-                enu1 = LadderUp(transform.position, new Vector3(34, 82, 69), 2f);
-                //StartCoroutine(LadderUp, transform.position, new Vector3(34,82,69), 2f);
-                StartCoroutine(enu1);
-            }
-        }
+       //         enu1 = LadderUp(transform.position, new Vector3(34, 82, 69), 2f);
+        //        //StartCoroutine(LadderUp, transform.position, new Vector3(34,82,69), 2f);
+       //         StartCoroutine(enu1);
+        //    }
+       // }
 
 
 
@@ -375,7 +377,7 @@ public class Man : MonoBehaviour
 
         if (collision.gameObject.tag == "Ladder")
         {
-            isLadder = false;
+           // isLadder = false;
             rigid.useGravity = true;
             StopCoroutine(enu1);
 

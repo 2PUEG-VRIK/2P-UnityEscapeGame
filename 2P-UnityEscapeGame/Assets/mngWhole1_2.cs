@@ -23,11 +23,12 @@ public class mngWhole1_2 : MonoBehaviour
     int check = -1;
     Image img;
     public int monNum;
- 
-    GameObject nearObject;
- 
-   
 
+GameObject nearObject;
+Man coinCheck;
+    bool isCoinHolding;//coin����ִ���~
+    GameObject raiseArm;//���ø� ��
+    int raiseCheck = -1;
     private void Start()
     {
         holding = GameObject.Find("WeaponPoint").transform.GetChild(0).gameObject;
@@ -36,6 +37,11 @@ public class mngWhole1_2 : MonoBehaviour
         input = GameObject.Find("Canvas_2").transform.GetChild(1).gameObject;
         scrLight = GameObject.Find("Directional Light"); 
         sr = input.GetComponent<SpriteRenderer>();
+        
+        img = input.GetComponent<Image>();
+        coinCheck = GameObject.Find("Man").GetComponent<Man>();
+        raiseArm = GameObject.Find("Bone_Shoulder_L");//���� ���
+
          img = input.GetComponent<Image>();
 
     }
@@ -58,6 +64,18 @@ public class mngWhole1_2 : MonoBehaviour
 
             }
         }
+
+
+
+        if (coinCheck.check == 1)//���� �Ծ���� �տ� ��������
+        {
+            isCoinHolding = true;
+            _obj = GameObject.Find("holdingPoint").transform.GetChild(0).gameObject;
+            _obj.SetActive(true);//�տ� ���̱�
+
+        }
+
+
 
     }
 
@@ -90,6 +108,8 @@ public class mngWhole1_2 : MonoBehaviour
     private void tryAgain()
     {
         img.color = new Color(168,206,255,192);
+        text.text.Replace(text.text, "");
+
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -147,15 +167,36 @@ public class mngWhole1_2 : MonoBehaviour
                 scrLight.transform.rotation = Quaternion.Euler(-90, 0, 0);//빛 off
                 _obj = GameObject.Find("Canvas_2").transform.GetChild(0).gameObject;//text임
                 _obj.SetActive(true);//what we need 켜
-
+                
                 input.SetActive(true);//입력받는 창 켜
-               
+
                 check = 2;
             }
 
+
+             if(other.name=="Door" && coinCheck.check==1)//���θ԰� �� ����� ���� �� ����
+            {
+                //�÷��̾� Ư� �ġ�� �ű��(�� �����)
+                this.transform.position = new Vector3(679, 95, 444);
+                //this.transform.rotation = Quaternion.Euler(0, -90, 0);//�� ���� �ϻ�
+
+                //���� �տ� �� ä�� �� �ø��� �� ������(�ڷ�ƾ���)
+
+
+            }
         }
+    }
+    private Vector3 destPos = new Vector3(0, 1.3f, -0.4f);
+    //ȸ�� dest�� �����ߵ�
+    IEnumerator ArmMoveCo()//�� �����̴� �ڷ�ƾ
+    {
 
+        yield return null;
+    }
 
+    IEnumerator ArmSpinCo()
+    {
+        yield return null;
     }
 
 
