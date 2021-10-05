@@ -256,7 +256,7 @@ public class Man : MonoBehaviour
             }
         }
     }
-
+    public int check = -1;
     private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
     private void OnTriggerEnter(Collider other)
     {
@@ -271,6 +271,7 @@ public class Man : MonoBehaviour
 
                 case Item.Type.Coin:
                     this.transform.localScale *= 2;
+                    check = 1;
                     break;
 
                 case Item.Type.Heart:
