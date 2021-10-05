@@ -36,10 +36,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Common/SampleGame/sample1.unity
     guid: 962f634f97f7bf748a1237016ebf53ee
   - enabled: 1
-    path: Assets/Scenes/Common/SampleGame/sample2.unity
+    path: Assets/Scenes/Mode1/md1_psj/sample2.unity
     guid: 7c5b04be847186547ace14aa8bc08809
   - enabled: 1
-    path: Assets/Scenes/Common/SampleGame/sample3.unity
+    path: Assets/Scenes/Common/SampleGame/sample4.unity
     guid: 8b84f67359af03e4481668a586121bb9
   - enabled: 1
     path: Assets/Scenes/Common/Start Scene.unity

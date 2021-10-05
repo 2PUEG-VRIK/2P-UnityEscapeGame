@@ -46,6 +46,8 @@ public class Man : MonoBehaviour
     float fireDelay;
 
     IEnumerator enu1; //ladder에 필요
+    private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
+
     void Start()
     {
 
@@ -170,7 +172,7 @@ public class Man : MonoBehaviour
             else if (!isJump)
             {
                 // 점프는 그냥 위로 속도주기.
-                rigid.AddForce(Vector3.up * 150, ForceMode.Impulse);
+                rigid.AddForce(Vector3.up * 200, ForceMode.Impulse);
 
                 anim.SetTrigger("Jump");
                 isJump = true;
@@ -256,8 +258,9 @@ public class Man : MonoBehaviour
             }
         }
     }
-    public int check = -1;
-    private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
+
+ //public int check = -1;
+    //private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Item")
@@ -349,20 +352,20 @@ public class Man : MonoBehaviour
             isJump = false;
         }
 
-        if (collision.gameObject.tag == "Ladder")//사다리
-        {
+        //if (collision.gameObject.tag == "Ladder")//사다리
+      // {
 
-            isLadder = true;
-            Debug.Log("사다리에 닿았다");
-            if (Input.GetKey(KeyCode.UpArrow))
-            {
-                Debug.Log("화살표 눌러짐");
+        //    isLadder = true;
+        //    Debug.Log("사다리에 닿았다");
+        //    if (Input.GetKey(KeyCode.UpArrow))
+       //     {
+         //       Debug.Log("화살표 눌러짐");
 
-                enu1 = LadderUp(transform.position, new Vector3(34, 82, 69), 2f);
-                //StartCoroutine(LadderUp, transform.position, new Vector3(34,82,69), 2f);
-                StartCoroutine(enu1);
-            }
-        }
+       //         enu1 = LadderUp(transform.position, new Vector3(34, 82, 69), 2f);
+        //        //StartCoroutine(LadderUp, transform.position, new Vector3(34,82,69), 2f);
+       //         StartCoroutine(enu1);
+        //    }
+       // }
 
 
 
@@ -374,7 +377,7 @@ public class Man : MonoBehaviour
 
         if (collision.gameObject.tag == "Ladder")
         {
-            isLadder = false;
+           // isLadder = false;
             rigid.useGravity = true;
             StopCoroutine(enu1);
 
@@ -411,16 +414,16 @@ public class Man : MonoBehaviour
     }
     void Bump()
     {
-        anim.SetTrigger("Bump");
-        isBump = true;
-        transform.position += preVec * -7;
+        //anim.SetTrigger("Bump");
+        //isBump = true;
+        //transform.position += preVec * -7;
 
-        Invoke("BumpOut", 1.5f);
+        //Invoke("BumpOut", 1.5f);
     }
 
     void BumpOut()
     {
-        isBump = false;
+        //isBump = false;
     }
 
 

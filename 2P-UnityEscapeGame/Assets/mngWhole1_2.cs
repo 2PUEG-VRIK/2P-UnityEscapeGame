@@ -5,43 +5,44 @@ using UnityEngine.UI;
 
 public class mngWhole1_2 : MonoBehaviour
 {
-    //1Ãş- Àú¿ï, Å¥ºêµé°ü·Ã
-    private GameObject holding;//µé°íÀÖ´Â Å¥ºê
+    //1ì¸µ- ì €ìš¸, íë¸Œë“¤ê´€ë ¨
+    private GameObject holding;//ë“¤ê³ ìˆëŠ” íë¸Œ
     public GameObject[] Cubes;
-    private int addingWeight = 25;//ÇÕÄ£ Å¥ºêµéÀÇ ¹«°Ô
-    private bool isHold = false;//»óÀÚ µé°íÀÖ³ª¿©~
-    int holdinhCubeIndex = -1;//Áö±İ µé°íÀÖ´Â Å¥ºêÀÇ ÀÎµ¦½º
+    private int addingWeight = 25;//í•©ì¹œ íë¸Œë“¤ì˜ ë¬´ê²Œ
+    private bool isHold = false;//ìƒì ë“¤ê³ ìˆë‚˜ì—¬~
+    //int holdinhCubeIndex = -1;//ì§€ê¸ˆ ë“¤ê³ ìˆëŠ” íë¸Œì˜ ì¸ë±ìŠ¤
 
     Rigidbody rigid;
-    private GameObject W; //Àú¿ï
-    GameObject nearObject;
-
-    //2Ãş
+    private GameObject W; //ì €ìš¸
+     //2ì¸µ
     GameObject _obj;
     GameObject scrLight;
-    public GameObject input;//light ÀÔ·Â¹Ş´Â 
+    public GameObject input;//light ì…ë ¥ë°›ëŠ” 
     public Text text;
-    SpriteRenderer sr;//sprite renderer 
+    //SpriteRenderer sr;//sprite renderer 
     int check = -1;
     Image img;
     public int monNum;
-    Man coinCheck;
-    bool isCoinHolding;//coinµé°íÀÖ´ÂÁö~
-    GameObject raiseArm;//µé¾î¿Ã¸± ÆÈ
-    int raiseCheck = -1;
 
+GameObject nearObject;
+Man coinCheck;
+    bool isCoinHolding;//coinï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½~
+    GameObject raiseArm;//ï¿½ï¿½ï¿½Ã¸ï¿½ ï¿½ï¿½
+    int raiseCheck = -1;
     private void Start()
     {
         holding = GameObject.Find("WeaponPoint").transform.GetChild(0).gameObject;
         W = GameObject.Find("teleA");
         rigid = GameObject.FindWithTag("Player").GetComponent<Rigidbody>();
         input = GameObject.Find("Canvas_2").transform.GetChild(1).gameObject;
-        scrLight = GameObject.Find("Directional Light");
+        scrLight = GameObject.Find("Directional Light"); 
         sr = input.GetComponent<SpriteRenderer>();
+        
         img = input.GetComponent<Image>();
         coinCheck = GameObject.Find("Man").GetComponent<Man>();
-        raiseArm = GameObject.Find("Bone_Shoulder_L");//µ¹¸± ¾î±ú
+        raiseArm = GameObject.Find("Bone_Shoulder_L");//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 
+         img = input.GetComponent<Image>();
 
     }
     // Update is called once per frame
@@ -49,14 +50,14 @@ public class mngWhole1_2 : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))//¿£ÅÍ´©¸£¸é 
+        if (Input.GetKeyDown(KeyCode.Return))//ì—”í„°ëˆ„ë¥´ë©´ 
         {
-            //¹®ÀÚ¿­ÀÌ¶û light¶û ºñ±³
-            if (string.Compare("light", text.text, true) == 0)//Á¤´ä
+            //ë¬¸ìì—´ì´ë‘ lightë‘ ë¹„êµ
+            if (string.Compare("light", text.text, true) == 0)//ì •ë‹µ
             {
                 Answer();
             }
-            else //light¤¡¤¿ ¾Æ´Ï¸é~
+            else //lightã„±ã… ì•„ë‹ˆë©´~
             {
                 Wrong();
                 Invoke("tryAgain", 0.5f);
@@ -66,11 +67,11 @@ public class mngWhole1_2 : MonoBehaviour
 
 
 
-        if (coinCheck.check == 1)//ÄÚÀÎ ¸Ô¾úÀ¸¸é ¼Õ¿¡ µé°íÀÖÀ¸»ï
+        if (coinCheck.check == 1)//ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¾ï¿½ï¿½ï¿½ï¿½ ï¿½Õ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         {
             isCoinHolding = true;
             _obj = GameObject.Find("holdingPoint").transform.GetChild(0).gameObject;
-            _obj.SetActive(true);//¼Õ¿¡ º¸ÀÌ±â
+            _obj.SetActive(true);//ï¿½Õ¿ï¿½ ï¿½ï¿½ï¿½Ì±ï¿½
 
         }
 
@@ -87,8 +88,8 @@ public class mngWhole1_2 : MonoBehaviour
     {
         Destroy(input.gameObject);
 
-        scrLight.transform.rotation = Quaternion.Euler(90, 0, 0);//¾ÏÀü
-        _obj.SetActive(false);//What we need ¾ø¾Ö
+        scrLight.transform.rotation = Quaternion.Euler(90, 0, 0);//ì•”ì „
+        _obj.SetActive(false);//What we need ì—†ì• 
         _obj = null;
 
         _obj = GameObject.Find("Weapons").transform.GetChild(0).gameObject;  
@@ -100,7 +101,7 @@ public class mngWhole1_2 : MonoBehaviour
             _obj.SetActive(true);
         }
 
-        //ÁÖ¼®ÁÖ¼®ÁÖ¼®ÀÌ~
+        //ì£¼ì„ì£¼ì„ì£¼ì„ì´~
 
         
     }
@@ -117,18 +118,18 @@ public class mngWhole1_2 : MonoBehaviour
             if (other.name == "Cube")
             {
                 if (!isHold)
-                {//¾Èµé°íÀÖ´Â Ã¤·Î Å¥ºê ¸¸³ª¸é
+                {//ì•ˆë“¤ê³ ìˆëŠ” ì±„ë¡œ íë¸Œ ë§Œë‚˜ë©´
                     theCubes cube = other.GetComponent<theCubes>();
                     addingWeight += cube.value;
                     holding.SetActive(true);
                     isHold = true;
                     other.gameObject.SetActive(false);
-                    //Å¥ºê µé°í ¹Ù´Ú¿¡ ÀÖ´ø Å¥ºê »ç¶óÁü
+                    //íë¸Œ ë“¤ê³  ë°”ë‹¥ì— ìˆë˜ íë¸Œ ì‚¬ë¼ì§
 
 
                 }
 
-                else //µé°íÀÖÀ» ¶§
+                else //ë“¤ê³ ìˆì„ ë•Œ
                 {
                     theCubes cube = other.GetComponent<theCubes>();
                     other.isTrigger = true;
@@ -160,33 +161,34 @@ public class mngWhole1_2 : MonoBehaviour
 
             if (other.name == "teleB")//
             {
-                Debug.Log("´ê¾Ò´Ù");
+                Debug.Log("ë‹¿ì•˜ë‹¤");
                 Destroy(other.gameObject);
 
-                scrLight.transform.rotation = Quaternion.Euler(-90, 0, 0);//ºû off
-                _obj = GameObject.Find("Canvas_2").transform.GetChild(0).gameObject;//textÀÓ
-                _obj.SetActive(true);//what we need ÄÑ
+                scrLight.transform.rotation = Quaternion.Euler(-90, 0, 0);//ë¹› off
+                _obj = GameObject.Find("Canvas_2").transform.GetChild(0).gameObject;//textì„
+                _obj.SetActive(true);//what we need ì¼œ
+                
+                input.SetActive(true);//ì…ë ¥ë°›ëŠ” ì°½ ì¼œ
 
-                input.SetActive(true);//ÀÔ·Â¹Ş´Â Ã¢ ÄÑ
                 check = 2;
             }
 
 
-             if(other.name=="Door" && coinCheck.check==1)//ÄÚÀÎ¸Ô°í ¹® ¾ÕÀ¸·Î °¡¸é ¹® ¿­·Á
+             if(other.name=="Door" && coinCheck.check==1)//ï¿½ï¿½ï¿½Î¸Ô°ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             {
-                //ÇÃ·¹ÀÌ¾î Æ¯Á¤ À§Ä¡·Î ¿Å±â°í(¹® ¾ÕÀ¸·Î)
+                //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Æ¯ï¿½ ï¿½Ä¡ï¿½ï¿½ ï¿½Å±ï¿½ï¿½(ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½)
                 this.transform.position = new Vector3(679, 95, 444);
-                //this.transform.rotation = Quaternion.Euler(0, -90, 0);//¹® º¸°Ô ÇÏ»ï
+                //this.transform.rotation = Quaternion.Euler(0, -90, 0);//ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï»ï¿½
 
-                //ÄÚÀÎ ¼Õ¿¡ µç Ã¤·Î ÆÈ ¿Ã¸®¸é ¹® ¿­¸®°Ô(ÄÚ·çÆ¾À¸·Î)
+                //ï¿½ï¿½ï¿½ï¿½ ï¿½Õ¿ï¿½ ï¿½ï¿½ Ã¤ï¿½ï¿½ ï¿½ï¿½ ï¿½Ã¸ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½Ú·ï¿½Æ¾ï¿½ï¿½ï¿½)
 
 
             }
         }
     }
     private Vector3 destPos = new Vector3(0, 1.3f, -0.4f);
-    //È¸Àü destµµ ¸¸µé¾î¾ßµÅ
-    IEnumerator ArmMoveCo()//ÆÈ ¿òÁ÷ÀÌ´Â ÄÚ·çÆ¾
+    //È¸ï¿½ï¿½ destï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ßµï¿½
+    IEnumerator ArmMoveCo()//ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½Ú·ï¿½Æ¾
     {
 
         yield return null;
