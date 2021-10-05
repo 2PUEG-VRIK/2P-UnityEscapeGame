@@ -25,6 +25,10 @@ public class mngWhole1_2 : MonoBehaviour
     int check = -1;
     Image img;
     public int monNum;
+    Man coinCheck;
+    bool isCoinHolding;//coin들고있는지~
+    GameObject raiseArm;//들어올릴 팔
+    int raiseCheck = -1;
 
     private void Start()
     {
@@ -35,6 +39,9 @@ public class mngWhole1_2 : MonoBehaviour
         scrLight = GameObject.Find("Directional Light");
         sr = input.GetComponent<SpriteRenderer>();
         img = input.GetComponent<Image>();
+        coinCheck = GameObject.Find("Man").GetComponent<Man>();
+        raiseArm = GameObject.Find("Bone_Shoulder_L");//돌릴 어깨
+
 
     }
     // Update is called once per frame
@@ -56,6 +63,18 @@ public class mngWhole1_2 : MonoBehaviour
 
             }
         }
+
+
+
+        if (coinCheck.check == 1)//코인 먹었으면 손에 들고있으삼
+        {
+            isCoinHolding = true;
+            _obj = GameObject.Find("holdingPoint").transform.GetChild(0).gameObject;
+            _obj.SetActive(true);//손에 보이기
+
+        }
+
+
 
     }
 
@@ -88,6 +107,8 @@ public class mngWhole1_2 : MonoBehaviour
     private void tryAgain()
     {
         img.color = new Color(168,206,255,192);
+        text.text.Replace(text.text, "");
+
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -147,13 +168,33 @@ public class mngWhole1_2 : MonoBehaviour
                 _obj.SetActive(true);//what we need 켜
 
                 input.SetActive(true);//입력받는 창 켜
-               
                 check = 2;
             }
 
+
+             if(other.name=="Door" && coinCheck.check==1)//코인먹고 문 앞으로 가면 문 열려
+            {
+                //플레이어 특정 위치로 옮기고(문 앞으로)
+                this.transform.position = new Vector3(679, 95, 444);
+                //this.transform.rotation = Quaternion.Euler(0, -90, 0);//문 보게 하삼
+
+                //코인 손에 든 채로 팔 올리면 문 열리게(코루틴으로)
+
+
+            }
         }
+    }
+    private Vector3 destPos = new Vector3(0, 1.3f, -0.4f);
+    //회전 dest도 만들어야돼
+    IEnumerator ArmMoveCo()//팔 움직이는 코루틴
+    {
 
+        yield return null;
+    }
 
+    IEnumerator ArmSpinCo()
+    {
+        yield return null;
     }
 
 
