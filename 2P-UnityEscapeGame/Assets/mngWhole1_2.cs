@@ -19,7 +19,7 @@ public class mngWhole1_2 : MonoBehaviour
     GameObject scrLight;
     public GameObject input;//light 입력받는 
     public Text text;
-    //SpriteRenderer sr;//sprite renderer 
+    SpriteRenderer sr;//sprite renderer 
     int check = -1;
     Image img;
     public int monNum;
