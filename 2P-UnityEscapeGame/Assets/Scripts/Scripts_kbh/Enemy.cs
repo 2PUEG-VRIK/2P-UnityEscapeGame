@@ -31,8 +31,6 @@ public class Enemy : MonoBehaviour
         anim = GetComponentInChildren <Animator>();
         coin = GameObject.Find("2nd").transform.GetChild(3).gameObject;
         Invoke("ChaseStart", 1);
-
-        Debug.Log(coin.name);
     }
 
     void ChaseStart()

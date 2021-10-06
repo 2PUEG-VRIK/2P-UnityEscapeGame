@@ -273,7 +273,7 @@ public class Man : MonoBehaviour
                     break;
 
                 case Item.Type.Coin:
-                    this.transform.localScale *= 2;
+                    //this.transform.localScale *= 2;
                     check = 1;
                     break;
 
