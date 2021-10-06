@@ -10,10 +10,9 @@ public class mngWhole1_2 : MonoBehaviour
     public GameObject[] Cubes;
     private int addingWeight = 25;//합친 큐브들의 무게
     private bool isHold = false;//상자 들고있나여~
-    //int holdinhCubeIndex = -1;//지금 들고있는 큐브의 인덱스
-
     Rigidbody rigid;
     private GameObject W; //저울
+
      //2층
     GameObject _obj;
     GameObject scrLight;
@@ -24,11 +23,15 @@ public class mngWhole1_2 : MonoBehaviour
     Image img;
     public int monNum;
 
-GameObject nearObject;
-Man coinCheck;
-    bool isCoinHolding;//coin����ִ���~
-    GameObject raiseArm;//���ø� ��
-    int raiseCheck = -1;
+    GameObject nearObject;
+    Man coinCheck;
+    bool isCoinHolding;//coin 들고있나여
+                       // GameObject raiseArm;//문앞에서 들어올릴 팔
+                       //int raiseCheck = -1;
+    GameObject Door;
+    private int open = 0;//문 열어
+    bool isBack = false;//뒤로 한번 튕겨야지
+
     private void Start()
     {
         holding = GameObject.Find("WeaponPoint").transform.GetChild(0).gameObject;
@@ -37,19 +40,19 @@ Man coinCheck;
         input = GameObject.Find("Canvas_2").transform.GetChild(1).gameObject;
         scrLight = GameObject.Find("Directional Light"); 
         sr = input.GetComponent<SpriteRenderer>();
-        
         img = input.GetComponent<Image>();
         coinCheck = GameObject.Find("Man").GetComponent<Man>();
-        raiseArm = GameObject.Find("Bone_Shoulder_L");//���� ���
-
-         img = input.GetComponent<Image>();
+        img = input.GetComponent<Image>();
+        Door = GameObject.Find("Door_5.001");
 
     }
-    // Update is called once per frame
-    private Vector3 velocity = -Vector3.up.normalized;
+    //private Vector3 velocity = -Vector3.up.normalized;
+
 
     private void Update()
     {
+       
+
         if (Input.GetKeyDown(KeyCode.Return))//엔터누르면 
         {
             //문자열이랑 light랑 비교
@@ -61,22 +64,39 @@ Man coinCheck;
             {
                 Wrong();
                 Invoke("tryAgain", 0.5f);
-
             }
         }
 
-
-
-        if (coinCheck.check == 1)//���� �Ծ���� �տ� ��������
+        if (coinCheck.check == 1)//동전 들고있ㄷ고
         {
             isCoinHolding = true;
-            _obj = GameObject.Find("holdingPoint").transform.GetChild(0).gameObject;
-            _obj.SetActive(true);//�տ� ���̱�
+            _obj = GameObject.Find("holdingCoin").transform.GetChild(0).gameObject;
+            _obj.SetActive(true);//동전 눈에 보이게
+
+            if (open == 1)
+            {
+                if (isBack)
+                {
+                    this.transform.position = Vector3.Lerp(
+                        this.transform.position, new Vector3(724, 96, 444), Time.deltaTime * 2);
+
+                    Invoke("mumchwo", 1);
+                }
+                 _obj.SetActive(false);
+                Door.transform.rotation = Quaternion.Slerp(
+                Door.transform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), Time.time * 0.001f);
+                Door.transform.parent.GetComponent<BoxCollider>().enabled=false;
+            }
 
         }
+    }
 
-
-
+    private void mumchwo()//update에서 isBack=false하면 뒤로 가기도 전에 멈춰버려서~ 안됨
+    {
+        isBack = false;
+        _obj = GameObject.Find("2nd").transform.GetChild(3).gameObject;
+        Debug.Log(_obj.name);
+        _obj.SetActive(true);
     }
 
     private void Wrong()
@@ -108,7 +128,7 @@ Man coinCheck;
     private void tryAgain()
     {
         img.color = new Color(168,206,255,192);
-        text.text.Replace(text.text, "");
+        text.text.Replace(text.text, " ");
 
     }
     private void OnTriggerEnter(Collider other)
@@ -126,7 +146,6 @@ Man coinCheck;
                     other.gameObject.SetActive(false);
                     //큐브 들고 바닥에 있던 큐브 사라짐
 
-
                 }
 
                 else //들고있을 때
@@ -140,8 +159,6 @@ Man coinCheck;
                     cube.gameObject.SetActive(true);
                     cube.transform.localScale += new Vector3(1f, 1f, 1f);
 
-                    //Vector3 target = -Vector3.forward.normalized*7f;
-                    //transform.position = Vector3.Lerp(transform.position, transform.position+target, 0.1f);
                     isHold = false;
 
                 }
@@ -174,31 +191,14 @@ Man coinCheck;
             }
 
 
-             if(other.name=="Door" && coinCheck.check==1)//���θ԰� �� ����� ���� �� ����
+             if(other.name=="Door" )//동전 들고 문 앞에 가면coinCheck.check==1
             {
-                //�÷��̾� Ư� �ġ�� �ű��(�� �����)
-                this.transform.position = new Vector3(679, 95, 444);
-                //this.transform.rotation = Quaternion.Euler(0, -90, 0);//�� ���� �ϻ�
-
-                //���� �տ� �� ä�� �� �ø��� �� ������(�ڷ�ƾ���)
-
-
+                //문열어
+                isBack = true;//뒤로 튕길 준비 완.
+                open = 1;
             }
         }
     }
-    private Vector3 destPos = new Vector3(0, 1.3f, -0.4f);
-    //ȸ�� dest�� �����ߵ�
-    IEnumerator ArmMoveCo()//�� �����̴� �ڷ�ƾ
-    {
-
-        yield return null;
-    }
-
-    IEnumerator ArmSpinCo()
-    {
-        yield return null;
-    }
-
 
     private void OnTriggerExit(Collider other)
     {
