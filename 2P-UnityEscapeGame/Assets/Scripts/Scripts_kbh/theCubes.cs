@@ -52,3 +52,5 @@ public class theCubes : MonoBehaviour
         this.transform.position= Camera.main.ScreenToWorldPoint(mousePosition);
     }
 }
+
+//왜 커밋 안되냐
