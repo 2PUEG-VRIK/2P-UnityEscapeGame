@@ -8,10 +8,12 @@ public class mngWhole1_2 : MonoBehaviour
     //1층- 저울, 큐브들관련
     private GameObject holding;//들고있는 큐브
     public GameObject[] Cubes;
-    private int addingWeight = 25;//합친 큐브들의 무게
     private bool isHold = false;//상자 들고있나여~
     Rigidbody rigid;
     private GameObject W; //저울
+    private int check_1 = -1;//1층에서 쓰이는 체크. -1이면 뛸 준비 안된거고 1이면 뛸 준비 된거
+    theCubes cube;
+    private int addingTotal;
 
      //2층
     GameObject _obj;
@@ -22,12 +24,9 @@ public class mngWhole1_2 : MonoBehaviour
     int check = -1;
     Image img;
     public int monNum;
-
     GameObject nearObject;
     Man coinCheck;
     bool isCoinHolding;//coin 들고있나여
-                       // GameObject raiseArm;//문앞에서 들어올릴 팔
-                       //int raiseCheck = -1;
     GameObject Door;
     private int open = 0;//문 열어
     bool isBack = false;//뒤로 한번 튕겨야지
@@ -44,15 +43,18 @@ public class mngWhole1_2 : MonoBehaviour
         coinCheck = GameObject.Find("Man").GetComponent<Man>();
         img = input.GetComponent<Image>();
         Door = GameObject.Find("Door_5.001");
+        rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
 
+        addingTotal = cube.addNum;
     }
     //private Vector3 velocity = -Vector3.up.normalized;
 
 
     private void Update()
     {
-       
-
+        if (isHold && check == 1)
+            StartCoroutine("goBack");
+        //2층
         if (Input.GetKeyDown(KeyCode.Return))//엔터누르면 
         {
             //문자열이랑 light랑 비교
@@ -90,6 +92,7 @@ public class mngWhole1_2 : MonoBehaviour
 
         }
     }
+    
 
     private void mumchwo()//update에서 isBack=false하면 뒤로 가기도 전에 멈춰버려서~ 안됨
     {
@@ -122,8 +125,6 @@ public class mngWhole1_2 : MonoBehaviour
         }
 
         //주석주석주석이~
-
-        
     }
     private void tryAgain()
     {
@@ -135,37 +136,39 @@ public class mngWhole1_2 : MonoBehaviour
     {
         if (other.tag == "Things")
         {
-            if (other.name == "Cube")
-            {
-                if (!isHold)
-                {//안들고있는 채로 큐브 만나면
-                    theCubes cube = other.GetComponent<theCubes>();
-                    addingWeight += cube.value;
-                    holding.SetActive(true);
-                    isHold = true;
-                    other.gameObject.SetActive(false);
-                    //큐브 들고 바닥에 있던 큐브 사라짐
+           
+        //    if (other.name == "Cube")
+        //    {
+        //        if (!isHold)
+        //        {//안들고있는 채로 큐브 만나면
 
-                }
+        //            theCubes cube = other.GetComponent<theCubes>();
+        //            addingWeight += cube.value;
+        //            holding.SetActive(true);
+        //            isHold = true;
 
-                else //들고있을 때
-                {
-                    theCubes cube = other.GetComponent<theCubes>();
-                    other.isTrigger = true;
-                    holding.SetActive(false);
+        //            other.gameObject.SetActive(false);
+        //            //큐브 들고 바닥에 있던 큐브 사라짐
+        //        }
 
-                    Vector3 reactVec = transform.forward * Random.Range(-10, -20) + Vector3.up * Random.Range(10, 20);
-                    rigid.AddForce(reactVec, ForceMode.Impulse);
-                    cube.gameObject.SetActive(true);
-                    cube.transform.localScale += new Vector3(1f, 1f, 1f);
+        //        else //들고있을 때
+        //        {
+        //            theCubes cube = other.GetComponent<theCubes>();
+        //            other.isTrigger = true;
+        //            holding.SetActive(false);
+        //            //rigid.AddForce(Vector3.back * 200*Time.deltaTime, ForceMode.Impulse);
 
-                    isHold = false;
+        //            //Vector3 reactVec = transform.forward * Random.Range(-10, -20) + Vector3.up * Random.Range(10, 20);
+        //            cube.gameObject.SetActive(true);
+        //            check_1 = 1;//뒤로 튕길 준비 완
+        //            cube.transform.localScale += new Vector3(1f, 1f, 1f);
 
-                }
 
-            }
+        //        }
 
-            if (other.name == "PTK_Cuboid_4" && addingWeight == 25)
+        
+
+            if (other.name == "PTK_Cuboid_4" && addingTotal>=4)
             {
                 W.transform.position = new Vector3(W.transform.position.x, 2.5f, W.transform.position.z);
 
@@ -204,5 +207,17 @@ public class mngWhole1_2 : MonoBehaviour
     {
         if (other.name == "PTK_Cuboid_4")
             check = -1;
+    }
+
+    IEnumerator goBack()//1층에서 상자랑 닿으면 뒤로 튕기는거
+    {
+        ///rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
+        this.transform.Translate(new Vector3(0, 0, -1) * Time.deltaTime*30);
+
+        check = -1;
+        isHold = false;
+
+        yield return null;
+
     }
 }
