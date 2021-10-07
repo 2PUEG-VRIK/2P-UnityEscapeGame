@@ -259,12 +259,10 @@ public class Man : MonoBehaviour
         }
     }
 
-<<<<<<< Updated upstream
-
-=======
+ 
     public int check = -1;
     //private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
->>>>>>> Stashed changes
+ 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Item")
@@ -273,18 +271,10 @@ public class Man : MonoBehaviour
             switch (item.type)
             {
                 case Item.Type.Weapon:
-<<<<<<< Updated upstream
-                    nearObject = other.gameObject;
-                    break;
-
-                case Item.Type.Coin:
-                    this.transform.localScale *= 2;
-=======
-                     break;
+                      break;
                  case Item.Type.Coin:
-                    check = 1;
->>>>>>> Stashed changes
-                    break;
+                     //this.transform.localScale *= 2;
+                     break;
                 case Item.Type.Heart:
                     health += item.value;
                     if (health > maxHealth)
@@ -324,39 +314,28 @@ public class Man : MonoBehaviour
             isJump = false;
         }
 
-        if (collision.gameObject.tag == "Ladder")//사다리
-        {
+        //if (collision.gameObject.tag == "Ladder")//사다리
+      // {
 
-            isLadder = true;
-            Debug.Log("사다리에 닿았다");
-            if (Input.GetKey(KeyCode.UpArrow))
-            {
-                Debug.Log("화살표 눌러짐");
-
-<<<<<<< Updated upstream
-                enu1 = LadderUp(transform.position, new Vector3(34, 82, 69), 2f);
-                //StartCoroutine(LadderUp, transform.position, new Vector3(34,82,69), 2f);
-                StartCoroutine(enu1);
-            }
-        }
-
-
-
-=======
+        //    isLadder = true;
+        //    Debug.Log("사다리에 닿았다");
+        //    if (Input.GetKey(KeyCode.UpArrow))
+       //     {
+         //       Debug.Log("화살표 눌러짐");
+ 
        //         enu1 = LadderUp(transform.position, new Vector3(34, 82, 69), 2f);
         //        //StartCoroutine(LadderUp, transform.position, new Vector3(34,82,69), 2f);
        //         StartCoroutine(enu1);
         //    }
        // }
->>>>>>> Stashed changes
-    }
+     }
 
     private void OnCollisionExit(Collision collision)
     {
 
         if (collision.gameObject.tag == "Ladder")
         {
-            isLadder = false;
+           // isLadder = false;
             rigid.useGravity = true;
             StopCoroutine(enu1);
 
