@@ -6,7 +6,7 @@ public class Item : MonoBehaviour
 {
     public enum Type
     {
-        Weapon, Coin, Heart, Ammo
+        Weapon, Coin, Heart, Ammo, Key
     };
     //필요에 의해 Heart 추가(김보현)
 

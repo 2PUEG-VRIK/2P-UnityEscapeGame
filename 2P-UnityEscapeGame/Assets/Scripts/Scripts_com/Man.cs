@@ -259,8 +259,10 @@ public class Man : MonoBehaviour
         }
     }
 
- public int check = -1;
+ 
+    public int check = -1;
     //private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
+ 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Item")
@@ -269,14 +271,10 @@ public class Man : MonoBehaviour
             switch (item.type)
             {
                 case Item.Type.Weapon:
-                    nearObject = other.gameObject;
-                    break;
-
-                case Item.Type.Coin:
-                    //this.transform.localScale *= 2;
-                    check = 1;
-                    break;
-
+                      break;
+                 case Item.Type.Coin:
+                     //this.transform.localScale *= 2;
+                     break;
                 case Item.Type.Heart:
                     health += item.value;
                     if (health > maxHealth)
@@ -288,6 +286,8 @@ public class Man : MonoBehaviour
                     if (ammo > maxAmmo)
                         ammo = maxAmmo;
                     break;
+                //case Item.Type.Key:
+
 
             }
             Interaction();
@@ -303,48 +303,10 @@ public class Man : MonoBehaviour
             if (health <= 0)
                 Quit();
         }
-
-
-
     }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Item")
-        {
-            Item item = other.GetComponent<Item>();
-            switch (item.type)
-            {
-                case Item.Type.Weapon:
-                    // nearObject = null;
-                    break;
-                case Item.Type.Ammo:
-
-                    // nearObject = null;
-                    break;
-                case Item.Type.Heart:
-
-                    //nearObject = null;
-                    break;
-
-            }
-        }
-
-    }
-
     
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Wall")
-        {
-            Debug.Log("벽이랑 닿았다.!");
-        }
-
-        if (collision.gameObject.tag == "Player")
-        {
-            // 플레이어끼리 부딪히면 튕기기 애니메이션
-            Bump();
-        }
 
         // 바닥 닿으면 다시 점프 가능상태로 바꿔주기.
         if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Box")
@@ -360,20 +322,16 @@ public class Man : MonoBehaviour
         //    if (Input.GetKey(KeyCode.UpArrow))
        //     {
          //       Debug.Log("화살표 눌러짐");
-
+ 
        //         enu1 = LadderUp(transform.position, new Vector3(34, 82, 69), 2f);
         //        //StartCoroutine(LadderUp, transform.position, new Vector3(34,82,69), 2f);
        //         StartCoroutine(enu1);
         //    }
        // }
-
-
-
-    }
+     }
 
     private void OnCollisionExit(Collision collision)
     {
-
 
         if (collision.gameObject.tag == "Ladder")
         {
