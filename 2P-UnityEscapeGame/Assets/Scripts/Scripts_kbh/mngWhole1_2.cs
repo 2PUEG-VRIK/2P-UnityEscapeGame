@@ -50,7 +50,6 @@ public class mngWhole1_2 : MonoBehaviour
         img = input.GetComponent<Image>();
         Door = GameObject.Find("Door_5.001");
         rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
-        addingTotal = cube.addNum;
         isDown = cube.isDown;
     }
     //private Vector3 velocity = -Vector3.up.normalized;
@@ -88,27 +87,27 @@ public class mngWhole1_2 : MonoBehaviour
             }
         }
 
-        if (coinCheck.check == 1)//동전 들고있ㄷ고
-        {
-            isCoinHolding = true;
-            _obj = GameObject.Find("holdingCoin").transform.GetChild(0).gameObject;
-            _obj.SetActive(true);//동전 눈에 보이게
+        //if (coinCheck.check == 1)//동전 들고있ㄷ고
+        //{
+        //    isCoinHolding = true;
+        //    _obj = GameObject.Find("holdingCoin").transform.GetChild(0).gameObject;
+        //    _obj.SetActive(true);//동전 눈에 보이게
 
-            if (open == 1)
-            {
-                if (isBack)
-                {
-                    this.transform.position = Vector3.Lerp(
-                        this.transform.position, new Vector3(724, 96, 444), Time.deltaTime * 2);
+        //    if (open == 1)
+        //    {
+        //        if (isBack)
+        //        {
+        //            this.transform.position = Vector3.Lerp(
+        //                this.transform.position, new Vector3(724, 96, 444), Time.deltaTime * 2);
 
-                    Invoke("mumchwo", 1);
-                }
-                 _obj.SetActive(false);
-                Door.transform.rotation = Quaternion.Slerp(
-                Door.transform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), Time.time * 0.001f);
-                Door.transform.parent.GetComponent<BoxCollider>().enabled=false;
-            }
-        }
+        //            Invoke("mumchwo", 1);
+        //        }
+        //         _obj.SetActive(false);
+        //        Door.transform.rotation = Quaternion.Slerp(
+        //        Door.transform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), Time.time * 0.001f);
+        //        Door.transform.parent.GetComponent<BoxCollider>().enabled=false;
+        //    }
+        //}
     }
     
     private void mumchwo()//update에서 isBack=false하면 뒤로 가기도 전에 멈춰버려서~ 안됨

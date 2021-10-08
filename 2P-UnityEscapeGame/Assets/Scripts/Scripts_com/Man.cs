@@ -273,8 +273,10 @@ public class Man : MonoBehaviour
                 case Item.Type.Weapon:
                       break;
                  case Item.Type.Coin:
-                     //this.transform.localScale *= 2;
-                     break;
+                    check = 1;
+
+                    //this.transform.localScale *= 2;
+                    break;
                 case Item.Type.Heart:
                     health += item.value;
                     if (health > maxHealth)
