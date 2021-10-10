@@ -13,9 +13,12 @@ public class mngWhole1_2 : MonoBehaviour
     private GameObject W; //저울 & 텔레포트
     private int check_1 = -1;//1층에서 쓰이는 체크. -1이면 뛸 준비 안된거고 1이면 뛸 준비 된거
     theCubes cube;
+    GameObject grabCube;//손에 들고잇는 큐브
+    int cubeValue;//손에 들고있는 큐브 값
     private int addingTotal;
     Ray ray;
     RaycastHit hit;
+    Renderer cubeColor;
 
 
 
@@ -42,7 +45,7 @@ public class mngWhole1_2 : MonoBehaviour
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         W = GameObject.Find("teleA");
         rigid = GameObject.FindWithTag("Player").GetComponent<Rigidbody>();
-        input = GameObject.Find("Canvas_2").transform.GetChild(1).gameObject;
+        //input = GameObject.Find("Canvas_2").transform.GetChild(1).gameObject;
         scrLight = GameObject.Find("Directional Light"); 
         sr = input.GetComponent<SpriteRenderer>();
         img = input.GetComponent<Image>();
@@ -50,22 +53,26 @@ public class mngWhole1_2 : MonoBehaviour
         img = input.GetComponent<Image>();
         Door = GameObject.Find("Door_5.001");
         rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
-        addingTotal = cube.addNum;
-        isDown = cube.isDown;
+       
     }
     //private Vector3 velocity = -Vector3.up.normalized;
 
-
+    private void Awake()
+    {
+        
+    }
     private void Update()
     {
         if (isHold && check == 1)
             StartCoroutine("goBack");
-
+        
+        
         //if (true == Input.GetMouseButtonDown(0))//마우스 내려갔나용
         //{
-           
+
         //    if (Physics.Raycast(ray, out hit))
         //    {
+        //      hit.transform.~
         //    }
 
         //}
@@ -147,18 +154,48 @@ public class mngWhole1_2 : MonoBehaviour
     {
         img.color = new Color(168,206,255,192);
         text.text.Replace(text.text, " ");
-
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Things")
         {
-            if (addingTotal >= 4 && isDown) 
+            if (other.transform.name == "Cube_pre")
             {
-                W.transform.position = new Vector3(W.transform.position.x, 2.5f, W.transform.position.z);
-                    //holding.SetActive(false);
-                  isHold = false;
+                cube = other.transform.gameObject.GetComponent<theCubes>();
+                if (!isHold)//들고있지않은 상태에서 애를 만났따!
+                {
+                    grabCube.transform.gameObject.SetActive(true);//들고있게 하고
+                    grabCube.GetComponent<Renderer>().material.color = cube.GetComponent<Renderer>().material.color;
+                    cube.gameObject.SetActive(false);//닿은 애 없애고
+                    cubeValue = cube.value;//변수에 밸류값 넣어
+                    isHold = true;
+
+                }
+
+                else // 든 상태에서 상자를 터치해따!
+                {
+                    if (cubeValue == cube.value)//들고있는애랑 닿은 애랑 값이 같다면
+                    {
+                        cube.transform.gameObject.SetActive(false);//닿은 애 없애고,, ㅜ 존나하기싫다 쉽발
+                        grabCube.transform.gameObject.SetActive(false);//들고있는애 없애고
+                        cubeValue = -1;
+                        isHold = false;
+                    }
+                    else //값이 다르다~~~ 다른 애를 찍엇다!
+                    {
+                        cube.GetComponent<Renderer>().material.color = Color.red;
+                        //한 0.5초 뒤에 색 원상복구
+                        StartCoroutine(restoreColor(cube));
+                        StartCoroutine(goBack());
+
+                    }
+                }
+                
             }
+
+
+            //2층
 
             if (other.name == "teleB")//
             {
@@ -188,15 +225,35 @@ public class mngWhole1_2 : MonoBehaviour
             check = -1;
     }
 
+
+
     IEnumerator goBack()//1층에서 상자랑 닿으면 뒤로 튕기는거
     {
         ///rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
         this.transform.Translate(new Vector3(0, 0, -1) * Time.deltaTime*30);
 
         check = -1;
-        isHold = false;
+        isHold = true;
 
         yield return null;
 
+    }
+    IEnumerator restoreColor(theCubes cube)
+    {
+
+        yield return new WaitForSeconds(0.5f);
+
+        switch (cube.value)
+        {
+            case 1: // 흰색?
+                cube.GetComponent<Renderer>().material.color = Color.white;
+                break;
+            case 2: //노란색
+                cube.GetComponent<Renderer>().material.color = Color.yellow;
+                break;
+            case 3://초록색
+                cube.GetComponent<Renderer>().material.color = Color.green;
+                break;
+        }
     }
 }
