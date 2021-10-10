@@ -272,7 +272,7 @@ public class mngWhole1_2 : MonoBehaviour
                 break;
             case 3://연두
                 cube.GetComponent<Renderer>().material.color = new Color(173f / 255f, 255f / 255f, 143f / 255f, 255f / 255f);
-                break;
+                break;  
         }
     }
 
