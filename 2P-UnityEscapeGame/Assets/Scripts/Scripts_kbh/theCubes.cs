@@ -14,7 +14,6 @@ public class theCubes : MonoBehaviour
     RaycastHit hit;
     theCubes _obj;//마우스로 선택한 큐브
 
-
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
