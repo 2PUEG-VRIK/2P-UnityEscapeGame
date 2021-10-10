@@ -56,7 +56,7 @@ public class mngWhole1_2 : MonoBehaviour
         Door = GameObject.Find("Door_5.001");
         rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
         grabCube = GameObject.Find("holdingCube").transform.GetChild(0).gameObject;
-        remark = GameObject.Find("remark").transform.gameObject;
+        remark = GameObject.Find("teleA").transform.GetChild(1).gameObject;
 
     }
     //private Vector3 velocity = -Vector3.up.normalized;
@@ -81,7 +81,7 @@ public class mngWhole1_2 : MonoBehaviour
 
         //}
 
-        if (cubeNum == 0)
+        if (cubeNum == 20)
         {
             remark.SetActive(true); //느낌표 꺼내
 
@@ -279,7 +279,7 @@ public class mngWhole1_2 : MonoBehaviour
     IEnumerator remarkBigger(GameObject r)
     {
         r.transform.localScale += new Vector3(0.1f, 0.1f, 0.1f);
-        if (r.transform.localScale.x >= 25)
+        if (r.transform.localScale.x >= 6)
             goDown = true;
         yield return null;
     }
@@ -287,7 +287,7 @@ public class mngWhole1_2 : MonoBehaviour
     IEnumerator remarkSmaller(GameObject r)
     {
         r.transform.localScale -= new Vector3(0.1f, 0.1f, 0.1f);
-        if (r.transform.localScale.x <= 16)
+        if (r.transform.localScale.x <= 4)
             goDown = false;
         yield return null;
     }

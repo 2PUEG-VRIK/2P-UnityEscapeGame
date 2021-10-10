@@ -46,17 +46,7 @@ public class theCubes : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        theCubes otherCube = other.gameObject.GetComponent<theCubes>();//가만히 있던 애는 otherCube
-        if (_obj.value == otherCube.value)//잡고있는것과 닿은 큐브의 색 값이 같다면
-        {
-            other.transform.gameObject.SetActive(false);
-            _obj.transform.gameObject.SetActive(false);
-        }
-
-        else // 색 값이 다르면
-        {
-            Debug.Log("색 값 다르당");
-        }
+     
 
 
         if (other.gameObject.name == "teleA" )
