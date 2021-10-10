@@ -18,7 +18,7 @@ public class Man : MonoBehaviour
 
     bool isSwap;        // 스왑할땐 아무런 뭣도 안하도록 함.
     bool isBump;
-    bool isJump;
+    public bool isJump;
     bool sDown1;        //무기바꾸는 변수
     bool sDown2;
     bool sDown3;
@@ -316,6 +316,7 @@ public class Man : MonoBehaviour
         // 바닥 닿으면 다시 점프 가능상태로 바꿔주기.
         if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Box")
         {
+            Debug.Log("Floor 닿았다");
             isJump = false;
         }
 
