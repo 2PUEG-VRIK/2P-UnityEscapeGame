@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class SimpleCollectibleScript : MonoBehaviour {
 
-	public enum CollectibleTypes {NoType, Key, Type2, Type3, Type4, Type5}; // you can replace this with your own labels for the types of collectibles in your game!
+	public enum CollectibleTypes {Key, ClickItem, DragItem, Type4, Type5}; // you can replace this with your own labels for the types of collectibles in your game!
 
 	public CollectibleTypes CollectibleType; // this gameObject's type
 
@@ -17,14 +17,22 @@ public class SimpleCollectibleScript : MonoBehaviour {
 
 	public GameObject collectEffect;
 
+	private Vector3 m_Offset;
+	private float m_ZCoord;
+
+	// 드래그해서 원하는 지점에 놓기 
+	private Vector3 pre_position;
+	public GameObject target;
+	private bool inTarget;
+
 	// Use this for initialization
 	void Start () {
-		
+		pre_position = transform.position;
+		inTarget = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
 		if (rotate)
 			transform.Rotate (Vector3.up * rotationSpeed * Time.deltaTime, Space.World); 
 	}
@@ -34,24 +42,22 @@ public class SimpleCollectibleScript : MonoBehaviour {
 		if (other.tag == "Player") {
 			Collect ();
 		}
+		if( other == target)
+        {
+			inTarget = true;
+        }
 	}
 
 	public void Collect()
 	{
 		if (collectSound)
-			Debug.Log("collectSound 있긴 함/");
+			Debug.Log("collectSound 있긴 함");
 			AudioSource.PlayClipAtPoint(collectSound, transform.position);
 		if(collectEffect)
 			Instantiate(collectEffect, transform.position, Quaternion.identity);
 
 		//Below is space to add in your code for what happens based on the collectible type
-
-		if (CollectibleType == CollectibleTypes.NoType) {
-
-			//Add in code here;
-
-			Debug.Log ("Do NoType Command");
-		}
+		 
 		if (CollectibleType == CollectibleTypes.Key) {
 
 			Debug.Log("Do Key Command");
@@ -63,31 +69,58 @@ public class SimpleCollectibleScript : MonoBehaviour {
 			player.GetComponent<Man>().hasKey = true;
  			key.SetActive(true);
 		}
-		if (CollectibleType == CollectibleTypes.Type2) {
-
-			//Add in code here;
-
-			Debug.Log ("Do NoType Command");
-		}
-		if (CollectibleType == CollectibleTypes.Type3) {
-
-			//Add in code here;
-
-			Debug.Log ("Do NoType Command");
-		}
-		if (CollectibleType == CollectibleTypes.Type4) {
-
-			//Add in code here;
-
-			Debug.Log ("Do NoType Command");
-		}
-		if (CollectibleType == CollectibleTypes.Type5) {
-
-			//Add in code here;
-
-			Debug.Log ("Do NoType Command");
-		}
-
+		 
 		Destroy (gameObject);
+	}
+
+	private void OnMouseDown()
+	{
+		if (CollectibleType == CollectibleTypes.ClickItem || CollectibleType == CollectibleTypes.DragItem)
+        {
+			Debug.Log("OnMouseDown");
+			m_ZCoord = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
+			m_Offset = gameObject.transform.position - GetMouseWorldPosition();
+		}
+
+	}
+
+    private Vector3 GetMouseWorldPosition()
+	{
+		Vector3 mousePoint = Input.mousePosition;
+		mousePoint.z = m_ZCoord;
+
+		return Camera.main.ScreenToWorldPoint(mousePoint);
+	}
+
+	private void OnMouseUp()
+	{
+		if (CollectibleType == CollectibleTypes.ClickItem)
+		{
+			Destroy(gameObject);
+		}
+		if (CollectibleType == CollectibleTypes.DragItem)
+        {
+            if (inTarget)
+            {
+				Debug.Log("inTarget");
+				Destroy(gameObject);
+			}
+			else
+            {
+				Debug.Log("제자리로 ^^");
+				transform.position = pre_position;
+            }
+		}
+	}
+	private void OnMouseEnter()
+	{
+	}
+
+	private void OnMouseDrag()
+	{
+		if (CollectibleType == CollectibleTypes.DragItem)
+		{
+			transform.position = GetMouseWorldPosition() + m_Offset;
+		}
 	}
 }
