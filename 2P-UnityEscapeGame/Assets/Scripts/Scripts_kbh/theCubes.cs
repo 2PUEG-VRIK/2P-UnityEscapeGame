@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,7 +9,7 @@ public class theCubes : MonoBehaviour
     public GameObject obj;//???? ????????? ???
     Rigidbody rigid;
     SphereCollider sphere;
-    private int check = -1;//???? ??????? ???? ???????????°¿?
+    private int check = -1;//???? ??????? ???? ???????????ÔøΩÔøΩ?
 
     private void Awake()
     {
@@ -28,43 +28,29 @@ public class theCubes : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name == "Cube")
-        {
-            theCubes otherCube = other.gameObject.GetComponent<theCubes>();
-            if (this.value > otherCube.value)//¿‚∞Ì¿÷¥¬∞‘ ¥ı ≈¨∂ß
-            {
+        //if (other.gameObject.name == "Cube")
+        //{
+        //    theCubes otherCube = other.gameObject.GetComponent<theCubes>();
+        //    if (this.value > otherCube.value)//Ïû°Í≥†ÏûàÎäîÍ≤å Îçî ÌÅ¥Îïå
+        //    {
+               
+        //        other.transform.localScale *= 1.1f;
 
-                other.transform.localScale *= 1.1f;
+        //        other.transform.gameObject.SetActive(false);
+        //    }
 
+        //    else
+        //    {
+               
+        //        other.transform.localScale *= 1.2f;
+        //        other.transform.gameObject.SetActive(false);
 
-                other.transform.gameObject.SetActive(false);
-            }
+        //    }
+        //}
 
-            else
-            {
-                //if (check == -1)//√≥¿Ω ª˝º∫µ«¥¬ ∞¥√º!
-
-                //{
-                //    Instantiate(obj, new Vector3(
-                //            (this.transform.position.x + other.transform.position.x) / 2,
-                //            (this.transform.position.y + other.transform.position.y) / 2,
-                //            (this.transform.position.z + other.transform.position.z) / 2),
-                //            Quaternion.identity);
-                //    check++;
-                //}
-
-                other.transform.localScale *= 1.2f;
-                // otherCube.transform.localScale *= 1.2f;
-                //this.transform.position = new Vector3(999, 999, 999);
-                other.transform.gameObject.SetActive(false);
-
-            }
-        }
-
-        if (other.gameObject.name == "teleA")
-        {
-            
-        }
+        //if (other.gameObject.name == "teleA")
+        //{
+        //}
 
     }
     private void OnMouseDrag()
@@ -73,5 +59,3 @@ public class theCubes : MonoBehaviour
         this.transform.position = Camera.main.ScreenToWorldPoint(mousePosition);
     }
 }
-
-//?? ®®?? ???

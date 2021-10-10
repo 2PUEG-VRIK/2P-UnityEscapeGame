@@ -19,7 +19,9 @@ public class mngWhole1_2 : MonoBehaviour
     Ray ray;
     RaycastHit hit;
     Renderer cubeColor;
-
+    int cubeNum = 20;//큐브 개수
+    GameObject remark;//느낌표
+    bool goDown;
 
 
     //2층
@@ -46,27 +48,29 @@ public class mngWhole1_2 : MonoBehaviour
         W = GameObject.Find("teleA");
         rigid = GameObject.FindWithTag("Player").GetComponent<Rigidbody>();
         //input = GameObject.Find("Canvas_2").transform.GetChild(1).gameObject;
-        scrLight = GameObject.Find("Directional Light"); 
+        scrLight = GameObject.Find("Directional Light");
         sr = input.GetComponent<SpriteRenderer>();
         img = input.GetComponent<Image>();
         coinCheck = GameObject.Find("Man").GetComponent<Man>();
         img = input.GetComponent<Image>();
         Door = GameObject.Find("Door_5.001");
         rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
-       
+        grabCube = GameObject.Find("holdingCube").transform.GetChild(0).gameObject;
+        remark = GameObject.Find("remark").transform.gameObject;
+
     }
     //private Vector3 velocity = -Vector3.up.normalized;
 
     private void Awake()
     {
-        
+
     }
     private void Update()
     {
         if (isHold && check == 1)
             StartCoroutine("goBack");
-        
-        
+
+
         //if (true == Input.GetMouseButtonDown(0))//마우스 내려갔나용
         //{
 
@@ -77,6 +81,20 @@ public class mngWhole1_2 : MonoBehaviour
 
         //}
 
+        if (cubeNum == 0)
+        {
+            remark.SetActive(true); //느낌표 꺼내
+
+            if (goDown)
+            {
+                StartCoroutine(remarkSmaller(remark));
+            }
+
+            else if (!goDown)
+            {
+                StartCoroutine(remarkBigger(remark));
+            }
+        }
 
 
 
@@ -110,14 +128,14 @@ public class mngWhole1_2 : MonoBehaviour
 
                     Invoke("mumchwo", 1);
                 }
-                 _obj.SetActive(false);
+                _obj.SetActive(false);
                 Door.transform.rotation = Quaternion.Slerp(
                 Door.transform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), Time.time * 0.001f);
-                Door.transform.parent.GetComponent<BoxCollider>().enabled=false;
+                Door.transform.parent.GetComponent<BoxCollider>().enabled = false;
             }
         }
     }
-    
+
     private void mumchwo()//update에서 isBack=false하면 뒤로 가기도 전에 멈춰버려서~ 안됨
     {
         isBack = false;
@@ -129,7 +147,7 @@ public class mngWhole1_2 : MonoBehaviour
     private void Wrong()
     {
         img.color = Color.red;
-        text.text="";
+        text.text = "";
     }
     private void Answer()
     {
@@ -139,8 +157,8 @@ public class mngWhole1_2 : MonoBehaviour
         _obj.SetActive(false);//What we need 없애
         _obj = null;
 
-        _obj = GameObject.Find("Weapons").transform.GetChild(0).gameObject;  
-            _obj.SetActive(true);
+        _obj = GameObject.Find("Weapons").transform.GetChild(0).gameObject;
+        _obj.SetActive(true);
 
         for (int j = 0; j < monNum; j++)
         {
@@ -152,7 +170,7 @@ public class mngWhole1_2 : MonoBehaviour
     }
     private void tryAgain()
     {
-        img.color = new Color(168,206,255,192);
+        img.color = new Color(168, 206, 255, 192);
         text.text.Replace(text.text, " ");
     }
 
@@ -181,17 +199,18 @@ public class mngWhole1_2 : MonoBehaviour
                         grabCube.transform.gameObject.SetActive(false);//들고있는애 없애고
                         cubeValue = -1;
                         isHold = false;
+                        cubeNum -= 2;
                     }
                     else //값이 다르다~~~ 다른 애를 찍엇다!
                     {
                         cube.GetComponent<Renderer>().material.color = Color.red;
+                        check = 1;
                         //한 0.5초 뒤에 색 원상복구
                         StartCoroutine(restoreColor(cube));
-                        StartCoroutine(goBack());
 
                     }
                 }
-                
+
             }
 
 
@@ -204,13 +223,13 @@ public class mngWhole1_2 : MonoBehaviour
                 scrLight.transform.rotation = Quaternion.Euler(-90, 0, 0);//빛 off
                 _obj = GameObject.Find("Canvas_2").transform.GetChild(0).gameObject;//text임
                 _obj.SetActive(true);//what we need 켜
-                
+
                 input.SetActive(true);//입력받는 창 켜
 
                 check = 2;
             }
 
-             if(other.name=="Door" )//동전 들고 문 앞에 가면coinCheck.check==1
+            if (other.name == "Door")//동전 들고 문 앞에 가면coinCheck.check==1
             {
                 //문열어
                 isBack = true;//뒤로 튕길 준비 완.
@@ -230,7 +249,7 @@ public class mngWhole1_2 : MonoBehaviour
     IEnumerator goBack()//1층에서 상자랑 닿으면 뒤로 튕기는거
     {
         ///rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
-        this.transform.Translate(new Vector3(0, 0, -1) * Time.deltaTime*30);
+        this.transform.Translate(new Vector3(0, 0, -30) * Time.deltaTime);
 
         check = -1;
         isHold = true;
@@ -245,15 +264,31 @@ public class mngWhole1_2 : MonoBehaviour
 
         switch (cube.value)
         {
-            case 1: // 흰색?
-                cube.GetComponent<Renderer>().material.color = Color.white;
+            case 1: // 분홍
+                cube.GetComponent<Renderer>().material.color = new Color(255f / 255f, 181f / 255f, 242f / 255f, 255f / 255f);
                 break;
             case 2: //노란색
-                cube.GetComponent<Renderer>().material.color = Color.yellow;
+                cube.GetComponent<Renderer>().material.color = new Color(253f / 255f, 235f / 255f, 103f / 255f, 255f / 255f);
                 break;
-            case 3://초록색
-                cube.GetComponent<Renderer>().material.color = Color.green;
+            case 3://연두
+                cube.GetComponent<Renderer>().material.color = new Color(173f / 255f, 255f / 255f, 143f / 255f, 255f / 255f);
                 break;
         }
+    }
+
+    IEnumerator remarkBigger(GameObject r)
+    {
+        r.transform.localScale += new Vector3(0.1f, 0.1f, 0.1f);
+        if (r.transform.localScale.x >= 25)
+            goDown = true;
+        yield return null;
+    }
+
+    IEnumerator remarkSmaller(GameObject r)
+    {
+        r.transform.localScale -= new Vector3(0.1f, 0.1f, 0.1f);
+        if (r.transform.localScale.x <= 16)
+            goDown = false;
+        yield return null;
     }
 }
