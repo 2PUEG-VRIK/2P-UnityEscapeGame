@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class SimpleCollectibleScript : MonoBehaviour {
 
-	public enum CollectibleTypes {NoType, Type1, Type2, Type3, Type4, Type5}; // you can replace this with your own labels for the types of collectibles in your game!
+	public enum CollectibleTypes {NoType, Key, Type2, Type3, Type4, Type5}; // you can replace this with your own labels for the types of collectibles in your game!
 
 	public CollectibleTypes CollectibleType; // this gameObject's type
 
@@ -26,8 +26,7 @@ public class SimpleCollectibleScript : MonoBehaviour {
 	void Update () {
 
 		if (rotate)
-			transform.Rotate (Vector3.up * rotationSpeed * Time.deltaTime, Space.World);
-
+			transform.Rotate (Vector3.up * rotationSpeed * Time.deltaTime, Space.World); 
 	}
 
 	void OnTriggerEnter(Collider other)
@@ -39,7 +38,8 @@ public class SimpleCollectibleScript : MonoBehaviour {
 
 	public void Collect()
 	{
-		if(collectSound)
+		if (collectSound)
+			Debug.Log("collectSound 있긴 함/");
 			AudioSource.PlayClipAtPoint(collectSound, transform.position);
 		if(collectEffect)
 			Instantiate(collectEffect, transform.position, Quaternion.identity);
@@ -52,11 +52,16 @@ public class SimpleCollectibleScript : MonoBehaviour {
 
 			Debug.Log ("Do NoType Command");
 		}
-		if (CollectibleType == CollectibleTypes.Type1) {
+		if (CollectibleType == CollectibleTypes.Key) {
 
-			//Add in code here;
+			Debug.Log("Do Key Command");
+			
+			//sample1에 있는 노란 열쇠. 먹으면 캐릭 머리위 활성화
+			GameObject player = GameObject.Find("Man").gameObject;
+			GameObject key = GameObject.Find("Man").transform.GetChild(2).gameObject;
 
-			Debug.Log ("Do NoType Command");
+			player.GetComponent<Man>().hasKey = true;
+ 			key.SetActive(true);
 		}
 		if (CollectibleType == CollectibleTypes.Type2) {
 
