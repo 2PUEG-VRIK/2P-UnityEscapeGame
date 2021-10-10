@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Man : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class Man : MonoBehaviour
     bool iDown;
     bool jDown;
     bool isBorder;      // 벽 통과 못하게 막는 플래그      
+    public bool hasKey;
 
     // 무기 부분
     public GameObject[] weapons; // 이게 손에 들려있는 가려진 무기
@@ -50,7 +52,7 @@ public class Man : MonoBehaviour
 
     void Start()
     {
-
+        hasKey = false;
     }
 
     void Awake()
@@ -303,6 +305,7 @@ public class Man : MonoBehaviour
             if (health <= 0)
                 Quit();
         }
+        
     }
     
     private void OnCollisionEnter(Collision collision)
@@ -315,20 +318,24 @@ public class Man : MonoBehaviour
         }
 
         //if (collision.gameObject.tag == "Ladder")//사다리
-      // {
+        // {
 
         //    isLadder = true;
         //    Debug.Log("사다리에 닿았다");
         //    if (Input.GetKey(KeyCode.UpArrow))
-       //     {
-         //       Debug.Log("화살표 눌러짐");
- 
-       //         enu1 = LadderUp(transform.position, new Vector3(34, 82, 69), 2f);
+        //     {
+        //       Debug.Log("화살표 눌러짐");
+
+        //         enu1 = LadderUp(transform.position, new Vector3(34, 82, 69), 2f);
         //        //StartCoroutine(LadderUp, transform.position, new Vector3(34,82,69), 2f);
-       //         StartCoroutine(enu1);
+        //         StartCoroutine(enu1);
         //    }
-       // }
-     }
+        // }
+
+     
+    }
+
+     
 
     private void OnCollisionExit(Collision collision)
     {
