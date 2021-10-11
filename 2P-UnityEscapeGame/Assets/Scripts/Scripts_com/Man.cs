@@ -77,21 +77,6 @@ public class Man : MonoBehaviour
         StoptoWall();       // 벽 or 박스 통과 방지
 
 
-        //if (isLadder)
-        //{
-        //    rigid.useGravity = false;
-
-        //    if (Input.GetKeyDown(KeyCode.UpArrow))
-        //        34 82 69
-        //       transform.Translate()
-        //            // transform.Translate(new Vector3(0, speed * 1f * Time.deltaTime, speed* -0.5f * Time.deltaTime).normalized);
-        //    else if(Input.GetKeyDown(KeyCode.DownArrow))
-        //    {34 3 28
-                
-        //        //transform.Translate(new Vector3(0, speed * -1f * Time.deltaTime, speed * -2f * Time.deltaTime).normalized);
-        //    }
-
-        //}
     }
 
     
@@ -181,7 +166,6 @@ public class Man : MonoBehaviour
             }
         }
     }
-
     void Swap()
     {
 
@@ -214,7 +198,6 @@ public class Man : MonoBehaviour
         }
     }
 
-
     void SwapOut()
     {
         isSwap = false;
@@ -246,15 +229,18 @@ public class Man : MonoBehaviour
 
     void Interaction()
     {
-        if (nearObject != null) //&&iDown
+        if (nearObject != null) 
         {
             if (nearObject.tag == "Item")
             {
+                Debug.Log("먹었따");
+
                 Item item = nearObject.GetComponent<Item>();
                 int weaponIndex;
                 if (item.type == Item.Type.Weapon)
                 {
                     weaponIndex = item.value;
+                    Debug.Log(weaponIndex);
                     hasWeapons[weaponIndex] = true;
                 }
             }
@@ -262,8 +248,7 @@ public class Man : MonoBehaviour
     }
 
  
-    public int check = -1;
-    //private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
+    public int check = -1;//코인 관련 변수(김보현)
  
     private void OnTriggerEnter(Collider other)
     {
@@ -273,6 +258,7 @@ public class Man : MonoBehaviour
             switch (item.type)
             {
                 case Item.Type.Weapon:
+                    Debug.Log("아이템 먹었다-trigger 인식");
                       break;
                  case Item.Type.Coin:
                     check = 1;
@@ -295,7 +281,7 @@ public class Man : MonoBehaviour
 
             }
             Interaction();
-            Destroy(other.gameObject);//원래 exit에 있었음
+            Destroy(other.gameObject);
 
         }
         else if (other.tag == "Enemy")
@@ -312,73 +298,14 @@ public class Man : MonoBehaviour
     
     private void OnCollisionEnter(Collision collision)
     {
-
         // 바닥 닿으면 다시 점프 가능상태로 바꿔주기.
         if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Box")
         {
             isJump = false;
         }
-
-        //if (collision.gameObject.tag == "Ladder")//사다리
-        // {
-
-        //    isLadder = true;
-        //    Debug.Log("사다리에 닿았다");
-        //    if (Input.GetKey(KeyCode.UpArrow))
-        //     {
-        //       Debug.Log("화살표 눌러짐");
-
-        //         enu1 = LadderUp(transform.position, new Vector3(34, 82, 69), 2f);
-        //        //StartCoroutine(LadderUp, transform.position, new Vector3(34,82,69), 2f);
-        //         StartCoroutine(enu1);
-        //    }
-        // }
-
-     
     }
 
-     
-
-    private void OnCollisionExit(Collision collision)
-    {
-
-        if (collision.gameObject.tag == "Ladder")
-        {
-           // isLadder = false;
-            rigid.useGravity = true;
-            StopCoroutine(enu1);
-
-        }
-    }
-
-    private IEnumerator LadderUp(Vector3 startPos, Vector3 targetPos, float duration)
-    {
-        Debug.Log("코루틴 실행");
-        float timer = 0f;
-
-        // 이동 시작 위치 설정
-        Vector3 position = startPos;
-        //rectTransform.anchoredPosition = position;
-
-        // 시간에 따른 위치 설정
-        while (timer < duration)
-        {
-            timer += Time.deltaTime;
-
-            position.x = Mathf.Lerp(startPos.x, targetPos.x, timer / duration);
-            position.y = Mathf.Lerp(startPos.y, targetPos.y, timer / duration);
-            position.x = Mathf.Lerp(startPos.z, targetPos.z, timer / duration);
-
-            transform.localPosition = position;
-
-            yield return null;
-        }
-
-        // 이동 종료 위치 설정
-        position = targetPos;
-        transform.localPosition = position;
-
-    }
+  
     void Bump()
     {
         //anim.SetTrigger("Bump");
