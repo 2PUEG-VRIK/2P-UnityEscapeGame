@@ -19,9 +19,10 @@ public class mngWhole1_2 : MonoBehaviour
     Ray ray;
     RaycastHit hit;
     Renderer cubeColor;
-    int cubeNum = 20;//큐브 개수
-    GameObject remark;//느낌표
+    int cubeNum = 6;//큐브 개수
     bool goDown;
+    GameObject tele;
+    GameObject remark;//느낌표
 
 
     //2층
@@ -56,10 +57,11 @@ public class mngWhole1_2 : MonoBehaviour
         Door = GameObject.Find("Door_5.001");
         rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
         grabCube = GameObject.Find("holdingCube").transform.GetChild(0).gameObject;
-        remark = GameObject.Find("teleA").transform.GetChild(1).gameObject;
+        tele = GameObject.Find("final").transform.GetChild(0).gameObject;
+        remark = GameObject.Find("final").transform.GetChild(1).gameObject;
+
 
     }
-    //private Vector3 velocity = -Vector3.up.normalized;
 
     private void Awake()
     {
@@ -81,8 +83,9 @@ public class mngWhole1_2 : MonoBehaviour
 
         //}
 
-        if (cubeNum == 20)
+        if (cubeNum == 0)
         {
+            tele.SetActive(true);
             remark.SetActive(true); //느낌표 꺼내
 
             if (goDown)
@@ -200,6 +203,7 @@ public class mngWhole1_2 : MonoBehaviour
                         cubeValue = -1;
                         isHold = false;
                         cubeNum -= 2;
+                        Debug.Log(cubeNum);
                     }
                     else //값이 다르다~~~ 다른 애를 찍엇다!
                     {
@@ -279,7 +283,7 @@ public class mngWhole1_2 : MonoBehaviour
     IEnumerator remarkBigger(GameObject r)
     {
         r.transform.localScale += new Vector3(0.1f, 0.1f, 0.1f);
-        if (r.transform.localScale.x >= 6)
+        if (r.transform.localScale.x >= 30)
             goDown = true;
         yield return null;
     }
@@ -287,7 +291,7 @@ public class mngWhole1_2 : MonoBehaviour
     IEnumerator remarkSmaller(GameObject r)
     {
         r.transform.localScale -= new Vector3(0.1f, 0.1f, 0.1f);
-        if (r.transform.localScale.x <= 4)
+        if (r.transform.localScale.x <= 20)
             goDown = false;
         yield return null;
     }
