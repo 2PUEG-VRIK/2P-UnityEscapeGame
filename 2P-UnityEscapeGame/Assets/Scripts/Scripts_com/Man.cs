@@ -9,7 +9,6 @@ public class Man : MonoBehaviour
 
     float hAxis;
     float vAxis;
-
     Vector3 moveVec;
     Vector3 preVec;
 
@@ -69,7 +68,6 @@ public class Man : MonoBehaviour
         Jump();
         Attack();
         Swap();
-        Interaction();
     }
     private void FixedUpdate()
     {
@@ -227,23 +225,14 @@ public class Man : MonoBehaviour
         }
     }
 
-    void Interaction()
+    void Interaction(GameObject sth)
     {
-        if (nearObject != null) 
+        int weaponIndex;
+        if (sth != null)
         {
-            if (nearObject.tag == "Item")
-            {
-                Debug.Log("먹었따");
-
-                Item item = nearObject.GetComponent<Item>();
-                int weaponIndex;
-                if (item.type == Item.Type.Weapon)
-                {
-                    weaponIndex = item.value;
-                    Debug.Log(weaponIndex);
-                    hasWeapons[weaponIndex] = true;
-                }
-            }
+            Item item = sth.GetComponent<Item>();
+            weaponIndex = item.value;
+            hasWeapons[weaponIndex] = true;
         }
     }
 
@@ -258,7 +247,7 @@ public class Man : MonoBehaviour
             switch (item.type)
             {
                 case Item.Type.Weapon:
-                    Debug.Log("아이템 먹었다-trigger 인식");
+
                       break;
                  case Item.Type.Coin:
                     check = 1;
@@ -280,7 +269,7 @@ public class Man : MonoBehaviour
 
 
             }
-            Interaction();
+            Interaction(other.transform.gameObject);
             Destroy(other.gameObject);
 
         }
