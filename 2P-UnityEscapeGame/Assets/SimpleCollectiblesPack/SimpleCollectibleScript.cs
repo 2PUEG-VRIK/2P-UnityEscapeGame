@@ -22,13 +22,21 @@ public class SimpleCollectibleScript : MonoBehaviour {
 
 	// 드래그해서 원하는 지점에 놓기 
 	private Vector3 pre_position;
+	// 목표 지점
 	public GameObject target;
-	private bool inTarget;
+	private Dragtarget target_script;
+
+ 	public bool isClicked;
 
 	// Use this for initialization
 	void Start () {
 		pre_position = transform.position;
-		inTarget = false;
+ 		isClicked = false;
+
+		if(CollectibleType == CollectibleTypes.DragItem)
+        {
+			target_script = target.GetComponent<Dragtarget>();
+		}
 	}
 	
 	// Update is called once per frame
@@ -41,11 +49,7 @@ public class SimpleCollectibleScript : MonoBehaviour {
 	{
 		if (other.tag == "Player") {
 			Collect ();
-		}
-		if( other == target)
-        {
-			inTarget = true;
-        }
+		} 
 	}
 
 	public void Collect()
@@ -80,6 +84,7 @@ public class SimpleCollectibleScript : MonoBehaviour {
 			Debug.Log("OnMouseDown");
 			m_ZCoord = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
 			m_Offset = gameObject.transform.position - GetMouseWorldPosition();
+			isClicked = true;
 		}
 
 	}
@@ -100,16 +105,18 @@ public class SimpleCollectibleScript : MonoBehaviour {
 		}
 		if (CollectibleType == CollectibleTypes.DragItem)
         {
-            if (inTarget)
+			Debug.Log("느낌표 마우스 UP");
+			if (target_script.inTarget)
             {
-				Debug.Log("inTarget");
-				Destroy(gameObject);
-			}
-			else
-            {
-				Debug.Log("제자리로 ^^");
-				transform.position = pre_position;
+				// 물건 뽀셧음.
             }
+            else
+            {
+				//제자리로
+				Debug.Log("제자리로");
+				transform.position = pre_position;
+				isClicked = false;
+			}
 		}
 	}
 	private void OnMouseEnter()
