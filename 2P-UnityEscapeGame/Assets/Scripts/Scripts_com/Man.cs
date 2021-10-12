@@ -73,10 +73,7 @@ public class Man : MonoBehaviour
     {
         FreezeRotation();   // 플레이어가 탄피나 그런거에 닿으면 회전을 하기 시작.. 그거 없애려고 해주는것임
         StoptoWall();       // 벽 or 박스 통과 방지
-
-
     }
-
     
 
     void FreezeRotation()

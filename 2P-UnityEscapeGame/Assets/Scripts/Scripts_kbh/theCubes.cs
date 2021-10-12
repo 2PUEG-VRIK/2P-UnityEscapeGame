@@ -8,8 +8,6 @@ public class theCubes : MonoBehaviour
     public int value;
     Rigidbody rigid;
     SphereCollider sphere;
-    public bool isDown=false;//w를 내릴 준비 되엇나여
-    private int check = -1;//새로 생성되는 큐브는 하나여야하기땜시롱
     Ray ray;
     RaycastHit hit;
     theCubes _obj;//마우스로 선택한 큐브
@@ -19,7 +17,6 @@ public class theCubes : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         sphere = GetComponent<SphereCollider>();
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
     }
 
     private void Update()
@@ -29,10 +26,7 @@ public class theCubes : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 _obj = hit.transform.GetComponent<theCubes>();//_obj는 선택한 큐브임 이제
-
-
             }
-
         }
     }
     private void OnCollisionEnter(Collision collision)
@@ -44,18 +38,6 @@ public class theCubes : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-     
-
-
-        if (other.gameObject.name == "teleA" )
-        {
-            isDown = true;
-        }
-    }
-
-    
     private void OnMouseDrag()
     {
         Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 25);

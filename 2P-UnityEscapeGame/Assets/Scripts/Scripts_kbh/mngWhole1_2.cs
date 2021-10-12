@@ -5,24 +5,21 @@ using UnityEngine.UI;
 
 public class mngWhole1_2 : MonoBehaviour
 {
-    //1층- 저울, 큐브들관련
+    //1층- 큐브들관련
     public GameObject[] Cubes;
     private bool isHold = false;//상자 들고있나여~
-    private bool isDown;//W 내릴준비 되었나여~
     Rigidbody rigid;
-    private GameObject W; //저울 & 텔레포트
-    private int check_1 = -1;//1층에서 쓰이는 체크. -1이면 뛸 준비 안된거고 1이면 뛸 준비 된거
     theCubes cube;
     GameObject grabCube;//손에 들고잇는 큐브
     int cubeValue;//손에 들고있는 큐브 값
-    private int addingTotal;
     Ray ray;
     RaycastHit hit;
     Renderer cubeColor;
-    int cubeNum = 6;//큐브 개수
-    bool goDown;
+    int cubeNum = 18;//큐브 개수
+    bool goDown;//느낌표 크기 관련 변수
     GameObject tele;
     GameObject remark;//느낌표
+    GameObject holdPosition;
 
 
     //2층
@@ -36,7 +33,6 @@ public class mngWhole1_2 : MonoBehaviour
     public int monNum;
     GameObject nearObject;
     Man coinCheck;
-    bool isCoinHolding;//coin 들고있나여
     GameObject Door;
     private int open = 0;//문 열어
     bool isBack = false;//뒤로 한번 튕겨야지
@@ -46,7 +42,6 @@ public class mngWhole1_2 : MonoBehaviour
     private void Start()
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        W = GameObject.Find("teleA");
         rigid = GameObject.FindWithTag("Player").GetComponent<Rigidbody>();
         //input = GameObject.Find("Canvas_2").transform.GetChild(1).gameObject;
         scrLight = GameObject.Find("Directional Light");
@@ -59,6 +54,7 @@ public class mngWhole1_2 : MonoBehaviour
         grabCube = GameObject.Find("holdingCube").transform.GetChild(0).gameObject;
         tele = GameObject.Find("final").transform.GetChild(0).gameObject;
         remark = GameObject.Find("final").transform.GetChild(1).gameObject;
+        holdPosition = GameObject.Find("holdingCoin");
 
 
     }
@@ -83,7 +79,7 @@ public class mngWhole1_2 : MonoBehaviour
 
         //}
 
-        if (cubeNum == 0)
+        if (cubeNum ==18 )
         {
             tele.SetActive(true);
             remark.SetActive(true); //느낌표 꺼내
@@ -98,8 +94,6 @@ public class mngWhole1_2 : MonoBehaviour
                 StartCoroutine(remarkBigger(remark));
             }
         }
-
-
 
         //2층
         if (Input.GetKeyDown(KeyCode.Return))//엔터누르면 
@@ -118,7 +112,7 @@ public class mngWhole1_2 : MonoBehaviour
 
         if (coinCheck.check == 1)//동전 들고있ㄷ고
         {
-            isCoinHolding = true;
+            holdPosition.transform.localPosition = new Vector3(0, 0.27f, -0.25f);
             _obj = GameObject.Find("holdingCoin").transform.GetChild(0).gameObject;
             _obj.SetActive(true);//동전 눈에 보이게
 
@@ -142,15 +136,14 @@ public class mngWhole1_2 : MonoBehaviour
     private void mumchwo()//update에서 isBack=false하면 뒤로 가기도 전에 멈춰버려서~ 안됨
     {
         isBack = false;
-        _obj = GameObject.Find("2nd").transform.GetChild(3).gameObject;
-        Debug.Log(_obj.name);
+        _obj = GameObject.Find("2nd").transform.GetChild(4).gameObject;
         _obj.SetActive(true);
     }
 
     private void Wrong()
     {
         img.color = Color.red;
-        text.text = "";
+        text.text = ""; 
     }
     private void Answer()
     {
@@ -214,7 +207,6 @@ public class mngWhole1_2 : MonoBehaviour
 
                     }
                 }
-
             }
 
 
@@ -242,14 +234,6 @@ public class mngWhole1_2 : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.name == "PTK_Cuboid_4")
-            check = -1;
-    }
-
-
-
     IEnumerator goBack()//1층에서 상자랑 닿으면 뒤로 튕기는거
     {
         ///rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
@@ -274,15 +258,15 @@ public class mngWhole1_2 : MonoBehaviour
             case 2: //노란색
                 cube.GetComponent<Renderer>().material.color = new Color(253f / 255f, 235f / 255f, 103f / 255f, 255f / 255f);
                 break;
-            case 3://연두
-                cube.GetComponent<Renderer>().material.color = new Color(173f / 255f, 255f / 255f, 143f / 255f, 255f / 255f);
+            case 3://하늘
+                cube.GetComponent<Renderer>().material.color = new Color(110f / 255f, 241f / 255f, 255f/ 255f, 255f / 255f);
                 break;  
         }
     }
 
     IEnumerator remarkBigger(GameObject r)
     {
-        r.transform.localScale += new Vector3(0.1f, 0.1f, 0.1f);
+        r.transform.localScale += new Vector3(0.4f, 0.4f, 0.4f);
         if (r.transform.localScale.x >= 30)
             goDown = true;
         yield return null;
@@ -290,7 +274,7 @@ public class mngWhole1_2 : MonoBehaviour
 
     IEnumerator remarkSmaller(GameObject r)
     {
-        r.transform.localScale -= new Vector3(0.1f, 0.1f, 0.1f);
+        r.transform.localScale -= new Vector3(0.4f, 0.4f, 0.4f);
         if (r.transform.localScale.x <= 20)
             goDown = false;
         yield return null;
