@@ -38,6 +38,7 @@ public class mngWhole1_2 : MonoBehaviour
     bool isBack = false;//뒤로 한번 튕겨야지
     private GameObject target;//마우스가 클릭한 객체
     private bool _mouseState;//마우스 상태
+    GameObject exit;
 
     private void Start()
     {
@@ -55,6 +56,7 @@ public class mngWhole1_2 : MonoBehaviour
         tele = GameObject.Find("final").transform.GetChild(0).gameObject;
         remark = GameObject.Find("final").transform.GetChild(1).gameObject;
         holdPosition = GameObject.Find("holdingCoin");
+        exit = GameObject.Find("2nd").transform.GetChild(5).gameObject;
 
 
     }
@@ -126,6 +128,7 @@ public class mngWhole1_2 : MonoBehaviour
                     Invoke("mumchwo", 1);
                 }
                 _obj.SetActive(false);
+                exit.SetActive(true);
                 Door.transform.rotation = Quaternion.Slerp(
                 Door.transform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), Time.time * 0.001f);
                 Door.transform.parent.GetComponent<BoxCollider>().enabled = false;
@@ -196,7 +199,6 @@ public class mngWhole1_2 : MonoBehaviour
                         cubeValue = -1;
                         isHold = false;
                         cubeNum -= 2;
-                        Debug.Log(cubeNum);
                     }
                     else //값이 다르다~~~ 다른 애를 찍엇다!
                     {
