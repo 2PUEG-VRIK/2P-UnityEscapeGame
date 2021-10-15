@@ -29,7 +29,7 @@ public class Enemy : MonoBehaviour
         mat = GetComponentInChildren<MeshRenderer>().material;
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren <Animator>();
-        coin = GameObject.Find("2nd").transform.GetChild(4).gameObject;
+        coin = GameObject.Find("2nd").transform.GetChild(3).gameObject;
         Invoke("ChaseStart", 1);
     }
 
