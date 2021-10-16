@@ -228,8 +228,14 @@ public class Man : MonoBehaviour
         if (sth != null)
         {
             Item item = sth.GetComponent<Item>();
-            weaponIndex = item.value;
-            hasWeapons[weaponIndex] = true;
+            switch (item.type)
+            {
+                case Item.Type.Weapon:
+
+                    weaponIndex = item.value;
+                    hasWeapons[weaponIndex] = true;
+                    break;
+            }
         }
     }
 

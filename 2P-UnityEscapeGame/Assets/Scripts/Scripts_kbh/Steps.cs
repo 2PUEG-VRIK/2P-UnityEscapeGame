@@ -6,9 +6,9 @@ public class Steps : MonoBehaviour
 {
     BoxCollider boxcollider;
     Rigidbody rigid;
-    public GameObject broken1;
-    public GameObject broken2;
-
+    Vector3 pos;//밟은 땅의 위치
+    GameObject _obj;//밟은 땅
+    GameObject _objTrap;//생성할 트랩
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -19,17 +19,26 @@ public class Steps : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            Invoke("Break", 1.5f);
+            _obj = this.transform.gameObject;//_obj는 내가 밟은 땅!
+            pos = new Vector3(_obj.transform.localPosition.x, _obj.transform.localPosition.y, _obj.transform.localPosition.z);
+            _obj.SetActive(false);//밟았던 곳 없애고~
+           
+            
 
+            
         }
       
     }
 
-    void Break()
-    {
-        this.gameObject.SetActive(false);
-        broken1.SetActive(true);
-        broken2.SetActive(true);
+    
 
+    IEnumerator Trap()//일반 블럭 -> 트랩 되어서 1초마다 체력 깎이는 것 & 사람 색깔 빨간색으로 변하기
+    {
+        Instantiate(_objTrap, pos, Quaternion.identity);//내가 있던 곳에 트랩 생성
+        _objTrap.transform.localScale = _obj.transform.localScale;
+        _objTrap.tag = "Floor";
+        _objTrap.gameObject.layer = 7;//Floor layer로 바꿔줌
+
+        yield return null;
     }
 }
