@@ -7,23 +7,16 @@ using UnityEngine.UI;
 
 public class Exit : MonoBehaviour
 {
-
     // 다음 스테이지..
     public string scene;
-
     public GameObject result;
 
-    private int finPlayer = 0;
-
-    GameObject[] players;
-
+    GameObject players;
     bool isFinish;
-
 
     private void Start()
     {
-        players = new GameObject[2];
-        isFinish = false;
+         isFinish = false;
     }
 
     private void Update()
@@ -36,18 +29,16 @@ public class Exit : MonoBehaviour
         if (isFinish)
         {
             transform.position = Vector3.MoveTowards(transform.position, transform.position + Vector3.up, Time.deltaTime * 15);
-            players[0].transform.position = Vector3.MoveTowards(players[0].transform.position, players[0].transform.position + Vector3.up, Time.deltaTime * 15);
-            players[1].transform.position = Vector3.MoveTowards(players[1].transform.position, players[1].transform.position + Vector3.up, Time.deltaTime * 15);
+            players.transform.position = Vector3.MoveTowards(players.transform.position, players.transform.position + Vector3.up, Time.deltaTime * 15);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!isFinish && other.gameObject.tag == "Player")
-        {
-            players[0] = null;
-            finPlayer--;
-        }
+        //if (!isFinish && other.gameObject.tag == "Player")
+        //{
+        //    players = null;
+        //}
     }
 
 
@@ -56,16 +47,12 @@ public class Exit : MonoBehaviour
     {
         if (!isFinish && other.gameObject.tag == "Player")
         {
-            players[finPlayer] = other.gameObject;
 
-            finPlayer++;
-        }
-        if (finPlayer == 2)
-        {
-            Debug.Log("두명 다 올라왔따");
-            players[1] = other.gameObject;
+            players = other.gameObject;
+
+            // 키보드 이동 안받는 코드 추가
+
             SingleGameMNG.Instance.Timer_Stop();
-
             StartCoroutine("StageFinish");
         }
     }
@@ -73,18 +60,16 @@ public class Exit : MonoBehaviour
     {
         SingleGameMNG.Instance.save_time((scene == "Finish Scene"));
 
+        // 하늘로 올라가라.
         yield return new WaitForSeconds(1f);
-        players[0].GetComponent<Rigidbody>().useGravity = false;
-        players[1].GetComponent<Rigidbody>().useGravity = false;
-
+        players.GetComponent<Rigidbody>().useGravity = false;
         isFinish = true;
 
         // 결과창 띄우기
         yield return new WaitForSeconds(2f);
         result.SetActive(true);
+
+        // 결과 창에 시간 띄우는 함수
         SingleGameMNG.Instance.Game_Clear();
     }
-
-
-
 }
