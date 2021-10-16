@@ -8,11 +8,17 @@ public class Steps : MonoBehaviour
     Rigidbody rigid;
     Vector3 pos;//밟은 땅의 위치
     GameObject _obj;//밟은 땅
-    GameObject _objTrap;//생성할 트랩
+    public GameObject _objTrap;//생성할 트랩
+    Man player;//나~
+    SpriteRenderer spr;
+
+
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
         boxcollider = GetComponent<BoxCollider>();
+        player = GameObject.FindWithTag("Player").GetComponent<Man>();
+        spr = player.GetComponent<SpriteRenderer>();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -20,25 +26,55 @@ public class Steps : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             _obj = this.transform.gameObject;//_obj는 내가 밟은 땅!
-            pos = new Vector3(_obj.transform.localPosition.x, _obj.transform.localPosition.y, _obj.transform.localPosition.z);
-            _obj.SetActive(false);//밟았던 곳 없애고~
-           
-            
+            pos = new Vector3(_obj.transform.position.x, _obj.transform.position.y, _obj.transform.position.z);
+            StartCoroutine(Trap());
 
-            
+
         }
       
     }
 
-    
-
-    IEnumerator Trap()//일반 블럭 -> 트랩 되어서 1초마다 체력 깎이는 것 & 사람 색깔 빨간색으로 변하기
+    private void OnCollisionStay(Collision collision)
     {
+        if (collision.gameObject.tag == "Player")
+        {
+            spr.material.color = Color.yellow;
+
+
+        }
+
+    }
+
+
+
+    IEnumerator Trap()//일반 블럭 -> 트랩 되어
+    {
+        yield return new WaitForSeconds(1f);
+
         Instantiate(_objTrap, pos, Quaternion.identity);//내가 있던 곳에 트랩 생성
+        _obj.transform.position=new Vector3(999,999,999);//밟았던 곳 없애고~
+
         _objTrap.transform.localScale = _obj.transform.localScale;
         _objTrap.tag = "Floor";
         _objTrap.gameObject.layer = 7;//Floor layer로 바꿔줌
+            StartCoroutine(decreaseHealth());
 
-        yield return null;
+
+
+    }
+    private int count = -1;
+    IEnumerator decreaseHealth()//트랩위에 있는동안 체력 깎아~ & 사람 색깔 빨간색으로 놓기
+    {
+        yield return new WaitForSeconds(3f);
+        while (player.health > 0 && count==-1)
+        {
+            count++;
+            player.health -= 1;//머리 위로 체력 띄우자
+            Debug.Log(player.health);
+            spr.material.color = Color.red;
+            StartCoroutine(decreaseHealth());
+            
+            
+        }
     }
 }
