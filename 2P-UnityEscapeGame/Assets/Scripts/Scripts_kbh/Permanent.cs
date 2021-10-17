@@ -17,27 +17,19 @@ public class Permanent : MonoBehaviour
 
     private void Awake()
     {
-        //wall7 = GameObject.Find("Wall (7)");
         Step = GameObject.Find("Steps");
         Walls = GameObject.FindGameObjectsWithTag("Things");
         wallNum = 0;
-        
     }
     
     private void Update()
     {
         m = GameObject.FindGameObjectsWithTag("Enemy");
         Gnum = m.Length;
-       // if (m.Length == 4)//1Ãþ º® ³»·Á°¡´Â Á¶°Ç
+        foreach(GameObject wall in Walls)
         {
-            //wall7.transform.Translate(Vector3.down, Space.Self);
-            //if (wall7.transform.position.y < -60)
-            //    wall7.SetActive(false);
-            foreach(GameObject wall in Walls)
-            {
-                wall.transform.rotation = Quaternion.Slerp(
-               wall.transform.rotation, Quaternion.Euler(new Vector3(0, 0, 0)), Time.time * 0.01f);
-            }
+            wall.transform.rotation = Quaternion.Slerp(
+            wall.transform.rotation, Quaternion.Euler(new Vector3(0, 0, 0)), Time.time * 0.01f);
         }
 
 
@@ -46,7 +38,7 @@ public class Permanent : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
 
-        if (collision.transform.name == "Floor (1)")
+        if (collision.transform.name == "Plain")
         {
             Debug.Log("‰Ñ¶¥1");
 
