@@ -5,7 +5,7 @@ using UnityEngine;
 public class Waman : MonoBehaviour
 {
     public float speed = 20.0f;
-    public float jumpPower = 50.0f;
+    public float jumpPower = 30.0f;
 
     float hAxis;
     float vAxis;
@@ -320,16 +320,16 @@ public class Waman : MonoBehaviour
 
     void Bump()
     {
-        anim.SetTrigger("Bump");
-        isBump = true;
-        transform.position += preVec * -7;
+        //anim.SetTrigger("Bump");
+        //isBump = true;
+        //transform.position += preVec * -7;
 
-        Invoke("BumpOut", 1.5f);
+        //Invoke("BumpOut", 1.5f);
     }
 
     void BumpOut()
     {
-        isBump = false;
+        //isBump = false;
     }
 
 

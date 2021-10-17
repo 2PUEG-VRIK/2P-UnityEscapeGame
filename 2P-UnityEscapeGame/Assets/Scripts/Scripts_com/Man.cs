@@ -1,15 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Man : MonoBehaviour
 {
     public float speed = 25.0f;
-    public float jumpPower = 150.0f;
+    public float jumpPower = 200.0f;
 
     float hAxis;
     float vAxis;
-
     Vector3 moveVec;
     Vector3 preVec;
 
@@ -18,13 +18,14 @@ public class Man : MonoBehaviour
 
     bool isSwap;        // 스왑할땐 아무런 뭣도 안하도록 함.
     bool isBump;
-    bool isJump;
+    public bool isJump;
     bool sDown1;        //무기바꾸는 변수
     bool sDown2;
     bool sDown3;
     bool iDown;
     bool jDown;
     bool isBorder;      // 벽 통과 못하게 막는 플래그      
+    public bool hasKey;
 
     // 무기 부분
     public GameObject[] weapons; // 이게 손에 들려있는 가려진 무기
@@ -47,9 +48,11 @@ public class Man : MonoBehaviour
     float fireDelay;
 
     IEnumerator enu1; //ladder에 필요
+    private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
+
     void Start()
     {
-
+        hasKey = false;
     }
 
     void Awake()
@@ -66,31 +69,12 @@ public class Man : MonoBehaviour
         Jump();
         Attack();
         Swap();
-        Interaction();
     }
     private void FixedUpdate()
     {
         FreezeRotation();   // 플레이어가 탄피나 그런거에 닿으면 회전을 하기 시작.. 그거 없애려고 해주는것임
         StoptoWall();       // 벽 or 박스 통과 방지
-
-
-        //if (isLadder)
-        //{
-        //    rigid.useGravity = false;
-
-        //    if (Input.GetKeyDown(KeyCode.UpArrow))
-        //        34 82 69
-        //       transform.Translate()
-        //            // transform.Translate(new Vector3(0, speed * 1f * Time.deltaTime, speed* -0.5f * Time.deltaTime).normalized);
-        //    else if(Input.GetKeyDown(KeyCode.DownArrow))
-        //    {34 3 28
-                
-        //        //transform.Translate(new Vector3(0, speed * -1f * Time.deltaTime, speed * -2f * Time.deltaTime).normalized);
-        //    }
-
-        //}
     }
-
     
 
     void FreezeRotation()
@@ -179,7 +163,6 @@ public class Man : MonoBehaviour
             }
         }
     }
-
     void Swap()
     {
 
@@ -212,7 +195,6 @@ public class Man : MonoBehaviour
         }
     }
 
-
     void SwapOut()
     {
         isSwap = false;
@@ -242,24 +224,26 @@ public class Man : MonoBehaviour
         }
     }
 
-    void Interaction()
+    void Interaction(GameObject sth)
     {
-        if (nearObject != null) //&&iDown
+        int weaponIndex;
+        if (sth != null)
         {
-            if (nearObject.tag == "Item")
+            Item item = sth.GetComponent<Item>();
+            switch (item.type)
             {
-                Item item = nearObject.GetComponent<Item>();
-                int weaponIndex;
-                if (item.type == Item.Type.Weapon)
-                {
+                case Item.Type.Weapon:
+
                     weaponIndex = item.value;
                     hasWeapons[weaponIndex] = true;
-                }
+                    break;
             }
         }
     }
 
-    private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
+ 
+    public int check = -1;//코인 관련 변수(김보현)
+ 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Item")
@@ -268,14 +252,13 @@ public class Man : MonoBehaviour
             switch (item.type)
             {
                 case Item.Type.Weapon:
-                    nearObject = other.gameObject;
-                    break;
 
-                case Item.Type.Coin:
-                    Destroy(other.gameObject);
-                    this.transform.localScale *= 2;
-                    break;
+                      break;
+                 case Item.Type.Coin:
+                    check = 1;
 
+                    //this.transform.localScale *= 2;
+                    break;
                 case Item.Type.Heart:
                     health += item.value;
                     if (health > maxHealth)
@@ -284,134 +267,52 @@ public class Man : MonoBehaviour
 
                 case Item.Type.Ammo:
                     ammo += item.value;
-                    Debug.Log(ammo);
                     if (ammo > maxAmmo)
                         ammo = maxAmmo;
                     break;
+                //case Item.Type.Key:
+
 
             }
-            Interaction();
-            Destroy(other.gameObject);//원래 exit에 있었음
+            Interaction(other.transform.gameObject);
+            Destroy(other.gameObject);
 
         }
-
-        if (other.tag == "Ladder")//사다리
+        else if (other.tag == "Enemy")
         {
-            isLadder = true;
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                Debug.Log("사다리에 닿았고 upㅎ ㅘ살표 눌러짐");
+            health--;
+            //Vector3 reactVec = transform.forward * Random.Range(-15, -20) + Vector3.up * Random.Range(5,10);
+            //rigid.AddForce(reactVec*3, ForceMode.Impulse);
 
-                enu1 = LadderUp(transform.position, new Vector3(34, 82, 69), 2f);
-                //StartCoroutine(LadderUp, transform.position, new Vector3(34,82,69), 2f);
-                StartCoroutine(enu1);
-            }
+            if (health <= 0)
+                Quit();
         }
-
+        
     }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Item")
-        {
-            Item item = other.GetComponent<Item>();
-            switch (item.type)
-            {
-                case Item.Type.Weapon:
-                    // nearObject = null;
-                    break;
-                case Item.Type.Ammo:
-
-                    // nearObject = null;
-                    break;
-                case Item.Type.Heart:
-
-                    //nearObject = null;
-                    break;
-
-            }
-        }
-
-        else if (other.tag == "Ladder")
-        {
-            isLadder = false;
-            rigid.useGravity = true;
-            StopCoroutine(enu1);
-            
-        }
-    }
-
     
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Wall")
-        {
-            Debug.Log("벽이랑 닿았다.!");
-        }
-
-        if (collision.gameObject.tag == "Player")
-        {
-            // 플레이어끼리 부딪히면 튕기기 애니메이션
-            Bump();
-        }
-
         // 바닥 닿으면 다시 점프 가능상태로 바꿔주기.
         if (Physics.Raycast(transform.position, -transform.up, 3))
         {
+            Debug.Log("Floor 닿았다");
             isJump = false;
         }
-        //isJump = !Physics.Raycast(transform.position, -transform.up, 3); // 
-        //if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Box")
-        //{
-        //    isJump = false;
-        //}
     }
 
-    private void OnCollisionExit(Collision collision)
-    {
-
-    }
-
-    private IEnumerator LadderUp(Vector3 startPos, Vector3 targetPos, float duration)
-    {
-        Debug.Log("코루틴 실행");
-        float timer = 0f;
-
-        // 이동 시작 위치 설정
-        Vector3 position = startPos;
-        //rectTransform.anchoredPosition = position;
-
-        // 시간에 따른 위치 설정
-        while (timer < duration)
-        {
-            timer += Time.deltaTime;
-
-            position.x = Mathf.Lerp(startPos.x, targetPos.x, timer / duration);
-            position.y = Mathf.Lerp(startPos.y, targetPos.y, timer / duration);
-            position.x = Mathf.Lerp(startPos.z, targetPos.z, timer / duration);
-
-            transform.localPosition = position;
-
-            yield return null;
-        }
-
-        // 이동 종료 위치 설정
-        position = targetPos;
-        transform.localPosition = position;
-
-    }
+  
     void Bump()
     {
-        anim.SetTrigger("Bump");
-        isBump = true;
-        transform.position += preVec * -7;
+        //anim.SetTrigger("Bump");
+        //isBump = true;
+        //transform.position += preVec * -7;
 
-        Invoke("BumpOut", 1.5f);
+        //Invoke("BumpOut", 1.5f);
     }
 
     void BumpOut()
     {
-        isBump = false;
+        //isBump = false;
     }
 
 

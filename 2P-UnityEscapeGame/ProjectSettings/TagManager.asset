@@ -15,6 +15,7 @@ TagManager:
   - Bullet
   - Melee
   - Ladder
+  - Things
   layers:
   - Default
   - TransparentFX
@@ -26,9 +27,9 @@ TagManager:
   - Floor
   - Player
   - miniMap
-  - playerCube
-  - 
-  - 
+  - nonMini
+  - camArea
+  - Door
   - 
   - 
   - 

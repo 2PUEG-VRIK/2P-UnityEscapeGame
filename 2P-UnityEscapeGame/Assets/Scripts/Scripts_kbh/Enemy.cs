@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
     Rigidbody rigid;
     BoxCollider boxCollider;
     Animator anim;
+    GameObject coin;
 
    
     void Awake()//초기화
@@ -28,8 +29,8 @@ public class Enemy : MonoBehaviour
         mat = GetComponentInChildren<MeshRenderer>().material;
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren <Animator>();
-
-        Invoke("ChaseStart", 2);
+        coin = GameObject.Find("2nd").transform.GetChild(3).gameObject;
+        Invoke("ChaseStart", 1);
     }
 
     void ChaseStart()
@@ -63,7 +64,6 @@ public class Enemy : MonoBehaviour
         {
             Weapon weapon = other.GetComponent<Weapon>();
             curHealth -= weapon.damage;
-            Debug.Log("망치로 때림ㅜ 현재 체력은 " + curHealth);
             Vector3 reactVec = transform.position - other.transform.position;
             StartCoroutine(OnDamage(reactVec));
         }
@@ -72,7 +72,6 @@ public class Enemy : MonoBehaviour
         {
             Bullet bullet = other.GetComponent<Bullet>();
             curHealth -= bullet.damage;
-            Debug.Log("ㅊ총으로 때림ㅜ 현재 체력은 " + curHealth);
             Vector3 reactVec = transform.position - other.transform.position;
             Destroy(other.gameObject);//적에 닿는순간 총알 안보이게 하기~ 관통하면 안되니까
             StartCoroutine(OnDamage(reactVec));
@@ -90,6 +89,7 @@ public class Enemy : MonoBehaviour
 
         else
         {//죽었을 때
+            
             mat.color = Color.grey;
             gameObject.layer = 14;//EnemyDead로 바꿔
             isChase = false;
@@ -97,10 +97,15 @@ public class Enemy : MonoBehaviour
             anim.SetTrigger("doDie");
 
             reactVec = reactVec.normalized;//값 1로 통일
-            reactVec += Vector3.up;
-            rigid.AddForce(reactVec *5, ForceMode.Impulse);
-            Destroy(gameObject, 1); //1초 뒤에 사라짐
-
+            reactVec += Vector3.up*2;
+            rigid.AddForce(reactVec *7, ForceMode.Impulse);
+            if (this.name == "coinMonster")
+            {
+                coin.transform.position = this.transform.position;
+                coin.SetActive(true);
+                Debug.Log(coin.name);
+            }
+            Destroy(gameObject, 0.6f); //1초 뒤에 사라짐
             //사라진 그 자리에 아이템 하나 넣어주기
         }
     }

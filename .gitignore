@@ -69,3 +69,7 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /2P-UnityEscapeGame/[Aa]ssets/[Ss]treamingAssets/aa.meta
 /2P-UnityEscapeGame/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Firebase documents _sj 
+/2P-UnityEscapeGame/[Aa]ssets/Firebase/
+/2P-UnityEscapeGame/[Aa]ssets/Firebase.meta
