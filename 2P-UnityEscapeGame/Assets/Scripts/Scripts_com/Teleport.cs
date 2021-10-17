@@ -6,32 +6,35 @@ public class Teleport : MonoBehaviour
 {
     public GameObject target;
     bool cooldown = false;
+
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(this.gameObject.name + "::" + this.cooldown.ToString());
         if (cooldown)
         {
             return;
         }
         if (target != null)
         {
-            if (target.GetComponent<Teleport>() != null)
-            {
-                target.GetComponent<Teleport>().cooldown = true;
-            }
             if (other.gameObject.tag == "Player")
             {
+                StartCooldown();
                 Vector3 position = target.transform.position;
-                position.y += target.transform.localScale.y;
+                position.y += target.transform.lossyScale.y / 2.0f;
                 other.transform.position = position;
-            }
-            if(target.GetComponent<Teleport>() != null)
-            {
-                this.StartCoroutine("toggleCooldown");
             }
         }
     }
-    public IEnumerator toggleCooldown()
+
+    private void StartCooldown()
+    {
+        if (target.GetComponent<Teleport>() != null)
+        {
+            target.GetComponent<Teleport>().cooldown = true;
+            this.StartCoroutine("EndCooldown");
+        }
+    }
+
+    public IEnumerator EndCooldown()
     {
         yield return new WaitForSeconds(1.0f);
         target.GetComponent<Teleport>().cooldown = false;
