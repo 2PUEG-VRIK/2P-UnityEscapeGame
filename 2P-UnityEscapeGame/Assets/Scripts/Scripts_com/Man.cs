@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Man : MonoBehaviour
 {
-    float speed = 25;
+    public float speed = 25.0f;
+    public float jumpPower = 150.0f;
 
     float hAxis;
     float vAxis;
@@ -156,6 +157,7 @@ public class Man : MonoBehaviour
         // 점프 키 눌렀을 때 아이템 있으면 아이템 먹음.
         if (jDown)
         {
+            Debug.Log(isJump.ToString());
             if (nearObject != null)
             {
                 // 아이템 먹기
@@ -170,7 +172,7 @@ public class Man : MonoBehaviour
             else if (!isJump)
             {
                 // 점프는 그냥 위로 속도주기.
-                rigid.AddForce(Vector3.up * 150, ForceMode.Impulse);
+                rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
 
                 anim.SetTrigger("Jump");
                 isJump = true;
@@ -354,15 +356,15 @@ public class Man : MonoBehaviour
         }
 
         // 바닥 닿으면 다시 점프 가능상태로 바꿔주기.
-        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Box")
+        if (Physics.Raycast(transform.position, -transform.up, 3))
         {
             isJump = false;
         }
-
-      
-
-        
-
+        //isJump = !Physics.Raycast(transform.position, -transform.up, 3); // 
+        //if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Box")
+        //{
+        //    isJump = false;
+        //}
     }
 
     private void OnCollisionExit(Collision collision)
