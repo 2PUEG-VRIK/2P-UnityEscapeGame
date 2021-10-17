@@ -81,7 +81,7 @@ public class mngWhole1_2 : MonoBehaviour
 
         //}
 
-        if (cubeNum ==18 )
+        if (cubeNum ==0 )
         {
             tele.SetActive(true);
             remark.SetActive(true); //느낌표 꺼내

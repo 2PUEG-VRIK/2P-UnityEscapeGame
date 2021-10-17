@@ -8,7 +8,8 @@ public class Permanent : MonoBehaviour
     //몬스터와 징검다리 관할
 
     GameObject[] m;//초록 몬스터 배열
-    GameObject wall7;//떨굴 벽
+    GameObject[] Walls;//회전할 벽들
+    private int wallNum;//grave wall 개수
     GameObject Step; //징검다리 + 그 위의 아이템
 
     public int Total;
@@ -16,19 +17,27 @@ public class Permanent : MonoBehaviour
 
     private void Awake()
     {
-        wall7 = GameObject.Find("Wall (7)");
+        //wall7 = GameObject.Find("Wall (7)");
         Step = GameObject.Find("Steps");
+        Walls = GameObject.FindGameObjectsWithTag("Things");
+        wallNum = 0;
+        
     }
     
-    private void FixedUpdate()
+    private void Update()
     {
         m = GameObject.FindGameObjectsWithTag("Enemy");
         Gnum = m.Length;
-        if (m.Length == 4)//1층 벽 내려가는 조건
+       // if (m.Length == 4)//1층 벽 내려가는 조건
         {
-            wall7.transform.Translate(Vector3.down, Space.Self);
-            if (wall7.transform.position.y < -60)
-                wall7.SetActive(false);
+            //wall7.transform.Translate(Vector3.down, Space.Self);
+            //if (wall7.transform.position.y < -60)
+            //    wall7.SetActive(false);
+            foreach(GameObject wall in Walls)
+            {
+                wall.transform.rotation = Quaternion.Slerp(
+               wall.transform.rotation, Quaternion.Euler(new Vector3(0, 0, 0)), Time.time * 0.01f);
+            }
         }
 
 
