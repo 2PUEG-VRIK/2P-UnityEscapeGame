@@ -103,6 +103,7 @@ public class Enemy : MonoBehaviour
             {
                 coin.transform.position = this.transform.position;
                 coin.SetActive(true);
+                Debug.Log(coin.name);
             }
             Destroy(gameObject, 0.6f); //1초 뒤에 사라짐
             //사라진 그 자리에 아이템 하나 넣어주기

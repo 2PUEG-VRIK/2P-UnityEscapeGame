@@ -23,8 +23,7 @@ public class mouse_box : MonoBehaviour
 
     private void OnMouseUp()
     {
-        gameObject.active = false;
-
+        gameObject.SetActive(false);
     }
     private void OnMouseEnter()
     {
@@ -34,6 +33,4 @@ public class mouse_box : MonoBehaviour
     {
         transform.position = GetMouseWorldPosition() + m_Offset;
     }
-
-  
 }

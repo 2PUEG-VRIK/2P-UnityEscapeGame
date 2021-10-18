@@ -27,9 +27,13 @@ TagManager:
   - Floor
   - Player
   - miniMap
-  - playerCube
+  - nonMini
   - camArea
+
   - Box
+
+  - Door
+
   - 
   - 
   - 
