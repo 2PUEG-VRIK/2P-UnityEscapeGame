@@ -289,7 +289,6 @@ public class Man : MonoBehaviour
                     break;
                     //case Item.Type.Key:
 
-
             }
             Interaction(other.transform.gameObject);
             Destroy(other.gameObject);
@@ -304,7 +303,6 @@ public class Man : MonoBehaviour
             if (health <= 0)
                 Quit();
         }
-        
     }
     
     private void OnCollisionEnter(Collision collision)
@@ -316,7 +314,6 @@ public class Man : MonoBehaviour
             isJump = false;
         }
     }
-
   
     void Bump()
     {
