@@ -17,6 +17,10 @@ public class SimpleCollectibleScript : MonoBehaviour {
 
 	public GameObject collectEffect;
 
+
+	// 클릭시 생성될 오브젝트
+	public GameObject rewardObject;
+
 	private Vector3 m_Offset;
 	private float m_ZCoord;
 
@@ -48,6 +52,16 @@ public class SimpleCollectibleScript : MonoBehaviour {
         }
 	}
 
+    private void OnCollisionEnter(Collision collision)
+    {
+		if(CollectibleType == CollectibleTypes.Key)
+        {
+			GetComponent<Rigidbody>().isKinematic = true;
+			this.GetComponent<SphereCollider>().isTrigger = true;
+		}
+		
+	}
+
 	public void Collect()
 	{
 		if (collectSound)
@@ -64,7 +78,7 @@ public class SimpleCollectibleScript : MonoBehaviour {
 			
 			//sample1에 있는 노란 열쇠. 먹으면 캐릭 머리위 활성화
 			GameObject player = GameObject.Find("Man").gameObject;
-			GameObject key = GameObject.Find("Man").transform.GetChild(2).gameObject;
+			GameObject key = GameObject.Find("Man").transform.GetChild(3).gameObject;
 
 			player.GetComponent<Man>().hasKey = true;
  			key.SetActive(true);
@@ -96,6 +110,9 @@ public class SimpleCollectibleScript : MonoBehaviour {
 	{
 		if (CollectibleType == CollectibleTypes.ClickItem)
 		{
+			// 해당 위치에 오브젝트 생성
+			Instantiate(rewardObject, transform.position, Quaternion.Euler(0, 0, -90));
+
 			Destroy(gameObject);
 		}
 		if (CollectibleType == CollectibleTypes.DragItem)
