@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Man : MonoBehaviour
 {
+
     public float speed = 25.0f;
     public float jumpPower = 200.0f;
 
@@ -24,6 +25,10 @@ public class Man : MonoBehaviour
     bool sDown3;
     bool iDown;
     bool jDown;
+
+    bool istoWALL;        
+    bool istoObj;
+
     bool isBorder;      // 벽 통과 못하게 막는 플래그      
     public bool hasKey;
 
@@ -86,7 +91,8 @@ public class Man : MonoBehaviour
     {
         // 2021-09-27 원종진 수정
         // 플레이어에서 길이 3만큼의 Raycast 쐈을 때 Wall 레이어와 닿으면 isBorder ON
-        isBorder = Physics.Raycast(transform.position, transform.forward, 3, LayerMask.GetMask("Wall"));
+        istoWALL = Physics.Raycast(transform.position, transform.forward, 5, LayerMask.GetMask("Wall"));
+        istoObj = Physics.Raycast(transform.position, transform.forward, 3.5f, LayerMask.GetMask("Box"));
     }
 
     void GetInput()
@@ -124,7 +130,16 @@ public class Man : MonoBehaviour
             preVec = moveVec;
         }
 
-        if(!isBorder)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정
+        //if (istoWALL)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정
+        //    transform.position += moveVec * 0 * Time.deltaTime;
+
+        //else if (!istoWALL && istoObj)
+        //    transform.position += moveVec * speed * 0.375f * 1f * Time.deltaTime;
+
+        //else
+        //    transform.position += moveVec * speed * 1f * Time.deltaTime;
+
+        if (!istoWALL)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정 
             transform.position += moveVec * speed * 1f * Time.deltaTime;
 
         anim.SetBool("isWalk", (moveVec != Vector3.zero));  // 속도가 0이 아니면 걸어라.
@@ -242,6 +257,7 @@ public class Man : MonoBehaviour
     }
 
  
+
     public int check = -1;//코인 관련 변수(김보현)
  
     private void OnTriggerEnter(Collider other)
@@ -255,6 +271,7 @@ public class Man : MonoBehaviour
 
                       break;
                  case Item.Type.Coin:
+
                     check = 1;
 
                     //this.transform.localScale *= 2;
@@ -270,7 +287,7 @@ public class Man : MonoBehaviour
                     if (ammo > maxAmmo)
                         ammo = maxAmmo;
                     break;
-                //case Item.Type.Key:
+                    //case Item.Type.Key:
 
 
             }

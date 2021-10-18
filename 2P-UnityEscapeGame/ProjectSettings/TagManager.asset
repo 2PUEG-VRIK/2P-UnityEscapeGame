@@ -29,7 +29,11 @@ TagManager:
   - miniMap
   - nonMini
   - camArea
+
+  - Box
+
   - Door
+
   - 
   - 
   - 
