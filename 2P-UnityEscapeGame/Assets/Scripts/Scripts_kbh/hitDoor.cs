@@ -12,13 +12,15 @@ public class hitDoor : MonoBehaviour
 
     Rigidbody rigid;
     BoxCollider boxcollider;
+    BoxCollider PBoxcollider;
     private int doorRotCheck = -1;
-
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
         boxcollider = GetComponent<BoxCollider>();
+        PBoxcollider= GetComponent<BoxCollider>();
+
         mat = GetComponentInChildren<MeshRenderer>().material;
         pre = GetComponentInChildren<MeshRenderer>().material;
         StartCoroutine(OnDamage());
@@ -29,10 +31,10 @@ public class hitDoor : MonoBehaviour
         if(doorRotCheck==1)
             StartCoroutine(doorRotation());
     }
-
+    private int now;
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Melee" &&value==0)
+        if (other.tag == "Melee" && value==0)
         {
             Weapon weapon = other.GetComponent<Weapon>();
             ch -= weapon.damage;
@@ -57,35 +59,36 @@ public class hitDoor : MonoBehaviour
                 ch -= bullet.damage;
                 StartCoroutine(OnDamage());
             }
+            now = value;
+            boxcollider = this.gameObject.GetComponent<BoxCollider>();
+            PBoxcollider= this.gameObject.transform.parent.GetComponent<BoxCollider>();
                 Destroy(other.gameObject);//적에 닿는순간 총알 안보이게 하기~ 관통하면 안되니까
         }
     }
     IEnumerator OnDamage()
     {
-        mat.color = Color.grey;
+        //mat.color = Color.grey;
         yield return new WaitForSeconds(1f);
         mat.color = pre.color;
-        Debug.Log("색이 안바귀어우어웡");
 
-        if(ch==0)
+        if(ch<=0)
         {   //문 체력 다 닳음
             doorRotCheck = 1;
-           
         }
     }
 
     IEnumerator doorRotation()
     {
-        if (this.value == 1)//파란문
-        {
+        if (now==2)//파란문
             this.transform.rotation = Quaternion.Slerp(
-               this.transform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), Time.time * 0.01f);
-        }
+               this.transform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), Time.time * 0.001f);
 
         else // 노란, 연두색 문
             this.transform.rotation = Quaternion.Slerp(
-               this.transform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), Time.time * 0.01f);
-    
+               this.transform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), Time.time * 0.001f);
+
+        PBoxcollider.enabled = false;
+        boxcollider.enabled = false;
     yield return null;
     }
 }

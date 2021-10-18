@@ -16,6 +16,8 @@ public class Steps : MonoBehaviour
     bool timerOn = false;
     GameObject overHead;//머리위에 체력 -1 뜨는거
     Vector3 overHeadPos;
+    private bool isPopUp = false;
+
     Transform playerPos;
 
     private void Awake()
@@ -24,12 +26,12 @@ public class Steps : MonoBehaviour
         boxcollider = GetComponent<BoxCollider>();
         player = GameObject.FindWithTag("Player").GetComponent<Man>();
         spr = player.GetComponent<SpriteRenderer>();
-        overHead = GameObject.Find("overHeadCount");
-
     }
 
     private void Update()
     {
+        overHead = GameObject.Find("number").transform.GetChild(0).gameObject;
+
 
         if (isOn)
         {
@@ -38,20 +40,25 @@ public class Steps : MonoBehaviour
                 time = 0f;
                 Debug.Log("이거 아녀? 스페이스바눌렀읐때");
                 timerOn = false;
-                isOn = false;
                 CancelInvoke("decreaseHealth");
+                isOn = false;
             }
             else if (timerOn)
                 Timer();
+
+
+            else if (isPopUp)
+                overHead.transform.position = new Vector3
+                    (playerPos.position.x, playerPos.position.y + 12f, playerPos.position.z);
+            
         }
 
-
         if (player.health == 0)
-            Debug.Log("끝내삼");
+            Debug.Log("체력 0");
 
         playerPos = player.transform;
-       
 
+       
     }
 
     private void Timer()
@@ -66,14 +73,20 @@ public class Steps : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            _obj = this.transform.gameObject;//_obj는 내가 밟은 땅!
-            pos = new Vector3(
-                _obj.transform.position.x, 
-                _obj.transform.position.y, 
-                _obj.transform.position.z);
-
             isOn = true;
-            timerOn = true;
+
+            if (this.gameObject.name == "Step")
+            {
+                _obj = this.transform.gameObject;//_obj는 내가 밟은 땅!
+                pos = new Vector3(
+                    _obj.transform.position.x,
+                    _obj.transform.position.y,
+                    _obj.transform.position.z);
+
+                timerOn = true;
+            }
+            else
+                InvokeRepeating("decreaseHealth", 0.2f, 2f);
         }
     }
 
@@ -81,7 +94,6 @@ public class Steps : MonoBehaviour
     private void  Trap()//일반 블럭 -> 트랩 되어
     {
         timerOn = false;
-        Debug.Log("trap");
         Instantiate(_objTrap, pos, Quaternion.identity);//내가 있던 곳에 트랩 생성
 
         _objTrap.transform.localScale = _obj.transform.localScale;
@@ -97,29 +109,21 @@ public class Steps : MonoBehaviour
     private void decreaseHealth()
     {
         count = -1;
-        player.health -= 1;//머리 위로 체력 띄우자
+        player.health -= 1;
         popUp();
         Debug.Log(player.health);
-        //while (player.health > 0 && count == -1)
-        //{
-        //    count++;
-            
-        //    spr.material.color = Color.red;
-
-        //}
     }
-
     private void popUp()//체력 -1 머리 위에 띄워
     {
-        overHead.transform.position = new Vector3
-            (playerPos.position.x, playerPos.position.y+10f, playerPos.position.z);
+        isPopUp = true;
+        overHead.SetActive(true);
 
-        Invoke("disappear", 1.5f);
-
+        Invoke("disappear", 1f);
     }
 
     private void disappear()
     {
+        isPopUp = false;
         overHead.SetActive(false);//이거 다시 풀어야해
     }
 

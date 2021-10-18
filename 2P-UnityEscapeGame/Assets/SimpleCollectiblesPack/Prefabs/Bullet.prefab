@@ -102,6 +102,8 @@ MonoBehaviour:
   rotationSpeed: 10
   collectSound: {fileID: 0}
   collectEffect: {fileID: 1702657300312902, guid: a45c51da10cf1a84abc6a99c06951e3f, type: 3}
+  target: {fileID: 0}
+  isClicked: 0
 --- !u!82 &82776637683723400
 AudioSource:
   m_ObjectHideFlags: 0
@@ -209,5 +211,5 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.43935344
+  m_Radius: 0.58
   m_Center: {x: -0.000000007450581, y: 0.031888634, z: 0}

@@ -17,23 +17,16 @@ public class Weapon : MonoBehaviour
     public Transform bulletCasePos;
     public GameObject bulletCase;
 
-    private void Start()
-    {
-
-    }
     private void Update()
     {
         curAmmo = GameObject.Find("Man").GetComponent<Man>().ammo;
-
     }
     public void init()
     {
         trailEffect.enabled = false;
-
     }
     public void Use()
     {
-
         if (type == Type.Melee)
         {
             StopCoroutine("Swing");
