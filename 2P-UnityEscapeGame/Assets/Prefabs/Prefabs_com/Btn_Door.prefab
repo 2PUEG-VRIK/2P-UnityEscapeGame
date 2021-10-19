@@ -59,6 +59,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99cc74530a1000441937b4bc6e18d297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DoorType: 0
+  collectSound: {fileID: 8300000, guid: d46323e22e74e46baa241cbf48c85671, type: 3}
   isOpen: 0
 --- !u!1 &2341684698060311820
 GameObject:

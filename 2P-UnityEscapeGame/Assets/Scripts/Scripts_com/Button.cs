@@ -8,13 +8,14 @@ public class Button : MonoBehaviour
     ParticleSystem particle;
     Material mat;
 
-    bool isPushed = false;
+    bool isPushed;
 
     void Start()
     {
         particle = GetComponentInChildren<ParticleSystem>();
         particle.gameObject.SetActive(false);
         mat = GetComponent<MeshRenderer>().material;
+        isPushed = false;
     }
     private void OnTriggerStay(Collider other)
     {
@@ -30,18 +31,13 @@ public class Button : MonoBehaviour
                 mat.color = Color.yellow;
 
                 particle.gameObject.SetActive(true);
-            }
 
-            if (isPushed)
-            {
                 if (!door.GetComponent<Door>().isOpen)
                 {
-                    //Rigidbody doorRigid = door.GetComponent<Rigidbody>();
-                    //doorRigid.AddForce(new Vector3(0, 500.0f, 0));
                     door.transform.position += Vector3.up * 15;
                     door.GetComponent<Door>().isOpen = true;
                 }
-            }
+            } 
         }
     }
 
