@@ -30,7 +30,7 @@ public class Permanent : MonoBehaviour
             foreach (GameObject wall in Walls)
             {
                 wall.transform.rotation = Quaternion.Slerp(
-                wall.transform.rotation, Quaternion.Euler(new Vector3(0, 0, 0)), Time.time * 0.01f);
+                wall.transform.rotation, Quaternion.Euler(new Vector3(0, 0, 0)), Time.time * 0.005f);
             }
         }
     }

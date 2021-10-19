@@ -52,8 +52,10 @@ public class Man : MonoBehaviour
     bool isFireReady = true;
     float fireDelay;
 
+    private bool goBack=false;//몬스터 닿았을 때 뒤로 점프
+    Vector3 playerPos;
     IEnumerator enu1; //ladder에 필요
-    private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
+    Vector3 prePos;//뒤로 점프하기 전 플레이어의 기존 위치
 
     void Start()
     {
@@ -68,17 +70,32 @@ public class Man : MonoBehaviour
 
     void Update()
     {
+
         GetInput();
         Move();
         Turn();
         Jump();
         Attack();
         Swap();
+       
     }
     private void FixedUpdate()
     {
         FreezeRotation();   // 플레이어가 탄피나 그런거에 닿으면 회전을 하기 시작.. 그거 없애려고 해주는것임
         StoptoWall();       // 벽 or 박스 통과 방지
+
+        //playerPos = -this.transform.forward + Vector3.up;
+        //if (goBack)
+        //{
+        //    this.rigid.AddForce(playerPos, ForceMode.Impulse);
+        //    Debug.Log("이거안나올거같다 ㅎㅅㅂ");
+        //    this.transform.Translate(new Vector3(0, 0, -1) * Time.deltaTime * 2, Space.Self);
+
+
+        //    if (this.transform.position.z - prePos.z < -10 && transform.position.z - prePos.z > 10) goBack = false;
+
+
+        //}
     }
     
 
@@ -165,14 +182,16 @@ public class Man : MonoBehaviour
                 equipWeapon = weapons[equipWeaponIndex].GetComponent<Weapon>();
                 equipWeapon.gameObject.SetActive(true);
                 equipWeapon.init();
-
-
             }
             else if (!isJump)
             {
                 // 점프는 그냥 위로 속도주기.
+
                 rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
 
+
+
+                rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
                 anim.SetTrigger("Jump");
                 isJump = true;
             }
@@ -180,7 +199,6 @@ public class Man : MonoBehaviour
     }
     void Swap()
     {
-
         if (sDown1 && (!hasWeapons[0] || equipWeaponIndex == 0))
             return;
         if (sDown2 && (!hasWeapons[1] || equipWeaponIndex == 1))
@@ -292,19 +310,26 @@ public class Man : MonoBehaviour
             }
             Interaction(other.transform.gameObject);
             Destroy(other.gameObject);
-
         }
+
         else if (other.tag == "Enemy")
         {
+            //prePos = this.transform.position;
             health--;
-            //Vector3 reactVec = transform.forward * Random.Range(-15, -20) + Vector3.up * Random.Range(5,10);
-            //rigid.AddForce(reactVec*3, ForceMode.Impulse);
-
+            Bump();
+            Debug.Log("닿았따----------------------------");
             if (health <= 0)
                 Quit();
         }
     }
-    
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Enemy")
+            goBack = false;
+
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         // 바닥 닿으면 다시 점프 가능상태로 바꿔주기.
@@ -313,22 +338,22 @@ public class Man : MonoBehaviour
             Debug.Log("Floor 닿았다");
             isJump = false;
         }
+        
     }
   
     void Bump()
     {
-        //anim.SetTrigger("Bump");
-        //isBump = true;
-        //transform.position += preVec * -7;
+        anim.SetTrigger("Bump");
+        isBump = true;
+        transform.position += preVec * -10;
 
-        //Invoke("BumpOut", 1.5f);
+        Invoke("BumpOut", 1.5f);
     }
 
     void BumpOut()
     {
-        //isBump = false;
+        isBump = false;
     }
-
 
     //void OnGUI()
     //{
