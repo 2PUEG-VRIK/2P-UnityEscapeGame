@@ -8,7 +8,7 @@ public class Steps : MonoBehaviour
     Rigidbody rigid;
     Vector3 pos;//밟은 땅의 위치
     Vector3 pre_pos;//이동하기 전의 밟은 블럭 위치
-   // GameObject _obj;//밟은 땅
+                    // GameObject _obj;//밟은 땅
     public GameObject _objTrap;//생성할 트랩
     Man player;//나~
     SpriteRenderer spr;
@@ -31,7 +31,7 @@ public class Steps : MonoBehaviour
         boxcollider = GetComponent<BoxCollider>();
         player = GameObject.FindWithTag("Player").GetComponent<Man>();
         spr = player.GetComponent<SpriteRenderer>();
-        pos= this.transform.position;
+        pos = this.transform.position;
         pre_pos = this.transform.position;
 
     }
@@ -78,7 +78,7 @@ public class Steps : MonoBehaviour
             else if (isPopUp)
                 overHead.transform.position = new Vector3
                     (playerPos.position.x, playerPos.position.y + 12f, playerPos.position.z);
-            
+
         }
 
         if (player.health == 0)
@@ -101,8 +101,8 @@ public class Steps : MonoBehaviour
 
             if (this.gameObject.name == "Step")
             {
-                _obj= this;//_obj는 내가 밟은 땅!
-                
+                _obj = this;//_obj는 내가 밟은 땅!
+
                 pos = new Vector3(
                     _obj.transform.position.x,
                     _obj.transform.position.y,
@@ -116,7 +116,7 @@ public class Steps : MonoBehaviour
     }
 
 
-    private void  Trap()//일반 블럭 -> 트랩 되어
+    private void Trap()//일반 블럭 -> 트랩 되어
     {
         timerOn = false;
         Instantiate(_objTrap, pos, Quaternion.identity);//내가 있던 곳에 트랩 생성
@@ -152,5 +152,5 @@ public class Steps : MonoBehaviour
         overHead.SetActive(false);//이거 다시 풀어야해
     }
 
-    
+
 }

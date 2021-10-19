@@ -13,7 +13,7 @@ public class hitDoor : MonoBehaviour
     BoxCollider boxcollider;
     BoxCollider PBoxcollider;
     private int doorRotCheck = -1;
-    private bool goBack=false;//문 열리면 뒤로 튕기렴
+    private bool goBack = false;//문 열리면 뒤로 튕기렴
     private GameObject player;
     static Vector3 prePlayerPos;//문에 튕기기 전 내 위치
     //Vector3 offset;//문과 나 사이의 거리
@@ -23,7 +23,7 @@ public class hitDoor : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         boxcollider = GetComponent<BoxCollider>();
-        PBoxcollider= GetComponent<BoxCollider>();
+        PBoxcollider = GetComponent<BoxCollider>();
         mat = GetComponentInChildren<MeshRenderer>().material;
         pre = GetComponentInChildren<MeshRenderer>().material;
         player = GameObject.FindWithTag("Player");
@@ -31,7 +31,7 @@ public class hitDoor : MonoBehaviour
 
     private void Update()
     {
-        if(doorRotCheck==1)
+        if (doorRotCheck == 1)
             StartCoroutine(doorRotation());
 
         //if (this.value == 2)
@@ -46,7 +46,7 @@ public class hitDoor : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Melee" && value==0)
+        if (other.tag == "Melee" && value == 0)
         {
             Weapon weapon = other.GetComponent<Weapon>();
             ch -= weapon.damage;
@@ -54,7 +54,7 @@ public class hitDoor : MonoBehaviour
             StartCoroutine(OnDamage());
         }
 
-        else if (other.tag == "Bullet" )
+        else if (other.tag == "Bullet")
         {
             Bullet bullet = other.GetComponent<Bullet>();
             if (bullet.damage == 10 && value == 1)
@@ -68,8 +68,8 @@ public class hitDoor : MonoBehaviour
                 ch -= bullet.damage;
                 StartCoroutine(OnDamage());
             }
-           
-                Destroy(other.gameObject);//적에 닿는순간 총알 안보이게 하기~ 관통하면 안되니까
+
+            Destroy(other.gameObject);//적에 닿는순간 총알 안보이게 하기~ 관통하면 안되니까
         }
 
         boxcollider = this.gameObject.GetComponent<BoxCollider>();
@@ -77,12 +77,13 @@ public class hitDoor : MonoBehaviour
     }
     IEnumerator OnDamage()
     {
-       
+        goBack = true;
+
         //mat.color = Color.grey;
         yield return new WaitForSeconds(1f);
         mat.color = pre.color;
 
-        if(ch<=0)
+        if (ch <= 0)
         {   //문 체력 다 닳음
             doorRotCheck = 1;
         }
@@ -90,18 +91,17 @@ public class hitDoor : MonoBehaviour
 
     IEnumerator doorRotation()
     {
-        goBack = true;
         switch (value)
         {
             case 0: //노란문
                     //234, 3,-22
-               if(goBack)
+                if (goBack)
                     player.transform.position = Vector3.Lerp(
                          prePlayerPos,
-                         new Vector3(234f,3f,-22f), Time.deltaTime*2); //사람이동시켜
-               
-               this.transform.rotation = Quaternion.Slerp(
-                        this.transform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), Time.deltaTime ); // 문열어
+                         new Vector3(234f, 3f, -22f), Time.deltaTime * 2); //사람이동시켜
+
+                this.transform.rotation = Quaternion.Slerp(
+                         this.transform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), Time.deltaTime); // 문열어
 
                 if (player.transform.position.x <= 240f)
                     goBack = false;
@@ -137,9 +137,8 @@ public class hitDoor : MonoBehaviour
 
         PBoxcollider.enabled = false;
         boxcollider.enabled = false;
-        
+
         yield return null;
     }
 }
-
 

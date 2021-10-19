@@ -65,24 +65,32 @@ public class Man : MonoBehaviour
 
     void Update()
     {
+
         GetInput();
         Move();
         Turn();
         Jump();
         Attack();
         Swap();
-        playerPos = -this.transform.forward *0.5f+ Vector3.up*0.5f;
-        if (goBack)
-        {
-            //this.rigid.AddForce(playerPos, ForceMode.Impulse);
-            StartCoroutine(GoBack());
-            
-        }
+       
     }
     private void FixedUpdate()
     {
         FreezeRotation();   // 플레이어가 탄피나 그런거에 닿으면 회전을 하기 시작.. 그거 없애려고 해주는것임
         StoptoWall();       // 벽 or 박스 통과 방지
+
+        //playerPos = -this.transform.forward + Vector3.up;
+        //if (goBack)
+        //{
+        //    this.rigid.AddForce(playerPos, ForceMode.Impulse);
+        //    Debug.Log("이거안나올거같다 ㅎㅅㅂ");
+        //    this.transform.Translate(new Vector3(0, 0, -1) * Time.deltaTime * 2, Space.Self);
+
+
+        //    if (this.transform.position.z - prePos.z < -10 && transform.position.z - prePos.z > 10) goBack = false;
+
+
+        //}
     }
     
 
@@ -287,10 +295,10 @@ public class Man : MonoBehaviour
 
         else if (other.tag == "Enemy")
         {
-            prePos = this.transform.position;
+            //prePos = this.transform.position;
             health--;
+            Bump();
             Debug.Log("닿았따----------------------------");
-            goBack = true;
             if (health <= 0)
                 Quit();
         }
@@ -315,29 +323,16 @@ public class Man : MonoBehaviour
   
     void Bump()
     {
-        //anim.SetTrigger("Bump");
-        //isBump = true;
-        //transform.position += preVec * -7;
+        anim.SetTrigger("Bump");
+        isBump = true;
+        transform.position += preVec * -10;
 
-        //Invoke("BumpOut", 1.5f);
+        Invoke("BumpOut", 1.5f);
     }
 
     void BumpOut()
     {
-        //isBump = false;
-    }
-     IEnumerator GoBack()
-    {
-        Debug.Log("코루틴 돈다");
-
-        while (true)
-        {
-            this.transform.position = Vector3.Slerp(this.transform.position,
-                new Vector3(prePos.x, prePos.y, prePos.z - 5f), Time.deltaTime);
-            if (this.transform.position.z - prePos.z >= 4f) 
-                break;
-        }
-            yield return null;
+        isBump = false;
     }
 
     //void OnGUI()
