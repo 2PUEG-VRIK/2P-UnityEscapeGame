@@ -183,9 +183,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84a8743663898e4449ec2045b353f6f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
+  damage: 0
   rate: 2
   meleeArea: {fileID: 4810202522457193360}
   trailEffect: {fileID: 5102623988776896802}
+  bulletPos: {fileID: 0}
+  bullet: {fileID: 0}
+  bulletCasePos: {fileID: 0}
+  bulletCase: {fileID: 0}
 --- !u!1 &7292313473995444375
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,7 +234,7 @@ GameObject:
   - component: {fileID: 8065106341333879954}
   - component: {fileID: 6021810508892010858}
   - component: {fileID: 6021810508892010859}
-  - component: {fileID: 6021810508892010856}
+  - component: {fileID: -1026755339323297750}
   m_Layer: 9
   m_Name: Waman
   m_TagString: Player
@@ -281,7 +287,7 @@ CapsuleCollider:
   m_Height: 4.7
   m_Direction: 1
   m_Center: {x: 0, y: 1.95, z: 0.4}
---- !u!114 &6021810508892010856
+--- !u!114 &-1026755339323297750
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -293,7 +299,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edc9418414a78f74ab38010b7c34f01c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 7257319879852409996}
+  speed: 20
+  jumpPower: 50
+  weapons: []
+  hasWeapons: 
+  health: 0
+  maxHealth: 0
+  ammo: 0
+  maxAmmo: 0
 --- !u!1001 &3207743147301444081
 PrefabInstance:
   m_ObjectHideFlags: 0
