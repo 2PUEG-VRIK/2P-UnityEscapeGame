@@ -7,7 +7,7 @@ public class Man : MonoBehaviour
 {
 
     public float speed = 30.0f;
-    public float jumpPower = 150.0f;
+    public float jumpPower;
 
     float hAxis;
     float vAxis;
@@ -28,6 +28,7 @@ public class Man : MonoBehaviour
 
     bool istoWALL;        
     bool istoObj;
+    bool onStair;
 
     bool isBorder;      // 벽 통과 못하게 막는 플래그      
     public bool hasKey;
@@ -59,7 +60,9 @@ public class Man : MonoBehaviour
 
     void Start()
     {
+        //jumpPower = 150.0f;
         hasKey = false;
+        onStair = false;
     }
 
     void Awake()
@@ -115,6 +118,8 @@ public class Man : MonoBehaviour
 
     void Move()
     {
+        Debug.Log(hAxis + "   " + vAxis);
+
         if (isBump || isSwap)
         {
             return;
@@ -133,6 +138,11 @@ public class Man : MonoBehaviour
         if (moveVec != Vector3.zero)
         {
             preVec = moveVec;
+        }
+
+        if (onStair && vAxis<0)
+        {
+            moveVec = new Vector3(hAxis, vAxis*0.5f, vAxis).normalized;
         }
 
         //if (istoWALL)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정
@@ -174,11 +184,6 @@ public class Man : MonoBehaviour
             else if (!isJump)
             {
                 // 점프는 그냥 위로 속도주기.
-
-                rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
-
-
-
                 rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
                 anim.SetTrigger("Jump");
                 isJump = true;
@@ -326,9 +331,20 @@ public class Man : MonoBehaviour
         {
             isJump = false;
         }
-        
+        if(collision.gameObject.tag == "Stair")
+        {
+            onStair = true;
+        }
     }
-  
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "Stair")
+        {
+            onStair = false;
+        }
+    }
+
     void Bump()
     {
         anim.SetTrigger("Bump");

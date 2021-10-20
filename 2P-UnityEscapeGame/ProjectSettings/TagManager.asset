@@ -16,6 +16,7 @@ TagManager:
   - Melee
   - Ladder
   - Things
+  - Stair
   layers:
   - Default
   - TransparentFX
@@ -29,11 +30,7 @@ TagManager:
   - miniMap
   - nonMini
   - camArea
-
-  - Box
-
-  - Door
-
+  - 
   - 
   - 
   - 

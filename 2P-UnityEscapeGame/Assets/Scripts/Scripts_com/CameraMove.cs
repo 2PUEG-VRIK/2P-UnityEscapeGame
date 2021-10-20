@@ -8,10 +8,12 @@ public class CameraMove : MonoBehaviour
     public float zoomSpeed = 10.0f;
 
     private Camera mainCamera;
+    private Quaternion defaultPos;
 
     void Start()
     {
         mainCamera = GetComponent<Camera>();
+        defaultPos = transform.rotation;
     }
 
     void Update()
@@ -27,7 +29,7 @@ public class CameraMove : MonoBehaviour
         {
             mainCamera.fieldOfView += distance;
         }
-    }
+    } 
 
     private void Rotate()
     {
@@ -39,6 +41,10 @@ public class CameraMove : MonoBehaviour
             Quaternion q = Quaternion.Euler(rot); // Quaternion으로 변환
             q.z = 0;
             transform.rotation = Quaternion.Slerp(transform.rotation, q, 2f); // 자연스럽게 회전
+        }
+        else
+        {
+            transform.rotation = defaultPos;
         }
     }
 }
