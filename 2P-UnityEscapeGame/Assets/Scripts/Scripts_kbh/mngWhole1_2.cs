@@ -70,17 +70,6 @@ public class mngWhole1_2 : MonoBehaviour
         if (isHold && check == 1)
             StartCoroutine("goBack");
 
-
-        //if (true == Input.GetMouseButtonDown(0))//마우스 내려갔나용
-        //{
-
-        //    if (Physics.Raycast(ray, out hit))
-        //    {
-        //      hit.transform.~
-        //    }
-
-        //}
-
         if (cubeNum ==0 )
         {
             tele.SetActive(true);
@@ -177,7 +166,7 @@ public class mngWhole1_2 : MonoBehaviour
     {
         if (other.tag == "Things")
         {
-            if (other.transform.name == "Cube_pre")
+            if (other.transform.name == "Cube")
             {
                 cube = other.transform.gameObject.GetComponent<theCubes>();
                 if (!isHold)//들고있지않은 상태에서 애를 만났따!
@@ -187,7 +176,6 @@ public class mngWhole1_2 : MonoBehaviour
                     cube.gameObject.SetActive(false);//닿은 애 없애고
                     cubeValue = cube.value;//변수에 밸류값 넣어
                     isHold = true;
-
                 }
 
                 else // 든 상태에서 상자를 터치해따!
@@ -211,10 +199,8 @@ public class mngWhole1_2 : MonoBehaviour
                 }
             }
 
-
             //2층
-
-            if (other.name == "teleB")//
+            if (other.name == "teleB")
             {
                 Destroy(other.gameObject);
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class theCubes : MonoBehaviour
@@ -11,7 +12,10 @@ public class theCubes : MonoBehaviour
     Ray ray;
     RaycastHit hit;
     theCubes _obj;//마우스로 선택한 큐브
-
+    public float rotationSpeed;
+    public GameObject newMonster;//상자 건들면 나오는 애들
+    private int count = 0;
+    GameObject clickObject;
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -21,6 +25,8 @@ public class theCubes : MonoBehaviour
 
     private void Update()
     {
+        this.transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime, Space.World);
+
         if (true == Input.GetMouseButtonDown(0))//마우스 내려갔나용
         {
             if (Physics.Raycast(ray, out hit))
@@ -29,6 +35,7 @@ public class theCubes : MonoBehaviour
             }
         }
     }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor")
@@ -44,5 +51,3 @@ public class theCubes : MonoBehaviour
         this.transform.position= Camera.main.ScreenToWorldPoint(mousePosition);
     }
 }
-
-//왜 커밋 안되냐 이번엔 될까영!
