@@ -50,8 +50,11 @@ public class Man : MonoBehaviour
     IEnumerator enu1; //ladder에 필요
     private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
 
+    private GameObject camera;
+
     void Start()
     {
+        camera = GameObject.Find("Man Cam");
         hasKey = false;
     }
 
@@ -128,10 +131,27 @@ public class Man : MonoBehaviour
             return;
         }
 
+
         if (!isFireReady)
             moveVec = Vector3.zero;
 
-        moveVec = new Vector3(hAxis, 0, vAxis).normalized;
+        //메인카메라가 바라보는 방향입니다.
+        Vector3 dir = camera.transform.localRotation * Vector3.forward;
+        //카메라가 바라보는 방향으로 팩맨도 바라보게 합니다.
+        transform.localRotation = camera.transform.localRotation;
+        //팩맨의 Rotation.x값을 freeze해놓았지만 움직여서 따로 Rotation값을 0으로 세팅해주었습니다.
+        //transform.localRotation = new Quaternion(0, transform.localRotation.y, 0, transform.localRotation.w);
+
+        //바라보는 시점 방향으로 이동합니다.
+        if (vAxis != 0)
+        {
+            transform.position += dir * speed * 0.5f * Time.deltaTime * vAxis;
+            anim.SetBool("isWalk", true);  // 속도가 0이 아니면 걸어라.
+        }
+        //gameObject.transform.Translate(dir * 0.1f * Time.deltaTime);
+
+
+        //moveVec = new Vector3(hAxis, 0, vAxis).normalized;
 
         if (isJump)
         {
@@ -143,10 +163,25 @@ public class Man : MonoBehaviour
             preVec = moveVec;
         }
 
+<<<<<<< Updated upstream
         if(!isBorder)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정
             transform.position += moveVec * speed * 1f * Time.deltaTime;
+=======
+        //if (istoWALL)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정
+        //    transform.position += moveVec * 0 * Time.deltaTime;
+
+        //else if (!istoWALL && istoObj)
+        //    transform.position += moveVec * speed * 0.375f * 1f * Time.deltaTime;
+
+        //else
+        //    transform.position += moveVec * speed * 1f * Time.deltaTime;
+
+        if (!istoWALL) { }   // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정 
+                             //transform.position += moveVec * speed * 1f * Time.deltaTime;
+>>>>>>> Stashed changes
 
         anim.SetBool("isWalk", (moveVec != Vector3.zero));  // 속도가 0이 아니면 걸어라.
+
     }
 
     void Turn()
