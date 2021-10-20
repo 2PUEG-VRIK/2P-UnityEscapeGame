@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class Man : MonoBehaviour
 {
 
-    public float speed = 25.0f;
-    public float jumpPower = 200.0f;
+    public float speed = 30.0f;
+    public float jumpPower = 150.0f;
 
     float hAxis;
     float vAxis;
@@ -84,18 +84,6 @@ public class Man : MonoBehaviour
         FreezeRotation();   // 플레이어가 탄피나 그런거에 닿으면 회전을 하기 시작.. 그거 없애려고 해주는것임
         StoptoWall();       // 벽 or 박스 통과 방지
 
-        //playerPos = -this.transform.forward + Vector3.up;
-        //if (goBack)
-        //{
-        //    this.rigid.AddForce(playerPos, ForceMode.Impulse);
-        //    Debug.Log("이거안나올거같다 ㅎㅅㅂ");
-        //    this.transform.Translate(new Vector3(0, 0, -1) * Time.deltaTime * 2, Space.Self);
-
-
-        //    if (this.transform.position.z - prePos.z < -10 && transform.position.z - prePos.z > 10) goBack = false;
-
-
-        //}
     }
     
 
@@ -333,9 +321,9 @@ public class Man : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         // 바닥 닿으면 다시 점프 가능상태로 바꿔주기.
-        if (Physics.Raycast(transform.position, -transform.up, 3))
+        //if (Physics.Raycast(transform.position, -transform.up, 3))
+        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Box")
         {
-            Debug.Log("Floor 닿았다");
             isJump = false;
         }
         
