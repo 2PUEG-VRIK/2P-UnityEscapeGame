@@ -118,7 +118,9 @@ public class Man : MonoBehaviour
 
     void Move()
     {
-        Debug.Log(hAxis + "   " + vAxis);
+
+        //Debug.Log(hAxis + "   " + vAxis);
+
 
         if (isBump || isSwap)
         {
@@ -310,7 +312,7 @@ public class Man : MonoBehaviour
             //prePos = this.transform.position;
             health--;
             Bump();
-            Debug.Log("닿았따----------------------------");
+            //Debug.Log("닿았따----------------------------");
             if (health <= 0)
                 Quit();
         }

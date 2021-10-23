@@ -5,24 +5,26 @@ using UnityEngine.UI;
 
 public class talkManager : MonoBehaviour
 {
-    // Start is called before the first frame update
     Dictionary<int, string[]> talkData;
-    
+
     void Awake()
     {
         talkData = new Dictionary<int, string[]>();
         GenerateData();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void GenerateData()
     {
-        talkData.Add(0, new string[] { "안녕?", "이 곳에 처음 왔구나?" });
+        //index, string
+        //1.양 가장 처음 만나는 npc
+        talkData.Add(1, new string[]
+        { "..", "넌 누구야? 여긴 어쩐일이야?","노란 강아지? 아니, 못봤어. 여기는 양들만 지내는 곳이야."});
+
 
 
     }
