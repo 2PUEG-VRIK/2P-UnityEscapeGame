@@ -115,6 +115,10 @@ public class Man : MonoBehaviour
 
     void Move()
     {
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         if (isBump || isSwap)
         {
             return;
@@ -305,7 +309,6 @@ public class Man : MonoBehaviour
             //prePos = this.transform.position;
             health--;
             Bump();
-            Debug.Log("닿았따----------------------------");
             if (health <= 0)
                 Quit();
         }
