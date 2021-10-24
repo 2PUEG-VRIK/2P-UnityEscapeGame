@@ -16,7 +16,10 @@ TagManager:
   - Melee
   - Ladder
   - Things
-  - Stair
+  - StairUp
+  - StairDown
+  - StairRight
+  - StairLeft
   layers:
   - Default
   - TransparentFX

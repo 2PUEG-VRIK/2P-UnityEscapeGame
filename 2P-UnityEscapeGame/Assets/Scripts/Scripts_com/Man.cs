@@ -28,7 +28,11 @@ public class Man : MonoBehaviour
 
     bool istoWALL;        
     bool istoObj;
-    bool onStair;
+    bool onStair_up; // 계단 올라가는 방향키에 따라 유형 분류
+    bool onStair_down;
+    bool onStair_right;
+    bool onStair_left;
+
 
     bool isBorder;      // 벽 통과 못하게 막는 플래그      
     public bool hasKey;
@@ -62,7 +66,10 @@ public class Man : MonoBehaviour
     {
         //jumpPower = 150.0f;
         hasKey = false;
-        onStair = false;
+        onStair_up = false;
+        onStair_down = false;
+        onStair_right = false;
+        onStair_left = false;
     }
 
     void Awake()
@@ -73,14 +80,12 @@ public class Man : MonoBehaviour
 
     void Update()
     {
-
         GetInput();
         Move();
         Turn();
         Jump();
         Attack();
         Swap();
-       
     }
     private void FixedUpdate()
     {
@@ -119,9 +124,6 @@ public class Man : MonoBehaviour
     void Move()
     {
 
-        //Debug.Log(hAxis + "   " + vAxis);
-
-
         if (isBump || isSwap)
         {
             return;
@@ -142,9 +144,21 @@ public class Man : MonoBehaviour
             preVec = moveVec;
         }
 
-        if (onStair && vAxis<0)
+        if (onStair_up && vAxis<0) // 올라가는 방향이니까 내려오는 방향키 일때 y축 벡터 아래로 줌.
         {
             moveVec = new Vector3(hAxis, vAxis*0.5f, vAxis).normalized;
+        }
+        if (onStair_down && vAxis > 0)  
+        {
+            moveVec = new Vector3(hAxis, vAxis * -0.5f, vAxis).normalized;
+        }
+        if (onStair_right && hAxis < 0) 
+        {
+            moveVec = new Vector3(hAxis, hAxis * 0.5f, vAxis).normalized;
+        }
+        if (onStair_left && hAxis < 0)
+        {
+            moveVec = new Vector3(hAxis, hAxis * -0.5f, vAxis).normalized;
         }
 
         //if (istoWALL)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정
@@ -331,20 +345,57 @@ public class Man : MonoBehaviour
         //if (Physics.Raycast(transform.position, -transform.up, 3))
         if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Box")
         {
+
+            onStair_up = false;
+            onStair_down = false;
+            onStair_right = false;
+            onStair_left = false;
             isJump = false;
         }
-        if(collision.gameObject.tag == "Stair")
+        if(collision.gameObject.tag == "StairUp")
         {
-            onStair = true;
+
+            onStair_up = true;
+        }
+        if (collision.gameObject.tag == "StairDown")
+        {
+
+            onStair_down = true;
+        }
+        if (collision.gameObject.tag == "StairRight")
+        {
+
+            onStair_right = true;
+        }
+        if (collision.gameObject.tag == "StairLeft")
+        {
+
+            onStair_left = true;
         }
     }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.tag == "Stair")
-        {
-            onStair = false;
-        }
+    private void OnCollisionExit(Collision collision) { 
+    //{
+    //    if (collision.gameObject.tag == "StairUp")
+    //    {
+
+    //        onStair_up = false;
+    //    }
+    //    if (collision.gameObject.tag == "StairDown")
+    //    {
+
+    //        onStair_down = false;
+    //    }
+    //    if (collision.gameObject.tag == "StairRight")
+    //    {
+
+    //        onStair_right = false;
+    //    }
+    //    if (collision.gameObject.tag == "StairLeft")
+    //    {
+
+    //        onStair_left = false;
+    //    }
     }
 
     void Bump()
