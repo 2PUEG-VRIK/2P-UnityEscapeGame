@@ -21,9 +21,9 @@ public class talkManager : MonoBehaviour
     void GenerateData()
     {
         //index, string
-        //1.양 가장 처음 만나는 npc
+        //1.양 (가장 처음 만나는 npc)
         talkData.Add(1, new string[]
-        { "..", "넌 누구야? 여긴 어쩐일이야?","노란 강아지? 아니, 못봤어. 여기는 양들만 지내는 곳이야."});
+        { "..", "넌 누구야? 여긴 어쩐일이야?","노란 강아지? \n아니, 못봤어. 여기는 양들만 지내는 곳이야."});
 
 
 
