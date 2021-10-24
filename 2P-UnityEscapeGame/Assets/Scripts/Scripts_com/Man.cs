@@ -28,6 +28,11 @@ public class Man : MonoBehaviour
 
     bool istoWALL;        
     bool istoObj;
+<<<<<<< Updated upstream
+=======
+    bool onStair;
+    bool isDead = false;    // 죽음 변수
+>>>>>>> Stashed changes
 
     bool isBorder;      // 벽 통과 못하게 막는 플래그      
     public bool hasKey;
@@ -54,6 +59,8 @@ public class Man : MonoBehaviour
 
     IEnumerator enu1; //ladder에 필요
     private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
+
+    public Transform fastPos;
 
     void Start()
     {
@@ -110,7 +117,13 @@ public class Man : MonoBehaviour
 
     void Move()
     {
+<<<<<<< Updated upstream
         if (isBump || isSwap)
+=======
+        Debug.Log(hAxis + "   " + vAxis);
+
+        if (isBump || isSwap || isDead)
+>>>>>>> Stashed changes
         {
             return;
         }
@@ -119,6 +132,7 @@ public class Man : MonoBehaviour
             moveVec = Vector3.zero;
 
         moveVec = new Vector3(hAxis, 0, vAxis).normalized;
+
 
         if (isJump)
         {
@@ -139,7 +153,7 @@ public class Man : MonoBehaviour
         //else
         //    transform.position += moveVec * speed * 1f * Time.deltaTime;
 
-        if (!istoWALL)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정 
+        if (!istoWALL && !isDead)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정 
             transform.position += moveVec * speed * 1f * Time.deltaTime;
 
         anim.SetBool("isWalk", (moveVec != Vector3.zero));  // 속도가 0이 아니면 걸어라.
@@ -193,7 +207,7 @@ public class Man : MonoBehaviour
         if (sDown2) weaponIndex = 1;
         if (sDown3) weaponIndex = 2;
 
-        if ((sDown1 || sDown2 || sDown3))//점프할때 금지되어있었음
+        if ((sDown1 || sDown2 || sDown3))   //점프할때 금지되어있었음
         {
             if (equipWeapon != null)
                 equipWeapon.gameObject.SetActive(false);
@@ -262,6 +276,21 @@ public class Man : MonoBehaviour
  
     private void OnTriggerEnter(Collider other)
     {
+        if (other.tag == "fButton")
+        {
+            rigid.AddForce(fastPos.forward * 30, ForceMode.VelocityChange);
+        }
+
+        if (other.tag == "Water")
+        {
+            OnDie();
+        }
+
+        if (other.tag == "Box")
+        {
+            transform.position += moveVec * speed * 1f * Time.deltaTime;
+        }
+
         if (other.tag == "Item")
         {
             Item item = other.GetComponent<Item>();
@@ -306,7 +335,27 @@ public class Man : MonoBehaviour
         }
         
     }
+<<<<<<< Updated upstream
     
+=======
+
+    void OnDie()
+    {
+        if (!isDead)
+        {
+            anim.SetTrigger("doDie");
+            isDead = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Enemy")
+            goBack = false;
+
+    }
+
+>>>>>>> Stashed changes
     private void OnCollisionEnter(Collision collision)
     {
         // 바닥 닿으면 다시 점프 가능상태로 바꿔주기.
@@ -315,6 +364,30 @@ public class Man : MonoBehaviour
             Debug.Log("Floor 닿았다");
             isJump = false;
         }
+<<<<<<< Updated upstream
+=======
+        if(collision.gameObject.tag == "Stair")
+        {
+            onStair = true;
+        }
+        //if (collision.gameObject.tag == "Water")
+        //{            
+        //    OnDie();
+        //}
+    }
+
+    private void OnTriggerEnter(Collider2D collision)
+    {
+        
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "Stair")
+        {         
+            onStair = false;
+        }
+>>>>>>> Stashed changes
     }
 
   

@@ -25,14 +25,14 @@ public class gr_Button : MonoBehaviour
             transform.position += new Vector3(0, -0.5f, 0);
             isPushed = true;
 
-            if (other.gameObject.tag == "Player")        // 플레이어가 초록버튼 누르면 가던 방향으로 x30
-            {
-                Rigidbody rigid = other.gameObject.GetComponent<Rigidbody>();
-                rigid.AddForce(gr_buttonPos.forward * 30, ForceMode.VelocityChange);
-                // rigid.velocity = gr_buttonPos.forward * 30;
-            }
-            
-            else if (other.gameObject.tag == "Box")   // 박스가 초록버튼 누르면 플레이어가 박스를 밀던 방향으로 x50
+            //if (other.gameObject.tag == "Player")        // 플레이어가 초록버튼 누르면 가던 방향으로 x30
+            //{
+            //    Rigidbody rigid = other.gameObject.GetComponent<Rigidbody>();
+            //    rigid.AddForce(gr_buttonPos.forward * 30, ForceMode.VelocityChange);
+            //    // rigid.velocity = gr_buttonPos.forward * 30;
+            //}
+
+            if (other.gameObject.tag == "Box")   // 박스가 초록버튼 누르면 플레이어가 박스를 밀던 방향으로 x50
             {
                 Rigidbody rigid = other.gameObject.GetComponent<Rigidbody>();
                 rigid.AddForce(gr_buttonPos.forward * 50, ForceMode.VelocityChange);

@@ -16,6 +16,12 @@ TagManager:
   - Melee
   - Ladder
   - Things
+<<<<<<< Updated upstream
+=======
+  - Stair
+  - Water
+  - fButton
+>>>>>>> Stashed changes
   layers:
   - Default
   - TransparentFX

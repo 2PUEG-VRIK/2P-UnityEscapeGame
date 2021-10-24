@@ -19,7 +19,7 @@ public class Obj : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         Rigidbody rigid = other.gameObject.GetComponent<Rigidbody>();
-        if (other.gameObject.tag == "Player")        // 플레이어가 초록버튼 누르면 가던 방향으로 x30
+        if (other.gameObject.tag == "Player")
         {
             rigid.velocity = manPos.forward * -0;
         }
@@ -29,7 +29,7 @@ public class Obj : MonoBehaviour
     {
 
         Rigidbody rigid = other.gameObject.GetComponent<Rigidbody>();
-        if (other.gameObject.tag == "Player")        // 플레이어가 초록버튼 누르면 가던 방향으로 x30
+        if (other.gameObject.tag == "Player")
         {
             rigid.AddForce(manPos.forward * -15, ForceMode.VelocityChange);
         }
