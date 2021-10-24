@@ -19,7 +19,8 @@ public class Obj : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         Rigidbody rigid = other.gameObject.GetComponent<Rigidbody>();
-        if (other.gameObject.tag == "Player")       
+
+        if (other.gameObject.tag == "Player")
         {
             rigid.velocity = manPos.forward * -0;
         }
@@ -29,7 +30,9 @@ public class Obj : MonoBehaviour
     {
 
         Rigidbody rigid = other.gameObject.GetComponent<Rigidbody>();
+
         if (other.gameObject.tag == "Player")        
+
         {
             rigid.AddForce(manPos.forward * -15, ForceMode.VelocityChange);
         }
