@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class Man : MonoBehaviour
 {
 
-    public float speed = 25.0f;
-    public float jumpPower = 200.0f;
+    public float speed = 30.0f;
+    public float jumpPower;
 
     float hAxis;
     float vAxis;
@@ -28,11 +28,14 @@ public class Man : MonoBehaviour
 
     bool istoWALL;        
     bool istoObj;
-<<<<<<< Updated upstream
-=======
+
     bool onStair;
     bool isDead = false;    // 죽음 변수
->>>>>>> Stashed changes
+
+    bool onStair_up; // 계단 올라가는 방향키에 따라 유형 분류
+    bool onStair_down;
+    bool onStair_right;
+    bool onStair_left;
 
     bool isBorder;      // 벽 통과 못하게 막는 플래그      
     public bool hasKey;
@@ -57,14 +60,21 @@ public class Man : MonoBehaviour
     bool isFireReady = true;
     float fireDelay;
 
+    private bool goBack=false;//몬스터 닿았을 때 뒤로 점프
+    Vector3 playerPos;
     IEnumerator enu1; //ladder에 필요
-    private bool isLadder; //사다리 오르락내리락할 때 필요한 변수(2021-10-03, 김보)
+    Vector3 prePos;//뒤로 점프하기 전 플레이어의 기존 위치
 
     public Transform fastPos;
 
     void Start()
     {
+        //jumpPower = 150.0f;
         hasKey = false;
+        onStair_up = false;
+        onStair_down = false;
+        onStair_right = false;
+        onStair_left = false;
     }
 
     void Awake()
@@ -86,6 +96,7 @@ public class Man : MonoBehaviour
     {
         FreezeRotation();   // 플레이어가 탄피나 그런거에 닿으면 회전을 하기 시작.. 그거 없애려고 해주는것임
         StoptoWall();       // 벽 or 박스 통과 방지
+
     }
     
 
@@ -117,13 +128,12 @@ public class Man : MonoBehaviour
 
     void Move()
     {
-<<<<<<< Updated upstream
+
         if (isBump || isSwap)
-=======
+
         Debug.Log(hAxis + "   " + vAxis);
 
         if (isBump || isSwap || isDead)
->>>>>>> Stashed changes
         {
             return;
         }
@@ -142,6 +152,23 @@ public class Man : MonoBehaviour
         if (moveVec != Vector3.zero)
         {
             preVec = moveVec;
+        }
+
+        if (onStair_up && vAxis<0) // 올라가는 방향이니까 내려오는 방향키 일때 y축 벡터 아래로 줌.
+        {
+            moveVec = new Vector3(hAxis, vAxis*0.5f, vAxis).normalized;
+        }
+        if (onStair_down && vAxis > 0)  
+        {
+            moveVec = new Vector3(hAxis, vAxis * -0.5f, vAxis).normalized;
+        }
+        if (onStair_right && hAxis < 0) 
+        {
+            moveVec = new Vector3(hAxis, hAxis * 0.5f, vAxis).normalized;
+        }
+        if (onStair_left && hAxis < 0)
+        {
+            moveVec = new Vector3(hAxis, hAxis * -0.5f, vAxis).normalized;
         }
 
         //if (istoWALL)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정
@@ -179,14 +206,11 @@ public class Man : MonoBehaviour
                 equipWeapon = weapons[equipWeaponIndex].GetComponent<Weapon>();
                 equipWeapon.gameObject.SetActive(true);
                 equipWeapon.init();
-
-
             }
             else if (!isJump)
             {
                 // 점프는 그냥 위로 속도주기.
                 rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
-
                 anim.SetTrigger("Jump");
                 isJump = true;
             }
@@ -194,7 +218,6 @@ public class Man : MonoBehaviour
     }
     void Swap()
     {
-
         if (sDown1 && (!hasWeapons[0] || equipWeaponIndex == 0))
             return;
         if (sDown2 && (!hasWeapons[1] || equipWeaponIndex == 1))
@@ -318,26 +341,22 @@ public class Man : MonoBehaviour
                     break;
                     //case Item.Type.Key:
 
-
             }
             Interaction(other.transform.gameObject);
             Destroy(other.gameObject);
-
         }
+
         else if (other.tag == "Enemy")
         {
+            //prePos = this.transform.position;
             health--;
-            //Vector3 reactVec = transform.forward * Random.Range(-15, -20) + Vector3.up * Random.Range(5,10);
-            //rigid.AddForce(reactVec*3, ForceMode.Impulse);
-
+            Bump();
+            //Debug.Log("닿았따----------------------------");
             if (health <= 0)
                 Quit();
         }
-        
     }
-<<<<<<< Updated upstream
-    
-=======
+
 
     void OnDie()
     {
@@ -355,17 +374,20 @@ public class Man : MonoBehaviour
 
     }
 
->>>>>>> Stashed changes
     private void OnCollisionEnter(Collision collision)
     {
         // 바닥 닿으면 다시 점프 가능상태로 바꿔주기.
-        if (Physics.Raycast(transform.position, -transform.up, 3))
+        //if (Physics.Raycast(transform.position, -transform.up, 3))
+        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Box")
         {
-            Debug.Log("Floor 닿았다");
+
+            onStair_up = false;
+            onStair_down = false;
+            onStair_right = false;
+            onStair_left = false;
             isJump = false;
         }
-<<<<<<< Updated upstream
-=======
+
         if(collision.gameObject.tag == "Stair")
         {
             onStair = true;
@@ -387,24 +409,67 @@ public class Man : MonoBehaviour
         {         
             onStair = false;
         }
->>>>>>> Stashed changes
+
+        if(collision.gameObject.tag == "StairUp")
+        {
+
+            onStair_up = true;
+        }
+        if (collision.gameObject.tag == "StairDown")
+        {
+
+            onStair_down = true;
+        }
+        if (collision.gameObject.tag == "StairRight")
+        {
+
+            onStair_right = true;
+        }
+        if (collision.gameObject.tag == "StairLeft")
+        {
+
+            onStair_left = true;
+        }
     }
 
-  
+    private void OnCollisionExit(Collision collision) { 
+    //{
+    //    if (collision.gameObject.tag == "StairUp")
+    //    {
+
+    //        onStair_up = false;
+    //    }
+    //    if (collision.gameObject.tag == "StairDown")
+    //    {
+
+    //        onStair_down = false;
+    //    }
+    //    if (collision.gameObject.tag == "StairRight")
+    //    {
+
+    //        onStair_right = false;
+    //    }
+    //    if (collision.gameObject.tag == "StairLeft")
+    //    {
+
+    //        onStair_left = false;
+    //    }
+
+    }
+
     void Bump()
     {
-        //anim.SetTrigger("Bump");
-        //isBump = true;
-        //transform.position += preVec * -7;
+        anim.SetTrigger("Bump");
+        isBump = true;
+        transform.position += preVec * -10;
 
-        //Invoke("BumpOut", 1.5f);
+        Invoke("BumpOut", 1.5f);
     }
 
     void BumpOut()
     {
-        //isBump = false;
+        isBump = false;
     }
-
 
     //void OnGUI()
     //{

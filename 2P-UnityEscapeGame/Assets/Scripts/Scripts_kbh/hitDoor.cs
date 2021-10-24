@@ -9,85 +9,136 @@ public class hitDoor : MonoBehaviour
     public int value;
     Material mat;
     Material pre;//원래 거 저장하는 변수
-
     Rigidbody rigid;
     BoxCollider boxcollider;
+    BoxCollider PBoxcollider;
     private int doorRotCheck = -1;
-
+    private bool goBack = false;//문 열리면 뒤로 튕기렴
+    private GameObject player;
+    static Vector3 prePlayerPos;//문에 튕기기 전 내 위치
+    //Vector3 offset;//문과 나 사이의 거리
+    //float sqrLen;//거리관련 변수
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
         boxcollider = GetComponent<BoxCollider>();
+        PBoxcollider = GetComponent<BoxCollider>();
         mat = GetComponentInChildren<MeshRenderer>().material;
         pre = GetComponentInChildren<MeshRenderer>().material;
-        StartCoroutine(OnDamage());
+        player = GameObject.FindWithTag("Player");
     }
 
     private void Update()
     {
-        if(doorRotCheck==1)
+        if (doorRotCheck == 1)
             StartCoroutine(doorRotation());
-    }
 
+        //if (this.value == 2)
+        //{
+        //    offset = player.transform.position - this.transform.position;
+        //    sqrLen = offset.sqrMagnitude;
+
+        //    if (sqrLen < 625)//거리가 좁을떄만~
+        //        goBack = true;
+        //}
+        prePlayerPos = player.transform.position;
+    }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Melee" &&value==0)
+        if (other.tag == "Melee" && value == 0)
         {
             Weapon weapon = other.GetComponent<Weapon>();
             ch -= weapon.damage;
-            Debug.Log("망치로 때림ㅜ 현재 체력은 " + ch);
             Vector3 reactVec = transform.position - other.transform.position;
             StartCoroutine(OnDamage());
         }
 
-        else if (other.tag == "Bullet" )
+        else if (other.tag == "Bullet")
         {
             Bullet bullet = other.GetComponent<Bullet>();
             if (bullet.damage == 10 && value == 1)
             {
-                Debug.Log("총이다");
                 ch -= bullet.damage;
                 StartCoroutine(OnDamage());
             }
 
             else if (bullet.damage != 10 && value == 2)
             {
-                Debug.Log("총이다");
                 ch -= bullet.damage;
                 StartCoroutine(OnDamage());
             }
-                Destroy(other.gameObject);//적에 닿는순간 총알 안보이게 하기~ 관통하면 안되니까
+
+            Destroy(other.gameObject);//적에 닿는순간 총알 안보이게 하기~ 관통하면 안되니까
         }
+
+        boxcollider = this.gameObject.GetComponent<BoxCollider>();
+        PBoxcollider = this.gameObject.transform.parent.GetComponent<BoxCollider>();
     }
     IEnumerator OnDamage()
     {
-        mat.color = Color.grey;
+        goBack = true;
+
+        //mat.color = Color.grey;
         yield return new WaitForSeconds(1f);
         mat.color = pre.color;
-        Debug.Log("색이 안바귀어우어웡");
 
-        if(ch==0)
+        if (ch <= 0)
         {   //문 체력 다 닳음
             doorRotCheck = 1;
-           
         }
     }
 
     IEnumerator doorRotation()
     {
-        if (this.value == 1)//파란문
+        switch (value)
         {
-            this.transform.rotation = Quaternion.Slerp(
-               this.transform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), Time.time * 0.01f);
+            case 0: //노란문
+                    //234, 3,-22
+                if (goBack)
+                    player.transform.position = Vector3.Lerp(
+                         prePlayerPos,
+                         new Vector3(234f, 3f, -22f), Time.deltaTime * 2); //사람이동시켜
+
+                this.transform.rotation = Quaternion.Slerp(
+                         this.transform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), Time.deltaTime); // 문열어
+
+                if (player.transform.position.x <= 240f)
+                    goBack = false;
+
+                break;
+
+            case 1: //초록문
+                    //286,3,-103
+                if (goBack)
+                    player.transform.position = Vector3.Lerp(
+                         prePlayerPos,
+                         new Vector3(286f, 3f, -103f), Time.deltaTime * 2); //사람이동시켜
+
+                this.transform.rotation = Quaternion.Slerp(
+                         this.transform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), Time.deltaTime); // 문열어
+
+                if (player.transform.position.x <= 292f)
+                    goBack = false;
+
+
+                break;
+
+            case 2:
+                //if (goBack)
+                //    player.transform.position = Vector3.Lerp(
+                //         prePlayerPos,
+                //         new Vector3(388f, 3f, 31f), Time.deltaTime * 2); //사람이동시켜
+
+                this.transform.rotation = Quaternion.Slerp(
+                         this.transform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), Time.deltaTime); // 문열어
+                break;
         }
 
-        else // 노란, 연두색 문
-            this.transform.rotation = Quaternion.Slerp(
-               this.transform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), Time.time * 0.01f);
-    
-    yield return null;
+        PBoxcollider.enabled = false;
+        boxcollider.enabled = false;
+
+        yield return null;
     }
 }
-
 

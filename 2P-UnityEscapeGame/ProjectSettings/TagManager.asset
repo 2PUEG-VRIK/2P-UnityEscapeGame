@@ -16,12 +16,16 @@ TagManager:
   - Melee
   - Ladder
   - Things
-<<<<<<< Updated upstream
-=======
+
   - Stair
   - Water
   - fButton
->>>>>>> Stashed changes
+
+  - StairUp
+  - StairDown
+  - StairRight
+  - StairLeft
+
   layers:
   - Default
   - TransparentFX
@@ -35,11 +39,7 @@ TagManager:
   - miniMap
   - nonMini
   - camArea
-
-  - Box
-
-  - Door
-
+  - 
   - 
   - 
   - 

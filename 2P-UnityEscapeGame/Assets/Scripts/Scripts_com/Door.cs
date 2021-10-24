@@ -23,7 +23,7 @@ public class Door : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        if (DoorType == CollectibleTypes.Swing)
+        if (other.tag == "Player" && DoorType == CollectibleTypes.Swing)
         {
             if (other.GetComponent<Man>().hasKey)
             {
