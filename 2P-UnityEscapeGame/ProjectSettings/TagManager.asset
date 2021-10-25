@@ -20,6 +20,8 @@ TagManager:
   - StairDown
   - StairRight
   - StairLeft
+  - Water
+  - fButton
   layers:
   - Default
   - TransparentFX
