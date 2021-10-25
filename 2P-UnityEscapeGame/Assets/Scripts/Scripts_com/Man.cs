@@ -28,14 +28,11 @@ public class Man : MonoBehaviour
 
     bool istoWALL;        
     bool istoObj;
-
-    bool onStair;
-    bool isDead = false;    // 죽음 변수
-
     bool onStair_up; // 계단 올라가는 방향키에 따라 유형 분류
     bool onStair_down;
     bool onStair_right;
     bool onStair_left;
+
 
     bool isBorder;      // 벽 통과 못하게 막는 플래그      
     public bool hasKey;
@@ -64,8 +61,6 @@ public class Man : MonoBehaviour
     Vector3 playerPos;
     IEnumerator enu1; //ladder에 필요
     Vector3 prePos;//뒤로 점프하기 전 플레이어의 기존 위치
-
-    public Transform fastPos;
 
     void Start()
     {
@@ -130,10 +125,6 @@ public class Man : MonoBehaviour
     {
 
         if (isBump || isSwap)
-
-        Debug.Log(hAxis + "   " + vAxis);
-
-        if (isBump || isSwap || isDead)
         {
             return;
         }
@@ -142,7 +133,6 @@ public class Man : MonoBehaviour
             moveVec = Vector3.zero;
 
         moveVec = new Vector3(hAxis, 0, vAxis).normalized;
-
 
         if (isJump)
         {
@@ -180,7 +170,7 @@ public class Man : MonoBehaviour
         //else
         //    transform.position += moveVec * speed * 1f * Time.deltaTime;
 
-        if (!istoWALL && !isDead)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정 
+        if (!istoWALL)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정 
             transform.position += moveVec * speed * 1f * Time.deltaTime;
 
         anim.SetBool("isWalk", (moveVec != Vector3.zero));  // 속도가 0이 아니면 걸어라.
@@ -230,7 +220,7 @@ public class Man : MonoBehaviour
         if (sDown2) weaponIndex = 1;
         if (sDown3) weaponIndex = 2;
 
-        if ((sDown1 || sDown2 || sDown3))   //점프할때 금지되어있었음
+        if ((sDown1 || sDown2 || sDown3))//점프할때 금지되어있었음
         {
             if (equipWeapon != null)
                 equipWeapon.gameObject.SetActive(false);
@@ -299,21 +289,6 @@ public class Man : MonoBehaviour
  
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "fButton")
-        {
-            rigid.AddForce(fastPos.forward * 30, ForceMode.VelocityChange);
-        }
-
-        if (other.tag == "Water")
-        {
-            OnDie();
-        }
-
-        if (other.tag == "Box")
-        {
-            transform.position += moveVec * speed * 1f * Time.deltaTime;
-        }
-
         if (other.tag == "Item")
         {
             Item item = other.GetComponent<Item>();
@@ -357,16 +332,6 @@ public class Man : MonoBehaviour
         }
     }
 
-
-    void OnDie()
-    {
-        if (!isDead)
-        {
-            anim.SetTrigger("doDie");
-            isDead = true;
-        }
-    }
-
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Enemy")
@@ -387,29 +352,6 @@ public class Man : MonoBehaviour
             onStair_left = false;
             isJump = false;
         }
-
-        if(collision.gameObject.tag == "Stair")
-        {
-            onStair = true;
-        }
-        //if (collision.gameObject.tag == "Water")
-        //{            
-        //    OnDie();
-        //}
-    }
-
-    private void OnTriggerEnter(Collider2D collision)
-    {
-        
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.tag == "Stair")
-        {         
-            onStair = false;
-        }
-
         if(collision.gameObject.tag == "StairUp")
         {
 
@@ -454,7 +396,6 @@ public class Man : MonoBehaviour
 
     //        onStair_left = false;
     //    }
-
     }
 
     void Bump()
