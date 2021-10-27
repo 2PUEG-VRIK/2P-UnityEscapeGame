@@ -9,6 +9,10 @@ public class Teleport : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!(this.GetComponent<Activator>()?.isOn ?? true)) // Activator가 있으면 값을 가져오고 아니면 true => 통과
+        {
+            return;
+        }
         if (cooldown)
         {
             return;

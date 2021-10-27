@@ -34,7 +34,8 @@ public class Man : MonoBehaviour
     bool onStair_right;
     bool onStair_left;
 
-
+    public Transform fastPos;
+    bool isDead = false;    // 죽음 변수
     bool isBorder;      // 벽 통과 못하게 막는 플래그      
     public bool hasKey;
 
@@ -126,7 +127,7 @@ public class Man : MonoBehaviour
     void Move()
     {
 
-        if (isBump || isSwap)
+        if (isBump || isSwap || isDead)
         {
             return;
         }
@@ -172,7 +173,7 @@ public class Man : MonoBehaviour
         //else
         //    transform.position += moveVec * speed * 1f * Time.deltaTime;
 
-        if (!istoWALL)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정 
+        if (!istoWALL && !isDead)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정 
             transform.position += moveVec * speed * 1f * Time.deltaTime;
 
         anim.SetBool("isWalk", (moveVec != Vector3.zero));  // 속도가 0이 아니면 걸어라.
@@ -285,12 +286,29 @@ public class Man : MonoBehaviour
         }
     }
 
- 
+    void OnDie()
+    {
+        if (!isDead)
+        {
+            anim.SetTrigger("doDie");
+            isDead = true;
+        }
+    }
 
     public int check = -1;//코인 관련 변수(김보현)
  
     private void OnTriggerEnter(Collider other)
     {
+        if (other.tag == "fButton")
+        {
+            rigid.AddForce(fastPos.forward * 30, ForceMode.VelocityChange);
+        }
+
+        if (other.tag == "Water")
+        {
+            OnDie();
+        }
+
         if (other.tag == "Item")
         {
             Item item = other.GetComponent<Item>();
