@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//0 나 혼자
+//1 양
+//2 두더지
 public class gameManager3 : MonoBehaviour
 {
     public talkManager talkManager;
@@ -21,6 +24,12 @@ public class gameManager3 : MonoBehaviour
     private bool first ;//처음 내가 말 할때만 쓰이는 변수
     private bool firstTouch = false;//npc이랑 콜라이더 처음 닿을때 쓰이는 변수. 내가 먼저 말해야해 ㅎ
     Dictionary<int, string[]> textGroup;//내 대화 뭉텅이
+    private bool isCarRotate;
+    GameObject car;
+    GameObject mole;
+    private bool molePopUp;
+    private bool active_moleFunc;//update함수에서 코루틴 돌리게
+    GameObject remark;//애들 머리 위에 느낌표(예상치 못한 중요한 단서)
 
     private void Start()
     {
@@ -28,7 +37,13 @@ public class gameManager3 : MonoBehaviour
         value = 0; myLastIndex = -1;
         first = true;//내가 먼저 말 시작하면서 게임 시작해야하니까
         firstTouch = false;//아직 동물이랑 안 닿은 상태니까
+        isCarRotate = false;
         textGroup = new Dictionary<int, string[]>();
+        molePopUp = false;
+        active_moleFunc = false;
+        remark = GameObject.Find("npcArrow").transform.GetChild(2).gameObject;
+        mole = GameObject.Find("mole");
+        Debug.Log(remark.name);
         generatePlayerText();
         checkLength();
     }
@@ -36,13 +51,29 @@ public class gameManager3 : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.LeftControl) && isMyTurn)
-            if(first) popMyText(value); 
-    }
+            if (first) popMyText(value);
 
-    private void OnTriggerEnter(Collider other)
+        if (isCarRotate)
+            StartCoroutine(carRotateFunc(car));
+        if (!isCarRotate)
+            StopCoroutine(carRotateFunc(car));
+        if (active_moleFunc)
+        {
+            Debug.Log("업데이트함수 들어옴");
+            StartCoroutine(molePopUpFunc(mole));
+
+        }
+        if (!active_moleFunc)
+            StopCoroutine(molePopUpFunc(mole));
+
+    //}
+
+}
+
+private void OnTriggerEnter(Collider other) //못움직이게 해야혀
     {
-        if (other.tag == "Things")
-        { 
+        if (other.tag == "Things" )
+        {
             isMyTurn = true;
             checkLength();
         }
@@ -52,9 +83,24 @@ public class gameManager3 : MonoBehaviour
     {
         if (other.tag == "Things")
         {
-            if (Input.GetKeyDown(KeyCode.LeftControl))
+            if (Input.GetKeyDown(KeyCode.LeftControl))//대화가능 npc
             {
-                Action(other.transform.gameObject); 
+                Action(other.transform.gameObject);
+            }
+
+            else if (Input.GetKeyDown(KeyCode.LeftAlt))//단서 주는 물건들
+            {
+                if (other.gameObject.name == "car_pivot")
+                {
+                    car = other.gameObject;
+                    isCarRotate = true;
+                    //  if (Input.GetKeyDown(KeyCode.LeftShift))
+                    //StartCoroutine(carRotate(other.gameObject));
+                }
+
+                if (other.gameObject.name == "mole")//두더지 파묻혀있는거 처음 발견하고 꺼내는 과정
+                    if (molePopUp)
+                        active_moleFunc = true;//mole popup 코루틴 돌릴준비 완료
             }
         }
     }
@@ -88,13 +134,16 @@ public class gameManager3 : MonoBehaviour
             }
         }
     }
-
    
 
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Things")
-            yourIndex = 0;
+        {
+            if (other.gameObject.name == "car_pivot")
+                isCarRotate = false;
+            yourIndex = 0; 
+        }
     }   
 
     void Talk(int id, bool isNpc)
@@ -109,6 +158,11 @@ public class gameManager3 : MonoBehaviour
         //양이랑 하는 대화
         textGroup.Add(1, new string[]//mylast=3
         { "안녕?", "혹시 여기 털 색이 노란 강아지\n지나가는거 봤니?","그렇구나.. 실례했어! 안녕!"});
+        //두더지랑 대화
+        textGroup.Add(2, new string[]
+        {
+            "두더쥐~~!!"
+        });
     }
 
     private string GetMyTalk(int id, int myIndex)
@@ -191,5 +245,38 @@ public class gameManager3 : MonoBehaviour
                 break;
         }
     }
+
+    IEnumerator carRotateFunc(GameObject car)
+    {
+        //236.7, -9,-91.2
+        car.transform.rotation = Quaternion.Slerp(
+               car.transform.localRotation, Quaternion.Euler(new Vector3(0, 180, 80f)), Time.time * 0.02f);
+        
+        yield return new WaitForSecondsRealtime(1f);
+        //if (car.transform.rotation == Quaternion.Euler(new Vector3(0, 180, 50f)))
+        mole.GetComponent<BoxCollider>().enabled = true;
+        car.GetComponent<BoxCollider>().enabled = false;
+        molePopUp = true;
+        remark.SetActive(true);
+        isCarRotate = false;
+
+        // StopCoroutine(carRotateFunc(car));
+    }
+
+    IEnumerator molePopUpFunc(GameObject mole)
+    {
+        Debug.Log("두더지코루틴");
+        Debug.Log(mole.transform.localPosition.y);
+
+        mole.transform.Translate(new Vector3(0, 1f, 0));
+        //yield return new WaitForSecondsRealtime(6f);
+        if (mole.transform.localPosition.y >= -11f)
+        { molePopUp = false;
+            active_moleFunc = false;
+        }
+
+        yield return null;
+    }
+  //mole=-11.87
 
 }
