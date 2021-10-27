@@ -109,6 +109,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e982aecc52c06dc4c98d440065b96136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 30
+  jumpPower: 180
+  isJump: 0
+  fastPos: {fileID: 9019174534868594130}
+  hasKey: 0
   weapons: []
   hasWeapons: 
   health: 0
