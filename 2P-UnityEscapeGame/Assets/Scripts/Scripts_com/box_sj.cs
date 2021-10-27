@@ -37,8 +37,7 @@ public class box_sj : MonoBehaviour
         {
             moveVec = new Vector3(hAxis, 0, vAxis).normalized;
             transform.position += moveVec * speed * 0.5f * Time.deltaTime;
-        }
- 
+        } 
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -48,5 +47,14 @@ public class box_sj : MonoBehaviour
             isMove = true;
             speed = collision.gameObject.GetComponent<Man>().speed;
         }   
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            isMove = false;
+            speed = collision.gameObject.GetComponent<Man>().speed;
+        }
     }
 }

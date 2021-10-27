@@ -122,7 +122,16 @@ public class Man : MonoBehaviour
         sDown1 = Input.GetButtonDown("Swap1");
         sDown2 = Input.GetButtonDown("Swap2");
         sDown3 = Input.GetButtonDown("Swap3");
+
+        if(Input.anyKeyDown)
+        {
+            if(isBox)
+            {
+                isBox = false;
+            }
+        }
     }
+
 
     void Move()
     {
