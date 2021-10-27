@@ -25,6 +25,7 @@ public class Man : MonoBehaviour
     bool sDown3;
     bool iDown;
     bool jDown;
+    bool isBox;
 
     bool istoWALL;        
     bool istoObj;
@@ -71,6 +72,7 @@ public class Man : MonoBehaviour
         onStair_down = false;
         onStair_right = false;
         onStair_left = false;
+        isBox = false;
     }
 
     void Awake()
@@ -135,7 +137,7 @@ public class Man : MonoBehaviour
 
         moveVec = new Vector3(hAxis, 0, vAxis).normalized;
 
-        if (isJump)
+        if (isJump || isBox)
         {
             moveVec *= 0.5f;
         }
@@ -389,6 +391,10 @@ public class Man : MonoBehaviour
         {
 
             onStair_left = true;
+        }
+        if(collision.gameObject.tag == "Boxsj")
+        {
+            isBox = true;
         }
     }
 
