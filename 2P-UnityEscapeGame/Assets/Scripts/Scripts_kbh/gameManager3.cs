@@ -43,14 +43,13 @@ public class gameManager3 : MonoBehaviour
         active_moleFunc = false;
         remark = GameObject.Find("npcArrow").transform.GetChild(2).gameObject;
         mole = GameObject.Find("mole");
-        Debug.Log(remark.name);
         generatePlayerText();
         checkLength();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl) && isMyTurn)
+        if (Input.GetKeyDown(KeyCode.X) && isMyTurn)
             if (first) popMyText(value);
 
         if (isCarRotate)
@@ -58,11 +57,8 @@ public class gameManager3 : MonoBehaviour
         if (!isCarRotate)
             StopCoroutine(carRotateFunc(car));
         if (active_moleFunc)
-        {
-            Debug.Log("업데이트함수 들어옴");
             StartCoroutine(molePopUpFunc(mole));
 
-        }
         if (!active_moleFunc)
             StopCoroutine(molePopUpFunc(mole));
 
@@ -74,8 +70,17 @@ private void OnTriggerEnter(Collider other) //못움직이게 해야혀
     {
         if (other.tag == "Things" )
         {
-            isMyTurn = true;
-            checkLength();
+            if (other.name == "car_pivot")
+            {
+                return;
+            }
+            else {
+                Debug.Log("두더지 콜라 안에 들어와서 my turn true됨");
+                isMyTurn = true;
+                checkLength();
+            }
+
+            talkPanel.SetActive(false);
         }
     }
 
@@ -83,7 +88,7 @@ private void OnTriggerEnter(Collider other) //못움직이게 해야혀
     {
         if (other.tag == "Things")
         {
-            if (Input.GetKeyDown(KeyCode.LeftControl))//대화가능 npc
+            if (Input.GetKeyDown(KeyCode.X))//대화가능 npc
             {
                 Action(other.transform.gameObject);
             }
@@ -142,7 +147,10 @@ private void OnTriggerEnter(Collider other) //못움직이게 해야혀
         {
             if (other.gameObject.name == "car_pivot")
                 isCarRotate = false;
-            yourIndex = 0; 
+            yourIndex = 0;
+            value = 0;
+            talkText.text = "";
+
         }
     }   
 
@@ -161,7 +169,7 @@ private void OnTriggerEnter(Collider other) //못움직이게 해야혀
         //두더지랑 대화
         textGroup.Add(2, new string[]
         {
-            "두더쥐~~!!"
+            "나(1)","나(3)","나(끝)"
         });
     }
 
@@ -182,13 +190,13 @@ private void OnTriggerEnter(Collider other) //못움직이게 해야혀
 
         if ( value == 0)
         { //혼자 뛰어다니는 상황 설명
-            if (myIndex == myLastIndex)//대화의 끝에 도달하면 
+            if (myLastIndex <= myIndex) //대화의 끝에 도달하면 
             {
                 talkPanel.SetActive(false);
                 panelActive = false;
                 yourIndex = 0; myIndex = 0;
-                isMyTurn = false;
                 first = false;
+                Debug.Log("대화 끝났다는");
             }
             else
             {
@@ -200,11 +208,12 @@ private void OnTriggerEnter(Collider other) //못움직이게 해야혀
 
         else
         { //npc랑 대화할 때 내 말들
-            if(myLastIndex==myIndex)//내 대화 끝에 도달
+            if (myLastIndex <= myIndex) //내 대화 끝에 도달
             {
                 talkPanel.SetActive(false);
                 panelActive = false;
-                Debug.Log("대화 긑나서 창 종료");
+                Debug.Log("대화 끝났다는");
+
                 yourIndex = 0; myIndex = 0;
                 yourLastIndex = 0; myLastIndex = 0;
             }
@@ -213,6 +222,8 @@ private void OnTriggerEnter(Collider other) //못움직이게 해야혀
             {
                 talkText.text = GetMyTalk(value, myIndex);
                 myIndex++;
+                if(Input.GetKeyDown(KeyCode.X)) Debug.Log("X 눌림");
+                Debug.Log("현재 내 인덱스 " + myIndex + "    끝 인덱스 " + myLastIndex);
             }
             isMyTurn = false;
         }
@@ -220,29 +231,23 @@ private void OnTriggerEnter(Collider other) //못움직이게 해야혀
 
     private void popNPCText(int value)
     {
-        switch (value)
+
+        yourLastIndex = talkManager.CheckLength(value);
+
+        if (yourLastIndex <= yourIndex)
         {
-            //양
-            case 1:
-                {
-                    yourLastIndex = talkManager.CheckLength(value);
-                   
-                    if (yourIndex < yourLastIndex)
-                    {
-                        talkText.text = talkManager.GetTalk(value, yourIndex);//npc index 대화 출력
-                        yourIndex++;
-                        isMyTurn = true;
-                    }
-                    else //양 대화 고갈~ 다 없애버려
-                    {
-                        talkPanel.SetActive(false);
-                        panelActive = false;
-                        Debug.Log("대화 긑나서 창 종료");
-                        yourIndex = 0; myIndex = 0;
-                        yourLastIndex = 0; myLastIndex = 0;
-                    }
-                }
-                break;
+            talkPanel.SetActive(false);
+            panelActive = false;
+            Debug.Log("대화 긑나서 창 종료");
+            yourIndex = 0; myIndex = 0;
+            yourLastIndex = 0; myLastIndex = 0;
+        }
+        {
+            talkText.text = talkManager.GetTalk(value, yourIndex);//npc index 대화 출력
+                if(Input.GetKeyDown(KeyCode.X)) Debug.Log("X 눌림");
+            yourIndex++;
+            isMyTurn = true;
+            Debug.Log("현재 두더지 인덱스 " + yourIndex + "끝 인덱스 " + yourLastIndex);
         }
     }
 
@@ -265,15 +270,13 @@ private void OnTriggerEnter(Collider other) //못움직이게 해야혀
 
     IEnumerator molePopUpFunc(GameObject mole)
     {
-        Debug.Log("두더지코루틴");
-        Debug.Log(mole.transform.localPosition.y);
-
         mole.transform.Translate(new Vector3(0, 1f, 0));
         //yield return new WaitForSecondsRealtime(6f);
         if (mole.transform.localPosition.y >= -11f)
         { molePopUp = false;
             active_moleFunc = false;
         }
+
 
         yield return null;
     }

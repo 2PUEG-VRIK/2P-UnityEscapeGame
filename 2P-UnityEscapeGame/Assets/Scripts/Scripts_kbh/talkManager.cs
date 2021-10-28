@@ -32,7 +32,7 @@ public class talkManager : MonoBehaviour
         
         //2.두더징
         talkData.Add(2, new string[]
-         {  "안니옹~!", "뭐? 노란 강아지?\n아까 노란 네 발이 북쪽으로 가는 걸 봤어!"
+         {  "두(2)", "두(4)"
         });
 
 
