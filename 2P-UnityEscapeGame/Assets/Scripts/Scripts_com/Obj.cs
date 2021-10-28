@@ -6,22 +6,49 @@ public class Obj : MonoBehaviour
 {
     public Transform manPos;
 
+    bool istoWALL = false;
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Wall")
+        {
+            istoWALL = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "Wall")
+        {
+            istoWALL = false;
+        }
+    }
 
     private void OnTriggerStay(Collider other)
     {
         Rigidbody rigid = other.gameObject.GetComponent<Rigidbody>();
-        if (other.gameObject.tag == "Player")        
+        if (!istoWALL)
         {
-            transform.position += manPos.forward * 25 * 0.75f * Time.deltaTime;
+            if (other.gameObject.tag == "Player")
+            {
+                transform.position += manPos.forward * 25 * 0.75f * Time.deltaTime;
+            }
+        }
+        else
+        {
+            rigid.velocity = manPos.forward * 0;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
         Rigidbody rigid = other.gameObject.GetComponent<Rigidbody>();
-        if (other.gameObject.tag == "Player")       
+        if (!istoWALL)
         {
-            rigid.velocity = manPos.forward * -0;
+            if (other.gameObject.tag == "Player")
+            {
+                rigid.velocity = manPos.forward * -0;
+            }
         }
     }
 
@@ -29,9 +56,16 @@ public class Obj : MonoBehaviour
     {
 
         Rigidbody rigid = other.gameObject.GetComponent<Rigidbody>();
-        if (other.gameObject.tag == "Player")        
+        if (!istoWALL)
         {
-            rigid.AddForce(manPos.forward * -15, ForceMode.VelocityChange);
+            if (other.gameObject.tag == "Player")
+            {
+                rigid.AddForce(manPos.forward * -15, ForceMode.VelocityChange);
+            }
+        }
+        else
+        {
+            rigid.velocity = manPos.forward*0;
         }
     }
 }

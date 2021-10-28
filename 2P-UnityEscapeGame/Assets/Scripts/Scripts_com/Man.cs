@@ -28,6 +28,7 @@ public class Man : MonoBehaviour
 
     bool istoWALL;        
     bool istoObj;
+    
     bool onStair_up; // 계단 올라가는 방향키에 따라 유형 분류
     bool onStair_down;
     bool onStair_right;
