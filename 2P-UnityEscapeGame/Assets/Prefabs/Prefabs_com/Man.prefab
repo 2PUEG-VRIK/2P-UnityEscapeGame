@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 30
-  jumpPower: 0
+  jumpPower: 200
   isJump: 0
   fastPos: {fileID: 9019174534868594130}
   hasKey: 0

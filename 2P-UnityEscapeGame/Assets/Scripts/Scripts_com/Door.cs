@@ -22,11 +22,15 @@ public class Door : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
+        Debug.Log("Door - OnTriggerEnter");
         if (other.tag == "Player" && DoorType == CollectibleTypes.Swing)
         {
+            Debug.Log("Door - Player");
+
             if (other.GetComponent<Man>().hasKey)
             {
+                Debug.Log("Door - hasKey");
+
                 isOpen = true;
 
                 if (collectSound)
@@ -40,7 +44,14 @@ public class Door : MonoBehaviour
 
         }
     }
-     
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player" && DoorType == CollectibleTypes.Swing)
+        {
+            Debug.Log("Door - OnCollisionEnter");
+        }
+    }
 
     private void Update()
     {
