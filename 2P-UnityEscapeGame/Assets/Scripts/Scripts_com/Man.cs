@@ -154,21 +154,24 @@ public class Man : MonoBehaviour
         if (moveVec != Vector3.zero)
         {
             preVec = moveVec;
+        } else
+        {
+
         }
 
-        if (onStair_up && vAxis<0) // 올라가는 방향이니까 내려오는 방향키 일때 y축 벡터 아래로 줌.
+        if (onStair_up) // 올라가는 방향이니까 내려오는 방향키 일때 y축 벡터 아래로 줌.
         {
-            moveVec = new Vector3(hAxis, vAxis*0.5f, vAxis).normalized;
+            moveVec = new Vector3(hAxis, vAxis * 0.5f, vAxis).normalized;
         }
-        if (onStair_down && vAxis > 0)  
+        if (onStair_down)  
         {
             moveVec = new Vector3(hAxis, vAxis * -0.5f, vAxis).normalized;
         }
-        if (onStair_right && hAxis < 0) 
+        if (onStair_right) 
         {
             moveVec = new Vector3(hAxis, hAxis * 0.5f, vAxis).normalized;
         }
-        if (onStair_left && hAxis < 0)
+        if (onStair_left)
         {
             moveVec = new Vector3(hAxis, hAxis * -0.5f, vAxis).normalized;
         }
@@ -191,7 +194,8 @@ public class Man : MonoBehaviour
     void Turn()
     {
         // 가는 방향 보기.
-        transform.LookAt(transform.position + moveVec);
+        Vector3 watchVec = new Vector3(moveVec.x, 0, moveVec.z);
+        transform.LookAt(transform.position + watchVec);
     }
 
     void Jump()
@@ -372,33 +376,40 @@ public class Man : MonoBehaviour
     {
         // 바닥 닿으면 다시 점프 가능상태로 바꿔주기.
         //if (Physics.Raycast(transform.position, -transform.up, 3))
-        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Box")
+        if (collision.gameObject.layer == 7 || collision.gameObject.tag == "Box")
         {
-
             onStair_up = false;
             onStair_down = false;
             onStair_right = false;
             onStair_left = false;
-            isJump = false;
+            isJump = false; 
         }
         if(collision.gameObject.tag == "StairUp")
         {
-
             onStair_up = true;
+            onStair_down = false;
+            onStair_right = false;
+            onStair_left = false;
         }
         if (collision.gameObject.tag == "StairDown")
         {
-
+            onStair_up = false;
             onStair_down = true;
+            onStair_right = false;
+            onStair_left = false;
         }
         if (collision.gameObject.tag == "StairRight")
         {
-
+            onStair_up = false;
+            onStair_down = false;
             onStair_right = true;
+            onStair_left = false;
         }
         if (collision.gameObject.tag == "StairLeft")
         {
-
+            onStair_up = false;
+            onStair_down = false;
+            onStair_right = false;
             onStair_left = true;
         }
         if(collision.gameObject.tag == "Boxsj")
