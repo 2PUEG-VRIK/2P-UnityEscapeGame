@@ -25,11 +25,16 @@ public class gameManager3 : MonoBehaviour
     private bool firstTouch = false;//npc이랑 콜라이더 처음 닿을때 쓰이는 변수. 내가 먼저 말해야해 ㅎ
     Dictionary<int, string[]> textGroup;//내 대화 뭉텅이
     private bool isCarRotate;
+    private bool isCarRotateBack;
+
     GameObject car;
     GameObject mole;
     private bool molePopUp;
     private bool active_moleFunc;//update함수에서 코루틴 돌리게
-    GameObject remark;//애들 머리 위에 느낌표(예상치 못한 중요한 단서)
+    GameObject remark_mole;//애들 머리 위에 느낌표(예상치 못한 중요한 단서)
+    GameObject arrow_blackCar;
+    new Vector3 preCar;//차 원래 좌표
+    new Vector3 preThing;//물건 원래 좌표
 
     private void Start()
     {
@@ -37,12 +42,14 @@ public class gameManager3 : MonoBehaviour
         value = 0; myLastIndex = -1;
         first = true;//내가 먼저 말 시작하면서 게임 시작해야하니까
         firstTouch = false;//아직 동물이랑 안 닿은 상태니까
-        isCarRotate = false;
+        isCarRotate = false; isCarRotateBack = false;
         textGroup = new Dictionary<int, string[]>();
         molePopUp = false;
         active_moleFunc = false;
-        remark = GameObject.Find("npcArrow").transform.GetChild(2).gameObject;
+        arrow_blackCar = GameObject.Find("npcArrow").transform.GetChild(1).gameObject;
+        remark_mole = GameObject.Find("npcArrow").transform.GetChild(2).gameObject;
         mole = GameObject.Find("mole");
+
         generatePlayerText();
         checkLength();
     }
@@ -62,19 +69,28 @@ public class gameManager3 : MonoBehaviour
         if (!active_moleFunc)
             StopCoroutine(molePopUpFunc(mole));
 
-    //}
+        if(isCarRotateBack)//차 다시 원상복귀
+            StartCoroutine(carRotateBackFunc(car));
 
-}
+        //}
 
-private void OnTriggerEnter(Collider other) //못움직이게 해야혀
+    }
+
+    private void OnTriggerEnter(Collider other) //못움직이게 해야혀
     {
         if (other.tag == "Things" )
         {
             if (other.name == "car_pivot")
             {
+                preCar = other.transform.position;
                 return;
             }
+            else if (other.name == "Car")
+            {
+
+            }
             else {
+                preThing = other.transform.position;
                 Debug.Log("두더지 콜라 안에 들어와서 my turn true됨");
                 isMyTurn = true;
                 checkLength();
@@ -135,7 +151,6 @@ private void OnTriggerEnter(Collider other) //못움직이게 해야혀
                     popMyText(value);
                 else
                     popNPCText(value);
-
             }
         }
     }
@@ -146,11 +161,18 @@ private void OnTriggerEnter(Collider other) //못움직이게 해야혀
         if (other.tag == "Things")
         {
             if (other.gameObject.name == "car_pivot")
+            { 
                 isCarRotate = false;
-            yourIndex = 0;
+                arrow_blackCar.SetActive(true);
+            }
+
+            if (other.gameObject.name == "mole")
+            {
+                isCarRotateBack = true;//나갔으니까 두더지 내려가고 차 위치나 회전 원상복귀
+            }
+            yourIndex = 0; myIndex = 0;
             value = 0;
             talkText.text = "";
-
         }
     }   
 
@@ -165,11 +187,16 @@ private void OnTriggerEnter(Collider other) //못움직이게 해야혀
         textGroup.Add(0, new string[] { "(헉.. 헉..) 누렁아! 누렁아!!", "어디있는거야..." });//mylast=2
         //양이랑 하는 대화
         textGroup.Add(1, new string[]//mylast=3
-        { "안녕?", "혹시 여기 털 색이 노란 강아지\n지나가는거 봤니?","그렇구나.. 실례했어! 안녕!"});
+        { "안녕?", "나는 두두야. 혹시 여기\n노란 강아지 지나가는거 못봤니?","그렇구나.. 실례했어! 안녕!"});
         //두더지랑 대화
         textGroup.Add(2, new string[]
         {
             "나(1)","나(3)","나(끝)"
+        });
+
+        textGroup.Add(3, new string[]
+        {
+            "나(1)", "나(3)", "나(5)"
         });
     }
 
@@ -188,42 +215,56 @@ private void OnTriggerEnter(Collider other) //못움직이게 해야혀
 
     private void popMyText(int value) { // npc랑 하는 내 대화 띄우기
 
-        if ( value == 0)
+        if (value == 0)
         { //혼자 뛰어다니는 상황 설명
-            if (myLastIndex <= myIndex) //대화의 끝에 도달하면 
+          // if (myLastIndex <= myIndex) //대화의 끝에 도달하면 
+            while (true)
             {
-                talkPanel.SetActive(false);
-                panelActive = false;
-                yourIndex = 0; myIndex = 0;
-                first = false;
-                Debug.Log("대화 끝났다는");
-            }
-            else
-            {
-                talkText.text = GetMyTalk(value, myIndex);
-                myIndex++;
-                Debug.Log(myIndex);
+                if (myLastIndex <= myIndex)
+                {
+                    talkPanel.SetActive(false);
+                    panelActive = false;
+                    yourIndex = 0; myIndex = 0;
+                    first = false;
+                    Debug.Log("대화 끝났다는");
+                    break;
+                }
+                if (Input.GetKeyDown(KeyCode.X))
+
+                {
+                    talkText.text = GetMyTalk(value, myIndex);
+                    myIndex++;
+                    Debug.Log(myIndex);
+                    break;
+
+                }
             }
         }
 
         else
         { //npc랑 대화할 때 내 말들
-            if (myLastIndex <= myIndex) //내 대화 끝에 도달
+          // if (myLastIndex <= myIndex) //내 대화 끝에 도달
+            while (true)
             {
-                talkPanel.SetActive(false);
-                panelActive = false;
-                Debug.Log("대화 끝났다는");
+                if (myLastIndex <= myIndex)
+                {
+                    talkPanel.SetActive(false);
+                    panelActive = false;
+                    Debug.Log("대화 끝났다는");
 
-                yourIndex = 0; myIndex = 0;
-                yourLastIndex = 0; myLastIndex = 0;
-            }
+                    yourIndex = 0; myIndex = 0;
+                    yourLastIndex = 0; myLastIndex = 0;
+                    break;
+                }
+                if (Input.GetKeyDown(KeyCode.X))
+                {
+                    talkText.text = GetMyTalk(value, myIndex);
+                    myIndex++;
+                    if (Input.GetKeyDown(KeyCode.X)) Debug.Log("X 눌림");
+                    Debug.Log("현재 내 인덱스 " + myIndex + "    끝 인덱스 " + myLastIndex);
+                    break;
 
-            else
-            {
-                talkText.text = GetMyTalk(value, myIndex);
-                myIndex++;
-                if(Input.GetKeyDown(KeyCode.X)) Debug.Log("X 눌림");
-                Debug.Log("현재 내 인덱스 " + myIndex + "    끝 인덱스 " + myLastIndex);
+                }
             }
             isMyTurn = false;
         }
@@ -234,51 +275,99 @@ private void OnTriggerEnter(Collider other) //못움직이게 해야혀
 
         yourLastIndex = talkManager.CheckLength(value);
 
-        if (yourLastIndex <= yourIndex)
+        //if (yourLastIndex <= yourIndex)
+        while (true)
         {
-            talkPanel.SetActive(false);
-            panelActive = false;
-            Debug.Log("대화 긑나서 창 종료");
-            yourIndex = 0; myIndex = 0;
-            yourLastIndex = 0; myLastIndex = 0;
-        }
-        {
-            talkText.text = talkManager.GetTalk(value, yourIndex);//npc index 대화 출력
-                if(Input.GetKeyDown(KeyCode.X)) Debug.Log("X 눌림");
-            yourIndex++;
-            isMyTurn = true;
-            Debug.Log("현재 두더지 인덱스 " + yourIndex + "끝 인덱스 " + yourLastIndex);
+            if (yourLastIndex <= yourIndex)
+            {
+                talkPanel.SetActive(false);
+                panelActive = false;
+                Debug.Log("대화 긑나서 창 종료");
+                yourIndex = 0; myIndex = 0;
+                yourLastIndex = 0; myLastIndex = 0;
+                break;
+            }
+            if (Input.GetKeyDown(KeyCode.X)) 
+            {
+                Debug.Log("X 눌림");
+                talkText.text = talkManager.GetTalk(value, yourIndex);//npc index 대화 출력
+                yourIndex++;
+                isMyTurn = true;
+                Debug.Log("현재 두더지 인덱스 " + yourIndex + "끝 인덱스 " + yourLastIndex);
+                break;
+
+            }
         }
     }
 
     IEnumerator carRotateFunc(GameObject car)
     {
+        car.transform.position = new Vector3(car.transform.position.x, car.transform.position.y + 2f, car.transform.position.z);
+
+        arrow_blackCar.SetActive(false);
         //236.7, -9,-91.2
         car.transform.rotation = Quaternion.Slerp(
-               car.transform.localRotation, Quaternion.Euler(new Vector3(0, 180, 80f)), Time.time * 0.02f);
+               car.transform.localRotation, Quaternion.Euler(new Vector3(0, 180, 80f)), Time.time * 0.01f);
         
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(2f);
         //if (car.transform.rotation == Quaternion.Euler(new Vector3(0, 180, 50f)))
         mole.GetComponent<BoxCollider>().enabled = true;
         car.GetComponent<BoxCollider>().enabled = false;
         molePopUp = true;
-        remark.SetActive(true);
+        remark_mole.SetActive(true);
         isCarRotate = false;
+
+        // StopCoroutine(carRotateFunc(car));
+    }
+
+    IEnumerator carRotateBackFunc(GameObject car)
+    {
+        //236.7, -9,-91.2
+        mole.transform.Translate(new Vector3(0, -0.7f, 0));
+        //yield return new WaitForSecondsRealtime(6f);
+        if (mole.transform.localPosition.y <= preThing.y)
+        {
+            molePopUp = false;
+            active_moleFunc = false;
+        }
+        car.transform.position =preCar;
+        car.transform.rotation = Quaternion.Slerp(
+               car.transform.localRotation, Quaternion.Euler(new Vector3(0, 180, 0)), Time.time * 0.01f);
+
+        yield return new WaitForSecondsRealtime(0.16f);
+        //if (car.transform.rotation == Quaternion.Euler(new Vector3(0, 180, 50f)))
+        mole.GetComponent<BoxCollider>().enabled = false;
+        car.GetComponent<BoxCollider>().enabled = true;
+        molePopUp = false;
+        remark_mole.SetActive(false);
+        isCarRotate = false; isCarRotateBack = false;
+        arrow_blackCar.SetActive(true);
+
+
+        Invoke("FlowerSay", 6f);
+
 
         // StopCoroutine(carRotateFunc(car));
     }
 
     IEnumerator molePopUpFunc(GameObject mole)
     {
+        remark_mole.SetActive(false);
         mole.transform.Translate(new Vector3(0, 1f, 0));
         //yield return new WaitForSecondsRealtime(6f);
         if (mole.transform.localPosition.y >= -11f)
-        { molePopUp = false;
+        { 
+            molePopUp = false;
             active_moleFunc = false;
         }
-
-
         yield return null;
+    }
+
+    private void FlowerSay()
+    {
+        talkPanel.SetActive(true);
+        panelActive = true;
+        talkText.text = "야! 너! 이리와 봐!";
     }
   //mole=-11.87
 

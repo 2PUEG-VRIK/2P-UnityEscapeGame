@@ -35,6 +35,11 @@ public class talkManager : MonoBehaviour
          {  "µÎ(2)", "µÎ(4)"
         });
 
+        //3. ¾ÆÆÄÆ® ¿· ¸ø³­ÀÌ ²É
+        talkData.Add(3, new string[]
+            { "²É(2)", "²É(4)", "(¤¾¤¾Àç¹Õ´ç)"
+            });
+
 
     }
 
