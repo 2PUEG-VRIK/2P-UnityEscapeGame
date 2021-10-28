@@ -36,6 +36,9 @@ public class gameManager3 : MonoBehaviour
     new Vector3 preCar;//차 원래 좌표
     new Vector3 preThing;//물건 원래 좌표
 
+    private float time;
+    private bool isTimerOn;
+
     private void Start()
     {
         yourIndex = 0; myIndex = 0;
@@ -49,6 +52,8 @@ public class gameManager3 : MonoBehaviour
         arrow_blackCar = GameObject.Find("npcArrow").transform.GetChild(1).gameObject;
         remark_mole = GameObject.Find("npcArrow").transform.GetChild(2).gameObject;
         mole = GameObject.Find("mole");
+        isTimerOn = false;
+        time = 0f;
 
         generatePlayerText();
         checkLength();
@@ -72,6 +77,8 @@ public class gameManager3 : MonoBehaviour
         if(isCarRotateBack)//차 다시 원상복귀
             StartCoroutine(carRotateBackFunc(car));
 
+        if (isTimerOn)
+            time += Time.deltaTime;
         //}
 
     }
@@ -344,7 +351,7 @@ public class gameManager3 : MonoBehaviour
         arrow_blackCar.SetActive(true);
 
 
-        Invoke("FlowerSay", 6f);
+        Invoke("FlowerSay", 4f);
 
 
         // StopCoroutine(carRotateFunc(car));
@@ -368,6 +375,14 @@ public class gameManager3 : MonoBehaviour
         talkPanel.SetActive(true);
         panelActive = true;
         talkText.text = "야! 너! 이리와 봐!";
+
+        isTimerOn = true;
+        if (time > 2.5f)
+            talkText.text = "어? 날 부르는건가?";
+        if (time > 5f)
+            talkText.text = "그래 너 ~";
+
+
     }
   //mole=-11.87
 
