@@ -6,6 +6,13 @@ using UnityEngine.UI;
 //0 나 혼자
 //1 양
 //2 두더지
+
+
+/*check(초기값 0)
+1- 차 회전 원상복구 끝나고 꽃이 말 걸 때 필요해서
+-1- 꽃이 말 거는거 끝나면 
+
+*/
 public class gameManager3 : MonoBehaviour
 {
     public talkManager talkManager;
@@ -33,11 +40,12 @@ public class gameManager3 : MonoBehaviour
     private bool active_moleFunc;//update함수에서 코루틴 돌리게
     GameObject remark_mole;//애들 머리 위에 느낌표(예상치 못한 중요한 단서)
     GameObject arrow_blackCar;
-    new Vector3 preCar;//차 원래 좌표
-    new Vector3 preThing;//물건 원래 좌표
+    Vector3 preCar;//차 원래 좌표
+    Vector3 preThing;//물건 원래 좌표
 
     private float time;
     private bool isTimerOn;
+    private int check;
 
     private void Start()
     {
@@ -53,6 +61,7 @@ public class gameManager3 : MonoBehaviour
         remark_mole = GameObject.Find("npcArrow").transform.GetChild(2).gameObject;
         mole = GameObject.Find("mole");
         isTimerOn = false;
+        check = 0;
         time = 0f;
 
         generatePlayerText();
@@ -79,9 +88,24 @@ public class gameManager3 : MonoBehaviour
         if (isCarRotateBack)//차 다시 원상복귀
             StartCoroutine(carRotateBackFunc(car));
 
+        
         if (isTimerOn)
-            time += Time.deltaTime;
-        //}
+         time += Time.deltaTime;
+
+        //if (check == 1)//꽃이 말 걸 차례다
+        //    StartCoroutine(FlowerSay());
+
+        switch (check)
+        {
+            case 1://꽃이 말 걸 차례다
+                StartCoroutine(FlowerSay());
+                break;
+
+            case -1:
+                StopCoroutine(FlowerSay());
+                break;
+
+        }
 
     }
 
@@ -183,10 +207,10 @@ public class gameManager3 : MonoBehaviour
                 isCarRotateBack = true;//나갔으니까 두더지 내려가고 차 위치나 회전 원상복귀
                 if (isCarRotateBack)//차 원상복구 시켜야지만 그 위에 화살표 보이게하기
                     arrow_blackCar.SetActive(true);
-                Debug.Log("두더지한텢");
             }
+           
             yourIndex = 0; myIndex = 0;
-            value = 0;
+            
             talkText.text = "";
         }
     }
@@ -200,18 +224,18 @@ public class gameManager3 : MonoBehaviour
     {
         //게임 시작 후 바로 나오는 대화
         textGroup.Add(0, new string[] { "(헉.. 헉..) 누렁아! 누렁아!!", "어디있는거야..." });//mylast=2
-        //양이랑 하는 대화
+        //1 양이랑 하는 대화
         textGroup.Add(1, new string[]//mylast=3
         { "안녕?", "나는 두두야. 혹시 여기\n노란 강아지 지나가는거 못봤니?","그렇구나.. 실례했어! 안녕!"});
-        //두더지랑 대화
+        //2 두더지랑 대화
         textGroup.Add(2, new string[]
         {
             "나(1)","나(3)","나(끝)"
         });
-
+        //3 아파트 옆 못난이 꽃
         textGroup.Add(3, new string[]
         {
-            "나(1)", "나(3)", "나(5)"
+            "네가 날 불렀니?", "나(3)", "나(5)"
         });
     }
 
@@ -245,21 +269,18 @@ public class gameManager3 : MonoBehaviour
                     Debug.Log("대화 끝났다는");
                     break;
                 }
-                if (Input.GetKeyDown(KeyCode.X))
 
+                if (Input.GetKeyDown(KeyCode.X))
                 {
                     talkText.text = GetMyTalk(value, myIndex);
                     myIndex++;
                     Debug.Log(myIndex);
                     break;
-
                 }
             }
         }
-
         else
         { //npc랑 대화할 때 내 말들
-          // if (myLastIndex <= myIndex) //내 대화 끝에 도달
             while (true)
             {
                 if (myLastIndex <= myIndex)
@@ -331,7 +352,7 @@ public class gameManager3 : MonoBehaviour
                 
         arrow_blackCar.SetActive(false);
         car.transform.rotation = Quaternion.Slerp(
-               car.transform.localRotation, Quaternion.Euler(new Vector3(0, 180, 65f)), Time.time * 0.01f);
+               car.transform.localRotation, Quaternion.Euler(new Vector3(0, 180, 65f)), Time.time * 0.03f);
 
         //while (true)
         //{ 
@@ -342,12 +363,12 @@ public class gameManager3 : MonoBehaviour
         //}
         if (car.transform.rotation == Quaternion.Euler(0, 180, 65))
         {
-            Debug.Log("각도 잘 들어옴");
             mole.GetComponent<BoxCollider>().enabled = true;
             car.GetComponent<BoxCollider>().enabled = false;
             molePopUp = true;
             remark_mole.SetActive(true);
             isCarRotate = false;
+            Debug.Log("각도 잘 들어옴");
             yield return null;
         }
         // StopCoroutine(carRotateFunc(car));
@@ -377,15 +398,11 @@ public class gameManager3 : MonoBehaviour
             molePopUp = false;
             isCarRotate = false; isCarRotateBack = false;
             arrow_blackCar.SetActive(true);
-           // Invoke("FlowerSay", 4f);
 
+            check = 1;
 
             yield return null;
-            
         }
-
-
-
         // StopCoroutine(carRotateFunc(car));
     }
 
@@ -403,31 +420,30 @@ public class gameManager3 : MonoBehaviour
         yield return null;
     }
 
-    private void  FlowerSay()
+    IEnumerator  FlowerSay()
     {
         talkPanel.SetActive(true);
         panelActive = true;
         talkText.text = "야! 너! 이리와 봐!";
 
-        // isTimerOn = true;
-
-        // yield return new WaitForSecondsRealtime(2.5f);
-        //// if (time > 2.5f)
-        //     talkText.text = "어? 날 부르는건가?";
-
-        // yield return new WaitForSecondsRealtime(2f);
-        //// if (time > 5f)
-        //     talkText.text = "그래 너 ~ 아파트 옆 쓰레기통으로 와봐!";
         isTimerOn = true;
-        while (isTimerOn)
-        {
-            if (time > 4f)
-                talkText.text = "어? 날 부르는건가?";
-            else if (time > 7f)
-                talkText.text = "그래 너 ~ \n아파트 옆 쓰레기통으로 와봐!";
 
-            else if (time > 10f)
-                isTimerOn = false;
+        if (3f < time && time < 6f)
+            talkText.text = "어? 날 부르는건가?";
+        else if (6f < time && time < 10f)
+            talkText.text = "?? : 그래 너 ~ \n아파트 옆 쓰레기통으로 와봐!";
+
+        else if (time > 10f)
+        {
+            isTimerOn = false;
+            Debug.Log("꽤2");
+            check = -1;
+
+            talkPanel.SetActive(false);
+            panelActive = false;
+            talkText.text = "";
+
+            yield return null;
         }
     }
     //mole=-11.87
