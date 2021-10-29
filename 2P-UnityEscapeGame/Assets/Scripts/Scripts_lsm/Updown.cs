@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Updown : MonoBehaviour
 {
-    public float rightMax = 2.0f; //좌로 이동가능한 (x)최대값
-    public float leftMax = -2.0f; //우로 이동가능한 (x)최대값
+    public float upMax = 2.0f; //위로 이동가능한 (x)최대값
+    public float downMax = -2.0f; //아래로 이동가능한 (x)최대값
     float posx; //현재 위치(x) 저장
     float posy; //현재 위치(y) 저장
     float posz; //현재 위치(z) 저장
@@ -22,25 +22,25 @@ public class Updown : MonoBehaviour
 
     void Update()
     {
-        if (!(this.GetComponent<Activator>()?.isOn ?? true))
+        if (!(this.GetComponent<Activator>()?.isOn ?? true)) // Activator가 있으면 값을 가져오고 아니면 true => 통과
         {
             return;
         }
-        posx += Time.deltaTime * direction * speed;
+        posy += Time.deltaTime * direction * speed;
 
-        if (posx >= rightMax)
+        if (posy >= upMax)
         {
             direction *= -1;
-            posx = rightMax;
+            posy = upMax;
         }
 
         //현재 위치(x)가 우로 이동가능한 (x)최대값보다 크거나 같다면
         //이동속도+방향에 -1을 곱해 반전을 해주고 현재위치를 우로 이동가능한 (x)최대값으로 설정
-        else if (posx <= leftMax)
+        else if (posy <= downMax)
         {
 
             direction *= -1;
-            posx = leftMax;
+            posy = downMax;
         }
 
         Rigidbody rigid = this.GetComponent<Rigidbody>();

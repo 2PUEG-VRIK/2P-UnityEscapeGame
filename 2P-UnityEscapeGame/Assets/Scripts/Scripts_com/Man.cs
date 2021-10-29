@@ -25,11 +25,18 @@ public class Man : MonoBehaviour
     bool sDown3;
     bool iDown;
     bool jDown;
+    bool isBox;
 
     bool istoWALL;        
     bool istoObj;
-    bool onStair;
+    
+    bool onStair_up; // 계단 올라가는 방향키에 따라 유형 분류
+    bool onStair_down;
+    bool onStair_right;
+    bool onStair_left;
 
+    public Transform fastPos;
+    bool isDead = false;    // 죽음 변수
     bool isBorder;      // 벽 통과 못하게 막는 플래그      
     public bool hasKey;
 
@@ -62,7 +69,11 @@ public class Man : MonoBehaviour
     {
         //jumpPower = 150.0f;
         hasKey = false;
-        onStair = false;
+        onStair_up = false;
+        onStair_down = false;
+        onStair_right = false;
+        onStair_left = false;
+        isBox = false;
     }
 
     void Awake()
@@ -73,14 +84,12 @@ public class Man : MonoBehaviour
 
     void Update()
     {
-
         GetInput();
         Move();
         Turn();
         Jump();
         Attack();
         Swap();
-       
     }
     private void FixedUpdate()
     {
@@ -114,15 +123,21 @@ public class Man : MonoBehaviour
         sDown1 = Input.GetButtonDown("Swap1");
         sDown2 = Input.GetButtonDown("Swap2");
         sDown3 = Input.GetButtonDown("Swap3");
+
+        if(Input.anyKeyDown)
+        {
+            if(isBox)
+            {
+                isBox = false;
+            }
+        }
     }
+
 
     void Move()
     {
 
-        //Debug.Log(hAxis + "   " + vAxis);
-
-
-        if (isBump || isSwap)
+        if (isBump || isSwap || isDead)
         {
             return;
         }
@@ -132,7 +147,7 @@ public class Man : MonoBehaviour
 
         moveVec = new Vector3(hAxis, 0, vAxis).normalized;
 
-        if (isJump)
+        if (isJump || isBox)
         {
             moveVec *= 0.5f;
         }
@@ -140,11 +155,26 @@ public class Man : MonoBehaviour
         if (moveVec != Vector3.zero)
         {
             preVec = moveVec;
+        } else
+        {
+
         }
 
-        if (onStair && vAxis<0)
+        if (onStair_up) // 올라가는 방향이니까 내려오는 방향키 일때 y축 벡터 아래로 줌.
         {
-            moveVec = new Vector3(hAxis, vAxis*0.5f, vAxis).normalized;
+            moveVec = new Vector3(hAxis, vAxis * 0.5f, vAxis).normalized;
+        }
+        if (onStair_down)  
+        {
+            moveVec = new Vector3(hAxis, vAxis * -0.5f, vAxis).normalized;
+        }
+        if (onStair_right) 
+        {
+            moveVec = new Vector3(hAxis, hAxis * 0.5f, vAxis).normalized;
+        }
+        if (onStair_left)
+        {
+            moveVec = new Vector3(hAxis, hAxis * -0.5f, vAxis).normalized;
         }
 
         //if (istoWALL)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정
@@ -156,7 +186,7 @@ public class Man : MonoBehaviour
         //else
         //    transform.position += moveVec * speed * 1f * Time.deltaTime;
 
-        if (!istoWALL)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정 
+        if (!istoWALL && !isDead)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정 
             transform.position += moveVec * speed * 1f * Time.deltaTime;
 
         anim.SetBool("isWalk", (moveVec != Vector3.zero));  // 속도가 0이 아니면 걸어라.
@@ -165,7 +195,8 @@ public class Man : MonoBehaviour
     void Turn()
     {
         // 가는 방향 보기.
-        transform.LookAt(transform.position + moveVec);
+        Vector3 watchVec = new Vector3(moveVec.x, 0, moveVec.z);
+        transform.LookAt(transform.position + watchVec);
     }
 
     void Jump()
@@ -269,12 +300,29 @@ public class Man : MonoBehaviour
         }
     }
 
- 
+    void OnDie()
+    {
+        if (!isDead)
+        {
+            anim.SetTrigger("doDie");
+            isDead = true;
+        }
+    }
 
     public int check = -1;//코인 관련 변수(김보현)
  
     private void OnTriggerEnter(Collider other)
     {
+        if (other.tag == "fButton")
+        {
+            rigid.AddForce(fastPos.forward * 30, ForceMode.VelocityChange);
+        }
+
+        if (other.tag == "Water")
+        {
+            OnDie();
+        }
+
         if (other.tag == "Item")
         {
             Item item = other.GetComponent<Item>();
@@ -329,22 +377,70 @@ public class Man : MonoBehaviour
     {
         // 바닥 닿으면 다시 점프 가능상태로 바꿔주기.
         //if (Physics.Raycast(transform.position, -transform.up, 3))
-        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Box")
+        if (collision.gameObject.layer == 7 || collision.gameObject.tag == "Box")
         {
-            isJump = false;
+            onStair_up = false;
+            onStair_down = false;
+            onStair_right = false;
+            onStair_left = false;
+            isJump = false; 
         }
-        if(collision.gameObject.tag == "Stair")
+        if(collision.gameObject.tag == "StairUp")
         {
-            onStair = true;
+            onStair_up = true;
+            onStair_down = false;
+            onStair_right = false;
+            onStair_left = false;
+        }
+        if (collision.gameObject.tag == "StairDown")
+        {
+            onStair_up = false;
+            onStair_down = true;
+            onStair_right = false;
+            onStair_left = false;
+        }
+        if (collision.gameObject.tag == "StairRight")
+        {
+            onStair_up = false;
+            onStair_down = false;
+            onStair_right = true;
+            onStair_left = false;
+        }
+        if (collision.gameObject.tag == "StairLeft")
+        {
+            onStair_up = false;
+            onStair_down = false;
+            onStair_right = false;
+            onStair_left = true;
+        }
+        if(collision.gameObject.tag == "Boxsj")
+        {
+            isBox = true;
         }
     }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.tag == "Stair")
-        {
-            onStair = false;
-        }
+    private void OnCollisionExit(Collision collision) { 
+    //{
+    //    if (collision.gameObject.tag == "StairUp")
+    //    {
+
+    //        onStair_up = false;
+    //    }
+    //    if (collision.gameObject.tag == "StairDown")
+    //    {
+
+    //        onStair_down = false;
+    //    }
+    //    if (collision.gameObject.tag == "StairRight")
+    //    {
+
+    //        onStair_right = false;
+    //    }
+    //    if (collision.gameObject.tag == "StairLeft")
+    //    {
+
+    //        onStair_left = false;
+    //    }
     }
 
     void Bump()
