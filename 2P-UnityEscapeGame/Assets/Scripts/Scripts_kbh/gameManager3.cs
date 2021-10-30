@@ -483,7 +483,7 @@ public class gameManager3 : MonoBehaviour
     IEnumerator FlowerSay()
     {
         isTimerOn = true;
-        if (3f < time && time < 6f)
+        if (2f < time && time < 5f)
         {
             talkPanel.SetActive(true);
             panelActive = true;
@@ -492,22 +492,21 @@ public class gameManager3 : MonoBehaviour
 
             talkText.text = "야! 너! 이리와 봐!";
         }
-        else if (6f < time && time < 10f)
+        else if (5f < time && time < 7f)
         {
             talkText.text = "어? 날 부르는건가?";
             nameText.text = GetName(0,0);
             changeNameIcon(0);
         }
-        else if (10f < time && time < 13f)
+        else if (7f < time && time < 10f)
         {
             talkText.text = "그래 너 ~ \n아파트 옆 쓰레기통으로 와봐!";
             nameText.text = GetName(3, 1);
             changeNameIcon(3);
         }
-        else if (time > 13f)
+        else if (time > 10f)
         {
             isTimerOn = false;
-            Debug.Log("꽤2");
             check = -1;
 
             talkPanel.SetActive(false);
