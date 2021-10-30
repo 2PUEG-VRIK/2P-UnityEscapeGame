@@ -21,9 +21,8 @@ public class gameManager3 : MonoBehaviour
     private GameObject scanObject;
 
     public GameObject namePanel;//누가 말하는지 뜨는 패널
-    public GameObject nameIcon;//말하는 애 아이콘 뜨는 곳~
+    public Image nameIcon;//말하는 애 아이콘 뜨는 곳~
     public Text nameText;//이름 뜨는 text
-    Sprite sprite;
 
     public bool isAction = false;
     public int talkIndex;
@@ -39,9 +38,9 @@ public class gameManager3 : MonoBehaviour
     private bool isCarRotate;
     private bool isCarRotateBack;
     Dictionary<int, string[]> textGroup;//내 대화 뭉텅이
-    Dictionary<int, string> nameTextGroup;//말하는 사람들 이름 뭉텅이
+    Dictionary<int, string[]> nameTextGroup;//말하는 사람들 이름 뭉텅이
 
-   
+
     GameObject car;
     GameObject mole;
     private bool molePopUp;
@@ -55,6 +54,8 @@ public class gameManager3 : MonoBehaviour
     private bool isTimerOn;
     private int check;//여러곳에 쓰일 변수
 
+    public Sprite[] images;
+
 
     private void Start()
     {
@@ -64,17 +65,24 @@ public class gameManager3 : MonoBehaviour
         firstTouch = false;//아직 동물이랑 안 닿은 상태니까
         isCarRotate = false; isCarRotateBack = false;
         textGroup = new Dictionary<int, string[]>();
-        nameTextGroup = new Dictionary<int, string>();
+        nameTextGroup = new Dictionary<int, string[]>();
         molePopUp = false;
         active_moleFunc = false;
         arrow_blackCar = GameObject.Find("npcArrow").transform.GetChild(1).gameObject;
         remark_mole = GameObject.Find("npcArrow").transform.GetChild(2).gameObject;
         mole = GameObject.Find("mole");
-        sprite = gameObject.GetComponent<SpriteRenderer>().sprite;
+        //sprite = gameObject.GetComponent<SpriteRenderer>().sprite;
         isTimerOn = false;
         check = 0;
         time = 0f;
 
+        //images = new Sprite[4];
+        //for (int i = 0; i < 4; i++)
+        //{
+        //    images[i] = GetComponent<SpriteRenderer>().sprite;
+        //}
+
+        Debug.Log(images[2]);
         generatePlayerText();
         generateNameText();
         checkLength();
@@ -100,9 +108,9 @@ public class gameManager3 : MonoBehaviour
         if (isCarRotateBack)//차 다시 원상복귀
             StartCoroutine(carRotateBackFunc(car));
 
-        
+
         if (isTimerOn)
-         time += Time.deltaTime;
+            time += Time.deltaTime;
 
         //if (check == 1)//꽃이 말 걸 차례다
         //    StartCoroutine(FlowerSay());
@@ -116,7 +124,6 @@ public class gameManager3 : MonoBehaviour
             case -1:
                 StopCoroutine(FlowerSay());
                 break;
-
         }
 
     }
@@ -208,7 +215,7 @@ public class gameManager3 : MonoBehaviour
             if (other.gameObject.name == "car_pivot")
             {
                 isCarRotate = false;
-                if(isCarRotateBack)//차 원상복구 시켜야지만 그 위에 화살표 보이게하기
+                if (isCarRotateBack)//차 원상복구 시켜야지만 그 위에 화살표 보이게하기
                     arrow_blackCar.SetActive(true);
             }
 
@@ -218,9 +225,9 @@ public class gameManager3 : MonoBehaviour
                 if (isCarRotateBack)//차 원상복구 시켜야지만 그 위에 화살표 보이게하기
                     arrow_blackCar.SetActive(true);
             }
-           
+
             yourIndex = 0; myIndex = 0;
-            
+
             talkText.text = "";
         }
     }
@@ -240,7 +247,7 @@ public class gameManager3 : MonoBehaviour
         //2 두더지랑 대화
         textGroup.Add(2, new string[]
         {
-            "나(1)","나(3)","나(끝)"
+            "앗! 놀라라! \n넌 누구야?","강쥐를 잃어버렸어 ㅜㅜ","와!! 정말 고마워!!"
         });
         //3 아파트 옆 못난이 꽃
         textGroup.Add(3, new string[]
@@ -252,13 +259,13 @@ public class gameManager3 : MonoBehaviour
     private void generateNameText()
     {
         //0 나
-        nameTextGroup.Add(0, "나");
+        nameTextGroup.Add(0, new string[] { "나" });
         //1 양
-        nameTextGroup.Add(1, "느긋하게 쉬던 양");
+        nameTextGroup.Add(1, new string[] { "느긋하게 쉬던 양" });
         //2 차 밑 두더지
-        nameTextGroup.Add(2, "참견하는 두더지");
+        nameTextGroup.Add(2, new string[] { "참견하는 두더지" });
         //3 아파트 옆 꽃
-        nameTextGroup.Add(3, "수상한 꽃");
+        nameTextGroup.Add(3, new string[] { "수상한 꽃", "???" });
 
     }
 
@@ -267,6 +274,10 @@ public class gameManager3 : MonoBehaviour
         return textGroup[id][myIndex];
     }
 
+    private string GetName(int id, int index)
+    {
+        return nameTextGroup[id][index];
+    }
     private void checkLength()//내 대화 길이 체크
     {
         myLastIndex = textGroup[value].Length;
@@ -298,8 +309,8 @@ public class gameManager3 : MonoBehaviour
                     talkText.text = GetMyTalk(value, myIndex);
                     myIndex++;
                     Debug.Log(myIndex);
-                    nameIcon.GetComponent<Image>().sprite =
-                GameObject.Find("Icon Luna").GetComponent<SpriteRenderer>().sprite;
+                    nameText.text = GetName(0, 0);
+                    changeNameIcon(0);
                     break;
                 }
             }
@@ -316,17 +327,16 @@ public class gameManager3 : MonoBehaviour
 
                     yourIndex = 0; myIndex = 0;
                     yourLastIndex = 0; myLastIndex = 0;
-                    
+
                     break;
                 }
                 if (Input.GetKeyDown(KeyCode.X))
                 {
                     talkText.text = GetMyTalk(value, myIndex);
                     myIndex++;
-                    if (Input.GetKeyDown(KeyCode.X)) Debug.Log("X 눌림");
-                    Debug.Log("현재 내 인덱스 " + myIndex + "    끝 인덱스 " + myLastIndex);
-                //    nameIcon.GetComponent<Image>().sprite =
-                //GameObject.Find("Icon Luna").GetComponent<SpriteRenderer>().sprite;
+                    nameText.text = GetName(0, 0);
+                    changeNameIcon(0);
+
                     break;
 
                 }
@@ -356,7 +366,10 @@ public class gameManager3 : MonoBehaviour
                 yourIndex++;
                 isMyTurn = true;
                 Debug.Log("현재 두더지 인덱스 " + yourIndex + "끝 인덱스 " + yourLastIndex);
+                nameText.text = GetName(value, 0);
                 changeNameIcon(value);
+
+                // changeNameIcon(value);
                 break;
             }
         }
@@ -367,33 +380,20 @@ public class gameManager3 : MonoBehaviour
         switch (a)
         {
             case 0: // 나잖아
-                nameIcon.GetComponent<Image>().sprite =
-                GameObject.Find("Icon Luna").GetComponent<SpriteRenderer>().sprite;
+                nameIcon.GetComponent<Image>().sprite = images[0];
                 break;
-
-                    //1 양
-            //case 1:
-            //    nameIcon.GetComponent<Image>().sprite = "sheep_icon";
-            //    break;
-
-            //case 2:
-            //    nameIcon.GetComponent<Image>().sprite =
-            //        GameObject.Find("mole_icon");
-            //    break;
-
-            //case 3:
-            //    nameIcon.GetComponent<Image>().sprite =
-            //        GameObject.Find("flower_icon").GetComponent<SpriteRenderer>().sprite;
-            //    break;
-
-
-
-
-
+            case 1://양
+                nameIcon.GetComponent<Image>().sprite = images[1];
+                break;
+            case 2://두더지
+                nameIcon.GetComponent<Image>().sprite = images[2];
+                break;
+            case 3://꽃
+                nameIcon.GetComponent<Image>().sprite = images[3];
+                break;
         }
-
     }
-    private float carRot=0f;
+    private float carRot = 0f;
     private float carPos = 0f;
     IEnumerator carRotateFunc(GameObject car)
     {
@@ -409,7 +409,7 @@ public class gameManager3 : MonoBehaviour
         //}
 
         car.transform.position = new Vector3(preCar.x, preCar.y + 2f, preCar.z);
-                
+
         arrow_blackCar.SetActive(false);
         car.transform.rotation = Quaternion.Slerp(
                car.transform.localRotation, Quaternion.Euler(new Vector3(0, 180, 65f)), Time.time * 0.03f);
@@ -444,11 +444,11 @@ public class gameManager3 : MonoBehaviour
         molePopUp = false;
         active_moleFunc = false;
         mole.transform.localPosition = new Vector3(290, -0.2f, 24);
-        remark_mole.SetActive(false); 
+        remark_mole.SetActive(false);
         car.transform.rotation = Quaternion.Slerp(
                car.transform.localRotation, Quaternion.Euler(new Vector3(0, 180, 0)), Time.time * 0.01f);
 
-        if(car.transform.rotation==Quaternion.Euler(new Vector3(0,180,0)))
+        if (car.transform.rotation == Quaternion.Euler(new Vector3(0, 180, 0)))
         {
             Debug.Log("각도 딱딱 맞춰");
             car.transform.position = preCar;
@@ -471,7 +471,7 @@ public class gameManager3 : MonoBehaviour
         remark_mole.SetActive(false);
         mole.transform.Translate(new Vector3(0, 1f, 0));
         //yield return new WaitForSecondsRealtime(6f);
-        if (mole.transform.localPosition.y >= 9f) 
+        if (mole.transform.localPosition.y >= 9f)
         {
             molePopUp = false;
             active_moleFunc = false;
@@ -480,19 +480,30 @@ public class gameManager3 : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator  FlowerSay()
+    IEnumerator FlowerSay()
     {
-        talkPanel.SetActive(true);
-        panelActive = true;
         isTimerOn = true;
-
         if (3f < time && time < 6f)
-            talkText.text = "야! 너! 이리와 봐!";
-        else if (6f < time && time < 10f)
-            talkText.text = "어? 날 부르는건가?";
-        else if(10f<time && time<13f)
-            talkText.text = "?? : 그래 너 ~ \n아파트 옆 쓰레기통으로 와봐!";
+        {
+            talkPanel.SetActive(true);
+            panelActive = true;
+            nameText.text = GetName(3, 1);
+            changeNameIcon(3);
 
+            talkText.text = "야! 너! 이리와 봐!";
+        }
+        else if (6f < time && time < 10f)
+        {
+            talkText.text = "어? 날 부르는건가?";
+            nameText.text = GetName(0,0);
+            changeNameIcon(0);
+        }
+        else if (10f < time && time < 13f)
+        {
+            talkText.text = "그래 너 ~ \n아파트 옆 쓰레기통으로 와봐!";
+            nameText.text = GetName(3, 1);
+            changeNameIcon(3);
+        }
         else if (time > 13f)
         {
             isTimerOn = false;
