@@ -268,14 +268,14 @@ public class gameManager3 : MonoBehaviour
     private void generatePlayerText()//내 대화 제작
     {
         //게임 시작 후 바로 나오는 대화
-        textGroup.Add(0, new string[] { "(헉.. 헉..) 누렁아! 누렁아!!", "어디있는거야..." });//mylast=2
+        textGroup.Add(0, new string[] { "(헉.. 헉..) 여긴 어디지? \n처음 오는 곳인데...", "너무 멀리 와버렸어." });//mylast=2
         //1 양이랑 하는 대화
         textGroup.Add(1, new string[]//mylast=3
-        { "안녕?", "나는 두두야. 혹시 여기\n노란 강아지 지나가는거 못봤니?","그렇구나.. 실례했어! 안녕!"});
+        { "저기.. ", "길을 잃었어... 여긴 대체 어디야?\n우리 집은 노란 지붕이 있는 곳인데..","그렇구나.. 정말 고마워!\n안녕!"});
         //2 두더지랑 대화
         textGroup.Add(2, new string[]
         {
-            "앗! 놀라라! \n넌 누구야?","강쥐를 잃어버렸어 ㅜㅜ","와!! 정말 고마워!!"
+            "앗! 놀라라! ","저기...","..."
         });
         //3 아파트 옆 못난이 꽃
         textGroup.Add(3, new string[]
@@ -416,6 +416,10 @@ public class gameManager3 : MonoBehaviour
             case 3://꽃
                 nameIcon.GetComponent<Image>().sprite = images[3];
                 break;
+            case 7://익명 꽃
+                nameIcon.GetComponent<Image>().sprite = images[7];
+                break;
+
         }
     }
     private float carRot = 0f;
@@ -508,12 +512,13 @@ public class gameManager3 : MonoBehaviour
     IEnumerator FlowerSay()
     {
         isTimerOn = true;
+        value = 7;
         if (2f < time && time < 5f)
         {
             talkPanel.SetActive(true);
             panelActive = true;
             nameText.text = GetName(3, 1);
-            changeNameIcon(3);
+            changeNameIcon(7);
 
             talkText.text = "야! 너! 이리와 봐!";
         }
@@ -527,7 +532,7 @@ public class gameManager3 : MonoBehaviour
         {
             talkText.text = "그래 너 ~ \n아파트 옆 쓰레기통으로 와봐!";
             nameText.text = GetName(3, 1);
-            changeNameIcon(3);
+            changeNameIcon(7);
         }
         else if (time > 10f)
         {
