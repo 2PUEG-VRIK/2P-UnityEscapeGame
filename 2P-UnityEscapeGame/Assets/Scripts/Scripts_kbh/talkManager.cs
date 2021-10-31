@@ -29,7 +29,16 @@ public class talkManager : MonoBehaviour
         //1.양 (가장 처음 만나는 npc)
         talkData.Add(1, new string[]
         {  "넌 누구야? 여긴 어쩐일이야?","노란 강아지? \n아니, 못봤어. 여기는 양들만 지내는 곳이야."});
+        
+        //2.두더징
+        talkData.Add(2, new string[]
+         {  "난 두더지얌. \n너 무슨일 있니? 표정이..?", "아 혹시 노란애? \n강가쪽으로 가던데!"
+        });
 
+        //3. 아파트 옆 못난이 꽃
+        talkData.Add(3, new string[]
+            { "꽃(2)", "꽃(4)", "(ㅎㅎ재밌당)"
+            });
 
 
     }

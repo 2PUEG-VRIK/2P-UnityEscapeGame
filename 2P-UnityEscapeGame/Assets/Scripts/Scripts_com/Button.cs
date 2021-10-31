@@ -26,7 +26,7 @@ public class Button : MonoBehaviour
             // 닿는 순간 버튼 눌린 액션
             if (!isPushed)
             {
-                transform.position += new Vector3(0, -0.99f, 0);
+                transform.position += new Vector3(0, -0.5f, 0);
                 isPushed = true;
                 mat.color = Color.yellow;
 
@@ -45,7 +45,7 @@ public class Button : MonoBehaviour
     {
         if (isPushed)
         {
-            transform.position += new Vector3(0, +0.99f, 0);
+            transform.position += new Vector3(0, +0.5f, 0);
             isPushed = false;
             mat.color = Color.white;
 
