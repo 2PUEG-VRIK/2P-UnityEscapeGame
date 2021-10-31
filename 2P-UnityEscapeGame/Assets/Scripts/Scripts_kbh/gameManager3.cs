@@ -12,6 +12,8 @@ using UnityEngine.UI;
 1- 차 회전 원상복구 끝나고 꽃이 말 걸 때 필요해서
 -1- 꽃이 말 거는거 끝나면 
 
+2 꽃 말 듣고 아파트로 가서 specialPlane 밟아
+
 */
 public class gameManager3 : MonoBehaviour
 {
@@ -159,23 +161,26 @@ public class gameManager3 : MonoBehaviour
         if (other.tag == "Things")
         {
             touchThings = other.gameObject;
-
-
-            if (other.name == "car_pivot")
-            {
-                preCar = other.transform.position;
-                Debug.Log(preCar);
-            }
-            else if (other.name == "Car")
-            {
-
-            }
-            else
-            {
-                preThing = other.transform.position;
-            }
-            Debug.Log(other.name);
             isTouch = true;
+
+            switch (other.name)
+            {
+                case "car_pivot":
+                    preCar = other.transform.position;
+                    break;
+
+
+                case "Car":
+                    break;
+
+                case "specialPlane":
+                    check = 2;
+                    break;
+            }
+            
+            //    preThing = other.transform.position;
+          
+            Debug.Log(other.name);
 
             talkPanel.SetActive(false);
         }
