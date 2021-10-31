@@ -10,6 +10,7 @@ public class FollowCam : MonoBehaviour
     void Update()
     {
         transform.position = target.position+ offset;
+        transform.LookAt(target.position);
     }
 
 

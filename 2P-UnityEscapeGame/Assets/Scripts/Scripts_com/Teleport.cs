@@ -26,6 +26,14 @@ public class Teleport : MonoBehaviour
                 position.y += target.transform.lossyScale.y / 2.0f;
                 other.transform.position = position;
             }
+
+            if (other.gameObject.tag != "Player")
+            {
+                StartCooldown();
+                Vector3 position = target.transform.position;
+                position.y += target.transform.lossyScale.y / 2.0f;
+                other.transform.position = position;
+            }
         }
     }
 

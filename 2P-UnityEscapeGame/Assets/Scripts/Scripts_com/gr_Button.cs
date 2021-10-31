@@ -12,7 +12,7 @@ public class gr_Button : MonoBehaviour
     public Transform gr_buttonPos;     // 플레이어가 움직이던 방향 가져오기 위한 empty. 플레이어안에 있으니 다른 때에 필요하면 이거 넣어서 쓰면 됨.
     Material mat;
 
-    bool isPushed;
+    public bool isPushed;
 
     void Start()
     {

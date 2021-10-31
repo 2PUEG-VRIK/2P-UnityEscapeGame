@@ -23,6 +23,12 @@ TagManager:
   - Water
   - fButton
   - Boxsj
+<<<<<<< Updated upstream
+=======
+  - NPC
+  - teleport
+  - Swing
+>>>>>>> Stashed changes
   layers:
   - Default
   - TransparentFX
@@ -37,7 +43,7 @@ TagManager:
   - nonMini
   - camArea
   - Box
-  - 
+  - Teleport
   - 
   - 
   - 
