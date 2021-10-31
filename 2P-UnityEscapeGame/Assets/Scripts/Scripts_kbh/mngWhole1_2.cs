@@ -57,8 +57,6 @@ public class mngWhole1_2 : MonoBehaviour
         remark = GameObject.Find("final").transform.GetChild(1).gameObject;
         holdPosition = GameObject.Find("holdingCoin");
         exit = GameObject.Find("2nd").transform.GetChild(5).gameObject;
-
-
     }
 
     private void Awake()
