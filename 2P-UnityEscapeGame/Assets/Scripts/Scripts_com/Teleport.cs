@@ -30,6 +30,7 @@ public class Teleport : MonoBehaviour
                 position.y += target.transform.lossyScale.y / 2.0f;
                 other.transform.position = position;
             }
+
             if (TargetType == TargetTypes.Things && other.gameObject.tag == "Boxsj")
             {
                 StartCooldown();

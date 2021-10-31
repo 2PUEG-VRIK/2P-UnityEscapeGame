@@ -29,6 +29,9 @@ public class Man : MonoBehaviour
 
     bool istoWALL;        
     bool istoObj;
+
+    public bool isGRbtn;
+
     bool istoDoor;
 
     bool onStair_up; // 계단 올라가는 방향키에 따라 유형 분류
@@ -87,7 +90,9 @@ public class Man : MonoBehaviour
 
     void Update()
     {
-        GetInput();
+        if(!isGRbtn)
+            GetInput();
+
         Move();
         Turn();
         Jump();
@@ -111,7 +116,11 @@ public class Man : MonoBehaviour
     {
         // 2021-09-27 원종진 수정
         // 플레이어에서 길이 3만큼의 Raycast 쐈을 때 Wall 레이어와 닿으면 isBorder ON
+
+        istoWALL = Physics.Raycast(fastPos.position, transform.forward, 5, LayerMask.GetMask("Wall"));
+
         //istoWALL = Physics.Raycast(transform.position, transform.forward, 5, LayerMask.GetMask("Wall"));
+
         istoObj = Physics.Raycast(transform.position, transform.forward, 3.5f, LayerMask.GetMask("Box"));
     }
 
@@ -318,6 +327,7 @@ public class Man : MonoBehaviour
     {
         if (other.tag == "fButton")
         {
+            isGRbtn = true;
             rigid.AddForce(fastPos.forward * 30, ForceMode.VelocityChange);
         }
 
@@ -378,9 +388,16 @@ public class Man : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+
+        if (collision.gameObject.tag == "Wall")
+        {
+            isGRbtn = false;
+        }
+          
         // 바닥 닿으면 다시 점프 가능상태로 바꿔주기.
         //if (Physics.Raycast(transform.position, -transform.up, 3))
         if (collision.gameObject.layer == 7 || collision.gameObject.tag == "Box" || collision.gameObject.tag == "Boxsj")
+
         {
             onStair_up = false;
             onStair_down = false;
