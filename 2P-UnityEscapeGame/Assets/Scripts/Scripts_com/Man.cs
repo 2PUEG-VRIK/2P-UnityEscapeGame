@@ -29,6 +29,11 @@ public class Man : MonoBehaviour
 
     bool istoWALL;        
     bool istoObj;
+<<<<<<< Updated upstream
+=======
+    bool istoDoor;
+    
+>>>>>>> Stashed changes
     bool onStair_up; // 계단 올라가는 방향키에 따라 유형 분류
     bool onStair_down;
     bool onStair_right;
@@ -73,6 +78,8 @@ public class Man : MonoBehaviour
         onStair_right = false;
         onStair_left = false;
         isBox = false;
+        istoWALL = false;
+        istoDoor = false;
     }
 
     void Awake()
@@ -107,7 +114,7 @@ public class Man : MonoBehaviour
     {
         // 2021-09-27 원종진 수정
         // 플레이어에서 길이 3만큼의 Raycast 쐈을 때 Wall 레이어와 닿으면 isBorder ON
-        istoWALL = Physics.Raycast(transform.position, transform.forward, 5, LayerMask.GetMask("Wall"));
+        //istoWALL = Physics.Raycast(transform.position, transform.forward, 5, LayerMask.GetMask("Wall"));
         istoObj = Physics.Raycast(transform.position, transform.forward, 3.5f, LayerMask.GetMask("Box"));
     }
 
@@ -185,7 +192,7 @@ public class Man : MonoBehaviour
         //else
         //    transform.position += moveVec * speed * 1f * Time.deltaTime;
 
-        if (!istoWALL && !isDead)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정 
+        if (!istoWALL && !isDead && !istoDoor)       // Wall Layer과 충돌하지 않을 때만 이동 가능하게 설정 
             transform.position += moveVec * speed * 1f * Time.deltaTime;
 
         anim.SetBool("isWalk", (moveVec != Vector3.zero));  // 속도가 0이 아니면 걸어라.
@@ -376,7 +383,7 @@ public class Man : MonoBehaviour
     {
         // 바닥 닿으면 다시 점프 가능상태로 바꿔주기.
         //if (Physics.Raycast(transform.position, -transform.up, 3))
-        if (collision.gameObject.layer == 7 || collision.gameObject.tag == "Box")
+        if (collision.gameObject.layer == 7 || collision.gameObject.tag == "Box" || collision.gameObject.tag == "Boxsj")
         {
             onStair_up = false;
             onStair_down = false;
@@ -416,30 +423,47 @@ public class Man : MonoBehaviour
         {
             isBox = true;
         }
+        if (collision.gameObject.layer.Equals(LayerMask.NameToLayer("Wall")))
+        {
+            istoWALL = true;
+        }
+        if (collision.gameObject.layer.Equals(LayerMask.NameToLayer("Door")))
+        {
+            istoDoor = true;
+        }
     }
 
-    private void OnCollisionExit(Collision collision) { 
-    //{
-    //    if (collision.gameObject.tag == "StairUp")
-    //    {
+    private void OnCollisionExit(Collision collision) {
+        //{
+        //    if (collision.gameObject.tag == "StairUp")
+        //    {
 
-    //        onStair_up = false;
-    //    }
-    //    if (collision.gameObject.tag == "StairDown")
-    //    {
+        //        onStair_up = false;
+        //    }
+        //    if (collision.gameObject.tag == "StairDown")
+        //    {
 
-    //        onStair_down = false;
-    //    }
-    //    if (collision.gameObject.tag == "StairRight")
-    //    {
+        //        onStair_down = false;
+        //    }
+        //    if (collision.gameObject.tag == "StairRight")
+        //    {
 
-    //        onStair_right = false;
-    //    }
-    //    if (collision.gameObject.tag == "StairLeft")
-    //    {
+        //        onStair_right = false;
+        //    }
+        //    if (collision.gameObject.tag == "StairLeft")
+        //    {
 
-    //        onStair_left = false;
-    //    }
+        //        onStair_left = false;
+        //    }
+
+        if (collision.gameObject.layer.Equals(LayerMask.NameToLayer("Wall")))
+        {
+            istoWALL = false;
+        }
+        if (collision.gameObject.layer.Equals(LayerMask.NameToLayer("Door")))
+        {
+            istoDoor = false;
+        }
     }
 
     void Bump()
