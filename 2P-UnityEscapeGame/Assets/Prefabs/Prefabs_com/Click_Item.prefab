@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 698621012f4317746bf1b79896b709b6, type: 2}
+  - {fileID: 2100000, guid: 1b9854cb4546be94796b7c0e97c44249, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -225,6 +225,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CollectibleType: 1
   rotate: 1
-  rotationSpeed: 10
+  rotationSpeed: 20
   collectSound: {fileID: 0}
   collectEffect: {fileID: 0}
+  rewardObject: {fileID: 0}
+  target: {fileID: 0}
+  isClicked: 0

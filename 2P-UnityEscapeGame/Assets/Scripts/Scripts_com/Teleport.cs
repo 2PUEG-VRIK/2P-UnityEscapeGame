@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class Teleport : MonoBehaviour
 {
+    public enum TargetTypes { Player, Things }; // you can replace this with your own labels for the types of collectibles in your game!
+
     public GameObject target;
+    public TargetTypes TargetType; // this gameObject's type
+
     bool cooldown = false;
 
     private void OnTriggerEnter(Collider other)
@@ -19,12 +23,19 @@ public class Teleport : MonoBehaviour
         }
         if (target != null)
         {
-            if (other.gameObject.tag == "Player")
+            if (TargetType==TargetTypes.Player &&  other.gameObject.tag == "Player")
             {
                 StartCooldown();
                 Vector3 position = target.transform.position;
                 position.y += target.transform.lossyScale.y / 2.0f;
                 other.transform.position = position;
+            }
+            if (TargetType == TargetTypes.Things && other.gameObject.tag == "Boxsj")
+            {
+                StartCooldown();
+                Vector3 next_pos = target.transform.position;
+                next_pos.y += other.gameObject.transform.position.y;
+                other.transform.position = next_pos;
             }
         }
     }

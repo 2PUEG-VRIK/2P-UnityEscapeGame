@@ -11,17 +11,20 @@ public class theCubes : MonoBehaviour
     SphereCollider sphere;
     Ray ray;
     RaycastHit hit;
-    theCubes _obj;//마우스로 선택한 큐브
+    private theCubes _obj;//마우스로 선택한 큐브
     public float rotationSpeed;
     public GameObject newMonster;//상자 건들면 나오는 애들
     private int count = 0;
-    GameObject clickObject;
+    private GameObject clickObject;
+    private Vector3 camPos;
+
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
         sphere = GetComponent<SphereCollider>();
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
     }
+     
 
     private void Update()
     {
@@ -47,7 +50,10 @@ public class theCubes : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 25);
-        this.transform.position= Camera.main.ScreenToWorldPoint(mousePosition);
+        // 이거 z값을 카메라의 z값 기준으로 설정 했음.
+        camPos = GameObject.Find("Man Cam").transform.position;
+        Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, camPos.z + 70);
+        transform.position = Camera.main.ScreenToWorldPoint(mousePosition);
+        //transform.position = new Vector3(Camera.main.ScreenToWorldPoint(mousePosition).x , Camera.main.ScreenToWorldPoint(mousePosition).y, 50);
     }
 }

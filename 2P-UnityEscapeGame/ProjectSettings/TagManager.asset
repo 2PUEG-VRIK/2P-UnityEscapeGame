@@ -23,6 +23,7 @@ TagManager:
   - fButton
   - Boxsj
   - NPC
+  - Door
   layers:
   - Default
   - TransparentFX
@@ -37,7 +38,7 @@ TagManager:
   - nonMini
   - camArea
   - Box
-  - 
+  - Door
   - 
   - 
   - 
