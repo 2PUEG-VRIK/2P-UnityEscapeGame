@@ -13,44 +13,56 @@ public class Door : MonoBehaviour
 
 
     public bool isOpen;
+    public GameObject msg;
 
     private void Start()
     {
         isOpen = false;
     }
-
-
-    private void OnTriggerEnter(Collider other)
+    
+    private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Door - OnTriggerEnter");
-        if (other.tag == "Player" && DoorType == CollectibleTypes.Swing)
+        if (!isOpen)
         {
-            Debug.Log("Door - Player");
-
-            if (other.GetComponent<Man>().hasKey)
+            if (collision.gameObject.tag == "Player")
             {
-                Debug.Log("Door - hasKey");
+                if (DoorType == CollectibleTypes.Swing)
+                {
+                    if (collision.gameObject.GetComponent<Man>().hasKey)
+                    {
+                        isOpen = true;
 
-                isOpen = true;
+                        if (collectSound)
+                            AudioSource.PlayClipAtPoint(collectSound, transform.position);
 
-                if (collectSound)
-                    AudioSource.PlayClipAtPoint(collectSound, transform.position);
+                        //문 열리면 열쇠 없애고 비활성화
+                        GameObject key = GameObject.Find("Man").transform.GetChild(3).gameObject;
+                        collision.gameObject.GetComponent<Man>().hasKey = false;
+                        key.SetActive(false);
+                    }
+                    else
+                    {
+                        msg.SetActive(true);
 
-                //문 열리면 열쇠 없애고 비활성화
-                GameObject key = GameObject.Find("Man").transform.GetChild(2).gameObject;
-                other.GetComponent<Man>().hasKey = false;
-                key.SetActive(false);
+                    }
+                }
+                if (DoorType == CollectibleTypes.Updown)
+                {
+                    msg.SetActive(true);
+                }
             }
-
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.tag == "Player" && DoorType == CollectibleTypes.Swing)
+        if (!isOpen)
         {
-            Debug.Log("Door - OnCollisionEnter");
-        }
+            if (collision.gameObject.tag == "Player")
+            {
+                msg.SetActive(false);
+            }
+        } 
     }
 
     private void Update()
@@ -59,7 +71,7 @@ public class Door : MonoBehaviour
         {
             if (isOpen)
             {
-                 transform.GetChild(0).gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), Time.time * 0.2f);
+                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), Time.time * 0.2f);
             }
         }
     }

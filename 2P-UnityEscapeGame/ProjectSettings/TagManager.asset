@@ -14,7 +14,6 @@ TagManager:
   - Enemy
   - Bullet
   - Melee
-  - Ladder
   - Things
   - StairUp
   - StairDown
@@ -23,12 +22,12 @@ TagManager:
   - Water
   - fButton
   - Boxsj
-<<<<<<< Updated upstream
-=======
-  - NPC
+
   - teleport
   - Swing
->>>>>>> Stashed changes
+  - NPC
+  - Door
+
   layers:
   - Default
   - TransparentFX
@@ -43,7 +42,11 @@ TagManager:
   - nonMini
   - camArea
   - Box
+
   - Teleport
+
+  - Door
+
   - 
   - 
   - 

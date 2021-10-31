@@ -28,11 +28,11 @@ public class talkManager : MonoBehaviour
         //index, string
         //1.양 (가장 처음 만나는 npc)
         talkData.Add(1, new string[]
-        {  "넌 누구야? 여긴 어쩐일이야?","노란 강아지? \n아니, 못봤어. 여기는 양들만 지내는 곳이야."});
+        {  "넌 누구야? 여긴 무슨일이야?","노란 지붕? 몰라.\n그치만 밖으로 나가는 길은 ~."});
         
         //2.두더징
         talkData.Add(2, new string[]
-         {  "두(2)", "두(4)"
+         {  "뭐야 내가 더 놀랐어", "종교 안믿는다는"
         });
 
         //3. 아파트 옆 못난이 꽃

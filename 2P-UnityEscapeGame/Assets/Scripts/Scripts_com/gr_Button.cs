@@ -4,42 +4,35 @@ using UnityEngine;
 
 public class gr_Button : MonoBehaviour
 {
-    // ÃÊ·Ï¹öÆ° ´­·ÈÀ» ¶§
-    // (1) ÇÃ·¹ÀÌ¾î°¡ ¹Ú½º¸¦ ¹Ğ´ø ¹æÇâÀ¸·Î ¹Ú½º ºü¸£°Ô ÀÌµ¿
-    // (2) ÇÃ·¹ÀÌ¾î°¡ ¿òÁ÷ÀÌ´ø ¹æÇâÀ¸·Î ÇÃ·¹ÀÌ¾î ºü¸£°Ô ÀÌµ¿
-    // °á·Ğ : µÑ ´Ù ÇÃ·¹ÀÌ¾î°¡ ¿òÁ÷ÀÌ´ø ¹æÇâÀ¸·Î ÀÌµ¿½ÃÄÑÁÖ¸é µÊ
+    // ì´ˆë¡ë²„íŠ¼ ëˆŒë ¸ì„ ë•Œ
+    // (1) í”Œë ˆì´ì–´ê°€ ë°•ìŠ¤ë¥¼ ë°€ë˜ ë°©í–¥ìœ¼ë¡œ ë°•ìŠ¤ ë¹ ë¥´ê²Œ ì´ë™
+    // (2) í”Œë ˆì´ì–´ê°€ ì›€ì§ì´ë˜ ë°©í–¥ìœ¼ë¡œ í”Œë ˆì´ì–´ ë¹ ë¥´ê²Œ ì´ë™
+    // ê²°ë¡  : ë‘˜ ë‹¤ í”Œë ˆì´ì–´ê°€ ì›€ì§ì´ë˜ ë°©í–¥ìœ¼ë¡œ ì´ë™ì‹œì¼œì£¼ë©´ ë¨
 
-    public Transform gr_buttonPos;     // ÇÃ·¹ÀÌ¾î°¡ ¿òÁ÷ÀÌ´ø ¹æÇâ °¡Á®¿À±â À§ÇÑ empty. ÇÃ·¹ÀÌ¾î¾È¿¡ ÀÖÀ¸´Ï ´Ù¸¥ ¶§¿¡ ÇÊ¿äÇÏ¸é ÀÌ°Å ³Ö¾î¼­ ¾²¸é µÊ.
+    public Transform gr_buttonPos;     // í”Œë ˆì´ì–´ê°€ ì›€ì§ì´ë˜ ë°©í–¥ ê°€ì ¸ì˜¤ê¸° ìœ„í•œ empty. í”Œë ˆì´ì–´ì•ˆì— ìˆìœ¼ë‹ˆ ë‹¤ë¥¸ ë•Œì— í•„ìš”í•˜ë©´ ì´ê±° ë„£ì–´ì„œ ì“°ë©´ ë¨.
     Material mat;
+
 
     public bool isPushed;
 
     void Start()
     {
-        mat = GetComponent<MeshRenderer>().material;
+        //mat = GetComponent<MeshRenderer>().material;
         isPushed = false;
     }
     private void OnTriggerEnter(Collider other)
     {
         if (!isPushed)
-        {
-            transform.position += new Vector3(0, -0.5f, 0);
-            isPushed = true;
-
-            //if (other.gameObject.tag == "Player")        // ÇÃ·¹ÀÌ¾î°¡ ÃÊ·Ï¹öÆ° ´©¸£¸é °¡´ø ¹æÇâÀ¸·Î x30
-            //{
-            //    Rigidbody rigid = other.gameObject.GetComponent<Rigidbody>();
-            //    rigid.AddForce(gr_buttonPos.forward * 30, ForceMode.VelocityChange);
-            //    // rigid.velocity = gr_buttonPos.forward * 30;
-            //} ÇÃ·¹ÀÌ¾î Àá½Ã ÁÖ¼® Ã³¸®Á»..
-            
-            if (other.gameObject.tag == "Box")   // ¹Ú½º°¡ ÃÊ·Ï¹öÆ° ´©¸£¸é ÇÃ·¹ÀÌ¾î°¡ ¹Ú½º¸¦ ¹Ğ´ø ¹æÇâÀ¸·Î x50
+        {  
+            if (other.gameObject.tag == "Player" || other.gameObject.tag == "Box" || other.gameObject.tag == "Boxsj")       
             {
-                Debug.Log("Box´êÀ½");
+                transform.position += new Vector3(0, -0.5f, 0);
+                isPushed = true;
+
                 Rigidbody rigid = other.gameObject.GetComponent<Rigidbody>();
                 rigid.AddForce(gr_buttonPos.forward * 50, ForceMode.VelocityChange);
-                // rigid.velocity = gr_buttonPos.forward * 50;
-            }
+                // rigid.velocity = gr_buttonPos.forward * 30;
+            }   
         }
     }
 
