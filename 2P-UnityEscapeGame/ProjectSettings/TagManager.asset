@@ -14,7 +14,6 @@ TagManager:
   - Enemy
   - Bullet
   - Melee
-  - Ladder
   - Things
   - StairUp
   - StairDown
@@ -23,6 +22,7 @@ TagManager:
   - Water
   - fButton
   - Boxsj
+  - NPC
   layers:
   - Default
   - TransparentFX

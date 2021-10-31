@@ -24,7 +24,7 @@ public class gameManager3 : MonoBehaviour
     public Image nameIcon;//말하는 애 아이콘 뜨는 곳~
     public Text nameText;//이름 뜨는 text
 
-    public bool isAction = false;
+    //public bool isAction = false;
     public int talkIndex;
     private int yourIndex;//npc대화 인덱스
     private int myIndex;//내 대화 인덱스
@@ -55,6 +55,8 @@ public class gameManager3 : MonoBehaviour
     private int check;//여러곳에 쓰일 변수
 
     public Sprite[] images;
+    private GameObject touchThings;//닿은 물체
+    private bool isTouch;//콜라이더 닿았을 때 true놓는 변수
 
 
     private void Start()
@@ -73,16 +75,11 @@ public class gameManager3 : MonoBehaviour
         mole = GameObject.Find("mole");
         //sprite = gameObject.GetComponent<SpriteRenderer>().sprite;
         isTimerOn = false;
+        isTouch = false;
+
         check = 0;
         time = 0f;
 
-        //images = new Sprite[4];
-        //for (int i = 0; i < 4; i++)
-        //{
-        //    images[i] = GetComponent<SpriteRenderer>().sprite;
-        //}
-
-        Debug.Log(images[2]);
         generatePlayerText();
         generateNameText();
         checkLength();
@@ -112,8 +109,36 @@ public class gameManager3 : MonoBehaviour
         if (isTimerOn)
             time += Time.deltaTime;
 
-        //if (check == 1)//꽃이 말 걸 차례다
-        //    StartCoroutine(FlowerSay());
+        if (Input.GetKeyDown(KeyCode.X) && isTouch)//말하는 npc랑 닿았고 X를 눌렀다면~
+        {
+            myLastIndex = textGroup[value].Length;//내 대화 길이 체크하고
+
+            //Action(touchThings.transform.gameObject);
+            talkPanel.SetActive(true);
+            panelActive = true;
+            if (myIndex <= myLastIndex)//내 대화가 끝나기 전까지만 애랑 대화 주고받기
+            {
+                if (isMyTurn)
+                    popMyText(value);
+                else
+                    popNPCText(value);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftAlt) && isTouch)//단서 주는 물건들
+        {
+            if (touchThings.name == "car_pivot")
+            {
+                car = touchThings;
+                isCarRotate = true;
+            }
+
+            if (touchThings.name == "mole")//두더지 파묻혀있는거 처음 발견하고 꺼내는 과정
+            {
+                if (molePopUp)
+                    active_moleFunc = true;//mole popup 코루틴 돌릴준비 완료
+            }
+        }
 
         switch (check)
         {
@@ -124,19 +149,22 @@ public class gameManager3 : MonoBehaviour
             case -1:
                 StopCoroutine(FlowerSay());
                 break;
-        }
-
+        } 
     }
 
+    
+
     private void OnTriggerEnter(Collider other) //못움직이게 해야혀
-    {
+    {//닿았을 대 정보 저장
         if (other.tag == "Things")
         {
+            touchThings = other.gameObject;
+
+
             if (other.name == "car_pivot")
             {
                 preCar = other.transform.position;
                 Debug.Log(preCar);
-                return;
             }
             else if (other.name == "Car")
             {
@@ -145,67 +173,61 @@ public class gameManager3 : MonoBehaviour
             else
             {
                 preThing = other.transform.position;
-                isMyTurn = true;
-                Debug.Log("value   " + value);
-                checkLength();
             }
+            Debug.Log(other.name);
+            isTouch = true;
 
             talkPanel.SetActive(false);
+        }
+
+        else if (other.tag == "NPC")
+        {
+            touchThings = other.gameObject;
+
+            objectData objData = other.GetComponent<objectData>();
+            value = objData.id; //value값 가져오고
+            Talk(objData.id, objData.isNpc);//대화 가져올 준비하고
+            isTouch = true;
+            isMyTurn = true;
+           
+            Debug.Log("value   " + value);
+            checkLength();//대화길이 체크하고
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Things")
-        {
-            if (Input.GetKeyDown(KeyCode.X))//대화가능 npc
-            {
-                Action(other.transform.gameObject);
-            }
-
-            else if (Input.GetKeyDown(KeyCode.LeftAlt))//단서 주는 물건들
-            {
-                if (other.gameObject.name == "car_pivot")
-                {
-                    car = other.gameObject;
-                    isCarRotate = true;
-                }
-
-                if (other.gameObject.name == "mole")//두더지 파묻혀있는거 처음 발견하고 꺼내는 과정
-                    if (molePopUp)
-                        active_moleFunc = true;//mole popup 코루틴 돌릴준비 완료
-            }
-        }
+       
     }
 
-    public void Action(GameObject scanObj)
-    {
-        //  playerText();
-        if (isAction)
-            isAction = false;
+    //public void Action(GameObject scanObj)
+    //{
+    //    //  playerText();
+    //    if (isAction)
+    //        isAction = false;
 
-        else //Action==false
-        {
-            scanObject = scanObj;
-            objectData objData = scanObject.GetComponent<objectData>();
-            isAction = true;
+    //    else //Action==false
+    //    {
+    //        //scanObject = scanObj;
+    //        //objectData objData = scanObject.GetComponent<objectData>();
+    //        isAction = true;
 
-            Talk(objData.id, objData.isNpc);
-            talkPanel.SetActive(true);
-            panelActive = true;
-            value = objData.id;
-            myLastIndex = textGroup[objData.id].Length;//내 대화 길이 체크하고
-            firstTouch = false;
+    //        //Talk(objData.id, objData.isNpc);
+    //        //talkPanel.SetActive(true);
+    //        //panelActive = true;
+    //        //value = objData.id;
+    //        //myLastIndex = textGroup[objData.id].Length;//내 대화 길이 체크하고
+    //       // firstTouch = false;
 
-            if (myIndex <= myLastIndex)//내 대화가 끝나기 전까지만 애랑 대화 주고받기
-            {
-                if (isMyTurn)
-                    popMyText(value);
-                else
-                    popNPCText(value);
-            }
-        }
-    }
+    //        //if (myIndex <= myLastIndex)//내 대화가 끝나기 전까지만 애랑 대화 주고받기
+    //        //{
+    //        //    if (isMyTurn)
+    //        //        popMyText(value);
+    //        //    else
+    //        //        popNPCText(value);
+    //        //}
+    //    }
+    //}
 
 
     private void OnTriggerExit(Collider other)
@@ -218,18 +240,19 @@ public class gameManager3 : MonoBehaviour
                 if (isCarRotateBack)//차 원상복구 시켜야지만 그 위에 화살표 보이게하기
                     arrow_blackCar.SetActive(true);
             }
-
+        }
+        if (other.tag == "NPC") { 
             if (other.gameObject.name == "mole")
             {
                 isCarRotateBack = true;//나갔으니까 두더지 내려가고 차 위치나 회전 원상복귀
                 if (isCarRotateBack)//차 원상복구 시켜야지만 그 위에 화살표 보이게하기
                     arrow_blackCar.SetActive(true);
             }
-
-            yourIndex = 0; myIndex = 0;
-
             talkText.text = "";
         }
+        yourIndex = 0; myIndex = 0;
+        isTouch = false;
+
     }
 
     void Talk(int id, bool isNpc)
@@ -281,9 +304,6 @@ public class gameManager3 : MonoBehaviour
     private void checkLength()//내 대화 길이 체크
     {
         myLastIndex = textGroup[value].Length;
-
-        talkPanel.SetActive(true);
-        panelActive = true;
     }
 
     private void popMyText(int value)
@@ -330,7 +350,7 @@ public class gameManager3 : MonoBehaviour
 
                     break;
                 }
-                if (Input.GetKeyDown(KeyCode.X))
+               // if (Input.GetKeyDown(KeyCode.X))
                 {
                     talkText.text = GetMyTalk(value, myIndex);
                     myIndex++;
@@ -359,7 +379,7 @@ public class gameManager3 : MonoBehaviour
                 yourLastIndex = 0; myLastIndex = 0;
                 break;
             }
-            if (Input.GetKeyDown(KeyCode.X))
+           // if (Input.GetKeyDown(KeyCode.X))
             {
                 Debug.Log("X 눌림");
                 talkText.text = talkManager.GetTalk(value, yourIndex);//npc index 대화 출력
