@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.IO;
 
 public class monsterMapScript : MonoBehaviour
 {
@@ -25,25 +26,29 @@ public class monsterMapScript : MonoBehaviour
     private bool _mouseState;//마우스 상태
     GameObject exit;
     private bool goApartment;
+    public Queue q = new Queue();
+    string fullpth = "Assets/Resources/kbh";
+
 
     private void Start()
     {
-        //ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //rigid = GameObject.FindWithTag("Player").GetComponent<Rigidbody>();
-        //input = GameObject.Find("Canvas_2").transform.GetChild(1).gameObject;
         scrLight = GameObject.Find("Directional Light");
         sr = input.GetComponent<SpriteRenderer>();
         img = input.GetComponent<Image>();
         coinCheck = GameObject.Find("Man").GetComponent<Man>();
         img = input.GetComponent<Image>();
         Door = GameObject.Find("Door_5.001");
+        exit = GameObject.Find("2nd").transform.GetChild(5).gameObject;
+        goApartment = false;
+        holdPosition = GameObject.Find("holdingCoin");
+        //ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //rigid = GameObject.FindWithTag("Player").GetComponent<Rigidbody>();
+        //input = GameObject.Find("Canvas_2").transform.GetChild(1).gameObject;
         //rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
         //grabCube = GameObject.Find("holdingCube").transform.GetChild(0).gameObject;
         // tele = GameObject.Find("final").transform.GetChild(0).gameObject;
+
         //remark = GameObject.Find("final").transform.GetChild(1).gameObject;
-        holdPosition = GameObject.Find("holdingCoin");
-        exit = GameObject.Find("2nd").transform.GetChild(5).gameObject;
-        goApartment = false;
 
     }
 
@@ -91,7 +96,7 @@ public class monsterMapScript : MonoBehaviour
             }
         }
 
-        if (goApartment)
+        if (goApartment)//아파트있는 맵으로 돌아가기
             StartCoroutine(goApartmentCo());
     }
 
@@ -134,11 +139,13 @@ public class monsterMapScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.name == "Exit")
+        if (other.name == "Exit")/////////////////exit에 닿으면~
         {
+            readText();
             goApartment = true;
             Debug.Log("Exit");
         }
+
         if (other.tag == "Things")
         {
             //2층
@@ -164,7 +171,20 @@ public class monsterMapScript : MonoBehaviour
             
         }
     }
+    void readText()//이전 맵 데이터 저장되어있는 txt의 정보 빼와서 다시 que에 넣기~ ㅎ
+    {
+        TextAsset data = Resources.Load("kbh/mapData", typeof(TextAsset)) as TextAsset;
+        StringReader sr = new StringReader(data.text);
 
+        //먼저 한 줄 읽기
+        string source = sr.ReadLine();
+
+        while (source != null)
+        {
+            q.Enqueue(source.Split('\n')) ;
+            Debug.Log(q.Dequeue());
+        }
+    }
     IEnumerator goApartmentCo()
     {
             AsyncOperation async = SceneManager.LoadSceneAsync("md1_3");
@@ -173,50 +193,6 @@ public class monsterMapScript : MonoBehaviour
     }
 }
 
-    //IEnumerator goBack()//1층에서 상자랑 닿으면 뒤로 튕기는거
-    //{
-    //    ///rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
-    //    this.transform.Translate(new Vector3(0, 0, -30) * Time.deltaTime);
-
-//    check = -1;
-//    isHold = true;
-
-//    yield return null;
-
-//}
-//IEnumerator restoreColor(theCubes cube)
-//{
-
-//    yield return new WaitForSeconds(0.5f);
-
-//    switch (cube.value)
-//    {
-//        case 1: // 분홍
-//            cube.GetComponent<Renderer>().material.color = new Color(255f / 255f, 181f / 255f, 242f / 255f, 255f / 255f);
-//            break;
-//        case 2: //노란색
-//            cube.GetComponent<Renderer>().material.color = new Color(253f / 255f, 235f / 255f, 103f / 255f, 255f / 255f);
-//            break;
-//        case 3://하늘
-//            cube.GetComponent<Renderer>().material.color = new Color(110f / 255f, 241f / 255f, 255f/ 255f, 255f / 255f);
-//            break;  
-//    }
-//}
-
-//IEnumerator remarkBigger(GameObject r)
-//{
-//    r.transform.localScale += new Vector3(0.4f, 0.4f, 0.4f);
-//    if (r.transform.localScale.x >= 30)
-//        goDown = true;
-//    yield return null;
-//}
-
-//IEnumerator remarkSmaller(GameObject r)
-//{
-//    r.transform.localScale -= new Vector3(0.4f, 0.4f, 0.4f);
-//    if (r.transform.localScale.x <= 20)
-//        goDown = false;
-//    yield return null;
-//}
+    
 
 

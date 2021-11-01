@@ -26,7 +26,7 @@ public class dataSaveScript : MonoBehaviour
         {
             while (manager.que.Count > 0)
             {
-                sw.WriteLine(manager.que.Dequeue() + " ");
+                sw.WriteLine(manager.que.Dequeue() + " ", false);//false값은 append에 대한 값
             }
 
             sw.Flush(); sw.Close();
