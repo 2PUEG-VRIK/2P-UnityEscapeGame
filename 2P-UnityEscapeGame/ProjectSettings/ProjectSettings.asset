@@ -239,7 +239,7 @@ PlayerSettings:
   AndroidTargetArchitectures: 1
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: '{inproject}: KEY/user.keystore'
+  AndroidKeystoreName: '{inproject}: KEY/last.keystore'
   AndroidKeyaliasName: vrik
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0

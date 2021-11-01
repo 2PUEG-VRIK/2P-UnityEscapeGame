@@ -35,20 +35,25 @@ public class Door : MonoBehaviour
                         if (collectSound)
                             AudioSource.PlayClipAtPoint(collectSound, transform.position);
 
-                        //문 열리면 열쇠 없애고 비활성화
-                        GameObject key = GameObject.Find("Man").transform.GetChild(3).gameObject;
+                        ///문 열리면 열쇠 없애고 비활성화
+                        GameObject key = GameObject.Find("Man").transform.GetChild(1).gameObject;
                         collision.gameObject.GetComponent<Man>().hasKey = false;
                         key.SetActive(false);
                     }
                     else
                     {
-                        msg.SetActive(true);
-
+                        if (msg != null)
+                        {
+                            msg.SetActive(true);
+                        }
                     }
                 }
                 if (DoorType == CollectibleTypes.Updown)
                 {
-                    msg.SetActive(true);
+                    if (msg)
+                    {
+                        msg.SetActive(true);
+                    }
                 }
             }
         }
@@ -60,7 +65,10 @@ public class Door : MonoBehaviour
         {
             if (collision.gameObject.tag == "Player")
             {
-                msg.SetActive(false);
+                if (msg)
+                {
+                    msg.SetActive(false);
+                }
             }
         } 
     }

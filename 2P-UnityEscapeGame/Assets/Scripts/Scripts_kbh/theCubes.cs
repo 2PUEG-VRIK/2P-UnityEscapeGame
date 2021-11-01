@@ -55,5 +55,11 @@ public class theCubes : MonoBehaviour
         Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, camPos.z + 70);
         transform.position = Camera.main.ScreenToWorldPoint(mousePosition);
         //transform.position = new Vector3(Camera.main.ScreenToWorldPoint(mousePosition).x , Camera.main.ScreenToWorldPoint(mousePosition).y, 50);
+
     }
+
+    //private void OnMouseUp()
+    //{
+    //    _obj = null;
+    //}
 }

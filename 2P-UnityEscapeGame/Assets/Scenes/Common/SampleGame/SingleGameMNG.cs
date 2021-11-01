@@ -27,7 +27,7 @@ public class SingleGameMNG : MonoBehaviour
 
     // 결과창 시간
     Text time;
-    private readonly string DBurl = "https://escape-game-3382c-default-rtdb.firebaseio.com/";
+    private readonly string DBurl = "https://realtime-unity-default-rtdb.firebaseio.com/";
     private string now_scene = "Start Scene";
     private string activeScene;
 
@@ -86,6 +86,7 @@ public class SingleGameMNG : MonoBehaviour
         else if (activeScene == now_scene)
         {
             //Debug.Log("This is now_scene");
+            state = GameObject.Find("State").GetComponent<Text>();
             Timer(); // 타이머 가동은 계속 해야지
         }
         else
@@ -107,7 +108,6 @@ public class SingleGameMNG : MonoBehaviour
                 mode.text = "협동모드\nStage" + activeScene.Substring(activeScene.Length - 1, 1);
 
                 state = GameObject.Find("State").GetComponent<Text>();
-                pause = GameObject.Find("Pause").GetComponentInChildren<Text>();
 
                 Timer();
             }
@@ -254,9 +254,14 @@ public class SingleGameMNG : MonoBehaviour
         yield return SceneManager.LoadSceneAsync(scene, LoadSceneMode.Single);
     }
 
+    IEnumerator LoadSceneCorutineByIndex(int index)
+    {
+        yield return SceneManager.LoadSceneAsync(index, LoadSceneMode.Single);
+    }
+
     public void Retry()
     {
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        StartCoroutine(LoadSceneCorutineByIndex(SceneManager.GetActiveScene().buildIndex));
     }
 
     public void Quit()
@@ -270,18 +275,16 @@ public class SingleGameMNG : MonoBehaviour
 
     public void Pause()
     {
+        Debug.Log("Pause");
         /*일시정지 활성화*/
         if (!IsPause)
         {
             Time.timeScale = 0;
             IsPause = true;
-            pause.text = "Resume";
-        }
-        else
+        } else
         {
             Time.timeScale = 1;
             IsPause = false;
-            pause.text = "Pause";
         }
     }
 
