@@ -21,7 +21,7 @@ public class saveManagerScript : MonoBehaviour
         manager = GameObject.Find("Man").GetComponent<gameManager3>();
         man = GameObject.FindWithTag("Player");
         j = GameObject.Find("judging").GetComponent<judginScript>();
-        while (j.yes)
+        if (j.yes)
         {
             man.transform.position = (Vector3)j.q1.Dequeue();
             manager.check = (int)j.q1.Dequeue();
