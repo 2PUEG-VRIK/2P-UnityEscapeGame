@@ -15,7 +15,7 @@ using UnityEngine.SceneManagement;
 -1- 꽃이 말 거는거 끝나면 
 
 2 (꽃 말 듣고) 아파트로 가서 specialPlane 밟아->monsterMap으로 이동까지.
--2 houseTalk코루틴 중단시키는 조건
+-2 houseTalk코루틴 중단시키는 조건. monsterMap에서 여기로 돌아오면 check=-2
 
 
 
@@ -33,8 +33,8 @@ public class gameManager3 : MonoBehaviour
 
     //public bool isAction = false;
     public int talkIndex;
-    private int yourIndex;//npc대화 인덱스
-    private int myIndex;//내 대화 인덱스
+    public int yourIndex;//npc대화 인덱스
+    public int myIndex;//내 대화 인덱스
     public int value;//npc에 따라 나가는 내 말 달라짐 (npc의 id와 동일하게 하자)
     private int myLastIndex = -1;
     private int yourLastIndex;
@@ -73,6 +73,8 @@ public class gameManager3 : MonoBehaviour
     public bool alreadyCame = false;//맵 한번 갔다온거임~
     //GameObject saveM;
     GameObject judge;//씬 이동 했는지 판별
+    judginScript judgeSc;
+    private bool twice = false;
 
     private void Start()
     {
@@ -80,7 +82,7 @@ public class gameManager3 : MonoBehaviour
         value = 0; myLastIndex = -1;
         first = true;//내가 먼저 말 시작하면서 게임 시작해야하니까
         firstTouch = false;//아직 동물이랑 안 닿은 상태니까
-        isCarRotate = false;    isCarRotateBack = false;
+        isCarRotate = false; isCarRotateBack = false;
         textGroup = new Dictionary<int, string[]>();
         nameTextGroup = new Dictionary<int, string[]>();
         molePopUp = false;
@@ -90,6 +92,7 @@ public class gameManager3 : MonoBehaviour
         mole = GameObject.Find("mole");
         audioListener = GameObject.Find("PlayerCam").GetComponent<AudioListener>();
         judge = GameObject.Find("judging");
+        judgeSc = judge.GetComponent<judginScript>();
         //saveM = GameObject.Find("saveManager");
         //data = saveM.GetComponent<saveManagerScript>();
         isTimerOn = false;
@@ -97,10 +100,29 @@ public class gameManager3 : MonoBehaviour
         alreadyCame = false;
         check = 0;
         time = 0f;
-
+        //GameObject plane = GameObject.Find("specialPlane");
+        //if (judge.GetComponent<judginScript>().yes)
+        //    plane.SetActive(false);
+        
         generatePlayerText();
         generateNameText();
         checkLength();
+
+        if (GameObject.Find("judging").GetComponent<judginScript>().yes)//갔다옴
+        {
+            Debug.Log("judging");
+            GameObject.Find("specialPlane").SetActive(false);
+            nameText.text = GetName(0, 0);
+            changeNameIcon(0);
+            talkText.text = "가서 따져야겠어";
+            first = false;
+            myIndex = (int)judgeSc.arr1[5];
+            yourIndex = (int)judgeSc.arr1[6];
+            Debug.Log("myindex" + myIndex);
+            Debug.Log("yours" + yourIndex);
+            twice = true;
+        }
+
     }
 
     private void Awake()
@@ -183,9 +205,8 @@ public class gameManager3 : MonoBehaviour
             case -2:
                 StopCoroutine(HouseTalk());
                 StartCoroutine(CallOtherMap(2));
-
                 break;
-        } 
+        }
     }
 
     private void OnTriggerEnter(Collider other) //못움직이게 해야혀
@@ -201,19 +222,12 @@ public class gameManager3 : MonoBehaviour
                     preCar = other.transform.position;
                     break;
 
-
                 case "Car":
                     break;
-
-                case "specialPlane":
-
-                    saveQueue();
-                    check = 2;
-                    break;
             }
-            
+
             //    preThing = other.transform.position;
-          
+
             Debug.Log(other.name);
 
             talkPanel.SetActive(false);
@@ -222,16 +236,27 @@ public class gameManager3 : MonoBehaviour
         else if (other.tag == "NPC")
         {
             touchThings = other.gameObject;
-
+            talkPanel.SetActive(false);
+            talkText.text = "";
             objectData objData = other.GetComponent<objectData>();
             value = objData.id; //value값 가져오고
             Talk(objData.id, objData.isNpc);//대화 가져올 준비하고
             isTouch = true;
             isMyTurn = true;
-           
+
             Debug.Log("value   " + value);
             checkLength();//대화길이 체크하고
         }
+
+        else if (other.name == "specialPlane")
+        {
+            touchThings = other.gameObject;
+            isTouch = true;
+
+            judge.GetComponent<judginScript>().saveQue((int)this.transform.position.x, (int)this.transform.position.y
+                      , (int)this.transform.position.z, check, value, myIndex, yourIndex);
+        }
+        Debug.Log(isTouch);
     }
 
     private void OnTriggerExit(Collider other)
@@ -244,33 +269,37 @@ public class gameManager3 : MonoBehaviour
                 if (isCarRotateBack)//차 원상복구 시켜야지만 그 위에 화살표 보이게하기
                     arrow_blackCar.SetActive(true);
             }
+            yourIndex = 0; myIndex = 0;
+
         }
-        if (other.tag == "NPC") { 
+        if (other.tag == "NPC" && other.name!="flower")
+        {
             if (other.gameObject.name == "mole")
             {
                 isCarRotateBack = true;//나갔으니까 두더지 내려가고 차 위치나 회전 원상복귀
                 if (isCarRotateBack)//차 원상복구 시켜야지만 그 위에 화살표 보이게하기
                     arrow_blackCar.SetActive(true);
             }
-            talkText.text = "";
+            yourIndex = 0; myIndex = 0;
+
         }
-        yourIndex = 0; myIndex = 0;
+
+        else //꽃은 대화 이어가야해서 인덱스 초기화 x
+        {
+            if (other.name == "flower")
+            {
+                Debug.Log("내 index" + myIndex);
+                Debug.Log("네 index" + yourIndex);
+            }
+
+        }
+        talkText.text = "";
+        Debug.Log("trigger exit "+other.name);
         isTouch = false;
 
-    }
 
-    private void saveQueue()//
-    {
-
-        judge.GetComponent<judginScript>().q1.Enqueue(this.transform.position);
-        judge.GetComponent<judginScript>().q1.Enqueue(check);
-        judge.GetComponent<judginScript>().q1.Enqueue(value);
-        //l1.Add((int)this.transform.position.x);
-        //l1.Add((int)this.transform.position.y);
-        //l1.Add((int)this.transform.position.z);
-        //l1.Add(check);
-        //l1.Add(value);
     }
+    
     void Talk(int id, bool isNpc)
     {
         talkManager.GetTalk(id, talkIndex);
@@ -291,7 +320,8 @@ public class gameManager3 : MonoBehaviour
         //3 아파트 옆 못난이 꽃
         textGroup.Add(3, new string[]
         {
-            "네가 날 불렀니?", "나(3)", "나(5)"
+            "네가 날 불렀니?", "길을 잃었거든", "와, 정말이니? 고마워!!!", "너무한거 아니야? 죽을 뻔 했잖아!",
+            "..정말이지?","ㄳ(끝)"
         });
     }
 
@@ -366,15 +396,23 @@ public class gameManager3 : MonoBehaviour
 
                     break;
                 }
-               // if (Input.GetKeyDown(KeyCode.X))
+                // if (Input.GetKeyDown(KeyCode.X))
                 {
-                    talkText.text = GetMyTalk(value, myIndex);
-                    myIndex++;
-                    nameText.text = GetName(0, 0);
-                    changeNameIcon(0);
-
-                    break;
-
+                    if (value == 3 && myIndex== 3 && !twice)//꽃이랑 말할때 ,얘 속마음 말하는걸로 끝남
+                    {
+                        talkPanel.SetActive(false);
+                        panelActive = false;
+                        Debug.Log("대화 끝났다는");
+                    }
+                    else
+                    {
+                        talkText.text = GetMyTalk(value, myIndex);
+                        myIndex++;
+                        nameText.text = GetName(0, 0);
+                        changeNameIcon(0);
+                    }
+                        break;
+                    
                 }
             }
             isMyTurn = false;
@@ -395,8 +433,7 @@ public class gameManager3 : MonoBehaviour
                 yourLastIndex = 0; myLastIndex = 0;
                 break;
             }
-           // if (Input.GetKeyDown(KeyCode.X))
-            {
+            // if (Input.GetKeyDown(KeyCode.X))
                 Debug.Log("X 눌림");
                 talkText.text = talkManager.GetTalk(value, yourIndex);//npc index 대화 출력
                 yourIndex++;
@@ -404,12 +441,11 @@ public class gameManager3 : MonoBehaviour
                 Debug.Log("현재 두더지 인덱스 " + yourIndex + "끝 인덱스 " + yourLastIndex);
                 nameText.text = GetName(value, 0);
                 changeNameIcon(value);
-
                 // changeNameIcon(value);
                 break;
             }
         }
-    }
+    
 
     private void changeNameIcon(int a)//value 인자로 받아야지
     {
@@ -434,7 +470,7 @@ public class gameManager3 : MonoBehaviour
         }
     }
 
-    
+
 
     private float carRot = 0f;
     private float carPos = 0f;
@@ -520,7 +556,7 @@ public class gameManager3 : MonoBehaviour
         else if (4f < time && time < 6f)
         {
             talkText.text = "어? 날 부르는건가?";
-            nameText.text = GetName(0,0);
+            nameText.text = GetName(0, 0);
             changeNameIcon(0);
         }
         else if (6f < time && time < 9f)
@@ -549,10 +585,10 @@ public class gameManager3 : MonoBehaviour
         value = 0;
         talkPanel.SetActive(true);
         panelActive = true;
-        nameText.text = GetName(0,0);
+        nameText.text = GetName(0, 0);
         changeNameIcon(0);
 
-        talkText.text = "어?,, 어지러워ㅜ" ;
+        talkText.text = "어?,, 어지러워ㅜ";
         isTimerOn = true;
         if (time > 2f)
         {
