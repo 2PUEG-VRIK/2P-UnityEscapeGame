@@ -90,7 +90,7 @@ public class monsterMapScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return))//엔터누르면 
         {
             //문자열이랑 light랑 비교
-            if (string.Compare("light", text.text, true) == 0)//정답
+            if (string.Compare("home", text.text, true) == 0)//정답
             {
                 Answer();
             }
