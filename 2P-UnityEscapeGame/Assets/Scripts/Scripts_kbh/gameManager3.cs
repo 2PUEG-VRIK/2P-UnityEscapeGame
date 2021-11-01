@@ -5,17 +5,17 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 
-//0 ³ª È¥ÀÚ
-//1 ¾ç
-//2 µÎ´õÁö
+//0 ë‚˜ í˜¼ì
+//1 ì–‘
+//2 ë‘ë”ì§€
 
 
-/*check(ÃÊ±â°ª 0)
-1- Â÷ È¸Àü ¿ø»óº¹±¸ ³¡³ª°í ²ÉÀÌ ¸» °É ¶§ ÇÊ¿äÇØ¼­
--1- ²ÉÀÌ ¸» °Å´Â°Å ³¡³ª¸é 
+/*check(ì´ˆê¸°ê°’ 0)
+1- ì°¨ íšŒì „ ì›ìƒë³µêµ¬ ëë‚˜ê³  ê½ƒì´ ë§ ê±¸ ë•Œ í•„ìš”í•´ì„œ
+-1- ê½ƒì´ ë§ ê±°ëŠ”ê±° ëë‚˜ë©´ 
 
-2 (²É ¸» µè°í) ¾ÆÆÄÆ®·Î °¡¼­ specialPlane ¹â¾Æ->monsterMapÀ¸·Î ÀÌµ¿±îÁö.
--2 houseTalkÄÚ·çÆ¾ Áß´Ü½ÃÅ°´Â Á¶°Ç. monsterMap¿¡¼­ ¿©±â·Î µ¹¾Æ¿À¸é check=-2
+2 (ê½ƒ ë§ ë“£ê³ ) ì•„íŒŒíŠ¸ë¡œ ê°€ì„œ specialPlane ë°Ÿì•„->monsterMapìœ¼ë¡œ ì´ë™ê¹Œì§€.
+-2 houseTalkì½”ë£¨í‹´ ì¤‘ë‹¨ì‹œí‚¤ëŠ” ì¡°ê±´. monsterMapì—ì„œ ì—¬ê¸°ë¡œ ëŒì•„ì˜¤ë©´ check=-2
 
 
 
@@ -27,52 +27,52 @@ public class gameManager3 : MonoBehaviour
     public Text talkText;
     private GameObject scanObject;
 
-    public GameObject namePanel;//´©°¡ ¸»ÇÏ´ÂÁö ¶ß´Â ÆĞ³Î
-    public Image nameIcon;//¸»ÇÏ´Â ¾Ö ¾ÆÀÌÄÜ ¶ß´Â °÷~
-    public Text nameText;//ÀÌ¸§ ¶ß´Â text
+    public GameObject namePanel;//ëˆ„ê°€ ë§í•˜ëŠ”ì§€ ëœ¨ëŠ” íŒ¨ë„
+    public Image nameIcon;//ë§í•˜ëŠ” ì•  ì•„ì´ì½˜ ëœ¨ëŠ” ê³³~
+    public Text nameText;//ì´ë¦„ ëœ¨ëŠ” text
 
     //public bool isAction = false;
     public int talkIndex;
-    public int yourIndex;//npc´ëÈ­ ÀÎµ¦½º
-    public int myIndex;//³» ´ëÈ­ ÀÎµ¦½º
-    public int value;//npc¿¡ µû¶ó ³ª°¡´Â ³» ¸» ´Ş¶óÁü (npcÀÇ id¿Í µ¿ÀÏÇÏ°Ô ÇÏÀÚ)
+    public int yourIndex;//npcëŒ€í™” ì¸ë±ìŠ¤
+    public int myIndex;//ë‚´ ëŒ€í™” ì¸ë±ìŠ¤
+    public int value;//npcì— ë”°ë¼ ë‚˜ê°€ëŠ” ë‚´ ë§ ë‹¬ë¼ì§ (npcì˜ idì™€ ë™ì¼í•˜ê²Œ í•˜ì)
     private int myLastIndex = -1;
     private int yourLastIndex;
     private bool panelActive = false;
-    private bool isMyTurn = true;//³»°¡ ´ëÈ­ÇÒ Â÷·Ê³Ä~
-    private bool first;//Ã³À½ ³»°¡ ¸» ÇÒ¶§¸¸ ¾²ÀÌ´Â º¯¼ö
-    private bool firstTouch = false;//npcÀÌ¶û Äİ¶óÀÌ´õ Ã³À½ ´êÀ»¶§ ¾²ÀÌ´Â º¯¼ö. ³»°¡ ¸ÕÀú ¸»ÇØ¾ßÇØ ¤¾
+    private bool isMyTurn = true;//ë‚´ê°€ ëŒ€í™”í•  ì°¨ë¡€ëƒ~
+    private bool first;//ì²˜ìŒ ë‚´ê°€ ë§ í• ë•Œë§Œ ì“°ì´ëŠ” ë³€ìˆ˜
+    private bool firstTouch = false;//npcì´ë‘ ì½œë¼ì´ë” ì²˜ìŒ ë‹¿ì„ë•Œ ì“°ì´ëŠ” ë³€ìˆ˜. ë‚´ê°€ ë¨¼ì € ë§í•´ì•¼í•´ ã…
     private bool isCarRotate;
     private bool isCarRotateBack;
-    Dictionary<int, string[]> textGroup;//³» ´ëÈ­ ¹¶ÅÖÀÌ
-    Dictionary<int, string[]> nameTextGroup;//¸»ÇÏ´Â »ç¶÷µé ÀÌ¸§ ¹¶ÅÖÀÌ
+    Dictionary<int, string[]> textGroup;//ë‚´ ëŒ€í™” ë­‰í……ì´
+    Dictionary<int, string[]> nameTextGroup;//ë§í•˜ëŠ” ì‚¬ëŒë“¤ ì´ë¦„ ë­‰í……ì´
 
 
     GameObject car;
     GameObject mole;
     private bool molePopUp;
-    private bool active_moleFunc;//updateÇÔ¼ö¿¡¼­ ÄÚ·çÆ¾ µ¹¸®°Ô
-    GameObject remark_mole;//¾Öµé ¸Ó¸® À§¿¡ ´À³¦Ç¥(¿¹»óÄ¡ ¸øÇÑ Áß¿äÇÑ ´Ü¼­)
+    private bool active_moleFunc;//updateí•¨ìˆ˜ì—ì„œ ì½”ë£¨í‹´ ëŒë¦¬ê²Œ
+    GameObject remark_mole;//ì• ë“¤ ë¨¸ë¦¬ ìœ„ì— ëŠë‚Œí‘œ(ì˜ˆìƒì¹˜ ëª»í•œ ì¤‘ìš”í•œ ë‹¨ì„œ)
     GameObject arrow_blackCar;
-    Vector3 preCar;//Â÷ ¿ø·¡ ÁÂÇ¥
-    Vector3 preThing;//¹°°Ç ¿ø·¡ ÁÂÇ¥
+    Vector3 preCar;//ì°¨ ì›ë˜ ì¢Œí‘œ
+    Vector3 preThing;//ë¬¼ê±´ ì›ë˜ ì¢Œí‘œ
 
-    private float time;//²É °ü·Ã ½Ã°£ on
+    private float time;//ê½ƒ ê´€ë ¨ ì‹œê°„ on
     private bool isTimerOn;
-    public int check;//¿©·¯°÷¿¡ ¾²ÀÏ º¯¼ö
+    public int check;//ì—¬ëŸ¬ê³³ì— ì“°ì¼ ë³€ìˆ˜
 
     public Sprite[] images;
-    private GameObject touchThings;//´êÀº ¹°Ã¼
-    private bool isTouch;//Äİ¶óÀÌ´õ ´ê¾ÒÀ» ¶§ true³õ´Â º¯¼ö
+    private GameObject touchThings;//ë‹¿ì€ ë¬¼ì²´
+    private bool isTouch;//ì½œë¼ì´ë” ë‹¿ì•˜ì„ ë•Œ trueë†“ëŠ” ë³€ìˆ˜
 
-    //¸Ê °£ ÀÌµ¿
-    AudioListener audioListener;//ÀÌµ¿ÇÒ ¶§ ÀÌÀü ¸ÊÀÇ ¿Àµğ¿À ¸®½º³Ê ²ô±â
+    //ë§µ ê°„ ì´ë™
+    AudioListener audioListener;//ì´ë™í•  ë•Œ ì´ì „ ë§µì˜ ì˜¤ë””ì˜¤ ë¦¬ìŠ¤ë„ˆ ë„ê¸°
     saveManagerScript data;
-    //public static List<int> l1 = new List<int>();//¸ó½ºÅÓ °¡±â Àü ¸ÊÀÇ ¸ğµç Á¤º¸
+    //public static List<int> l1 = new List<int>();//ëª¬ìŠ¤í… ê°€ê¸° ì „ ë§µì˜ ëª¨ë“  ì •ë³´
     //static List<int> l2= new List<int>();
-    public bool alreadyCame = false;//¸Ê ÇÑ¹ø °¬´Ù¿Â°ÅÀÓ~
+    public bool alreadyCame = false;//ë§µ í•œë²ˆ ê°”ë‹¤ì˜¨ê±°ì„~
     //GameObject saveM;
-    GameObject judge;//¾À ÀÌµ¿ Çß´ÂÁö ÆÇº°
+    GameObject judge;//ì”¬ ì´ë™ í–ˆëŠ”ì§€ íŒë³„
     judginScript judgeSc;
     private bool twice = false;
 
@@ -80,8 +80,8 @@ public class gameManager3 : MonoBehaviour
     {
         yourIndex = 0; myIndex = 0;
         value = 0; myLastIndex = -1;
-        first = true;//³»°¡ ¸ÕÀú ¸» ½ÃÀÛÇÏ¸é¼­ °ÔÀÓ ½ÃÀÛÇØ¾ßÇÏ´Ï±î
-        firstTouch = false;//¾ÆÁ÷ µ¿¹°ÀÌ¶û ¾È ´êÀº »óÅÂ´Ï±î
+        first = true;//ë‚´ê°€ ë¨¼ì € ë§ ì‹œì‘í•˜ë©´ì„œ ê²Œì„ ì‹œì‘í•´ì•¼í•˜ë‹ˆê¹Œ
+        firstTouch = false;//ì•„ì§ ë™ë¬¼ì´ë‘ ì•ˆ ë‹¿ì€ ìƒíƒœë‹ˆê¹Œ
         isCarRotate = false; isCarRotateBack = false;
         textGroup = new Dictionary<int, string[]>();
         nameTextGroup = new Dictionary<int, string[]>();
@@ -108,13 +108,13 @@ public class gameManager3 : MonoBehaviour
         generateNameText();
         checkLength();
 
-        if (GameObject.Find("judging").GetComponent<judginScript>().yes)//°¬´Ù¿È
+        if (GameObject.Find("judging").GetComponent<judginScript>().yes)//ê°”ë‹¤ì˜´
         {
             Debug.Log("judging");
             GameObject.Find("specialPlane").SetActive(false);
             nameText.text = GetName(0, 0);
             changeNameIcon(0);
-            talkText.text = "°¡¼­ µûÁ®¾ß°Ú¾î";
+            talkText.text = "ê°€ì„œ ë”°ì ¸ì•¼ê² ì–´";
             first = false;
             myIndex = (int)judgeSc.arr1[5];
             yourIndex = (int)judgeSc.arr1[6];
@@ -148,21 +148,21 @@ public class gameManager3 : MonoBehaviour
         //if (!active_moleFunc)
         //    StopCoroutine(molePopUpFunc(mole));
 
-        if (isCarRotateBack)//Â÷ ´Ù½Ã ¿ø»óº¹±Í
+        if (isCarRotateBack)//ì°¨ ë‹¤ì‹œ ì›ìƒë³µê·€
             StartCoroutine(carRotateBackFunc(car));
 
 
         if (isTimerOn)
             time += Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.X) && isTouch)//¸»ÇÏ´Â npc¶û ´ê¾Ò°í X¸¦ ´­·¶´Ù¸é~
+        if (Input.GetKeyDown(KeyCode.X) && isTouch)//ë§í•˜ëŠ” npcë‘ ë‹¿ì•˜ê³  Xë¥¼ ëˆŒë €ë‹¤ë©´~
         {
-            myLastIndex = textGroup[value].Length;//³» ´ëÈ­ ±æÀÌ Ã¼Å©ÇÏ°í
+            myLastIndex = textGroup[value].Length;//ë‚´ ëŒ€í™” ê¸¸ì´ ì²´í¬í•˜ê³ 
 
             //Action(touchThings.transform.gameObject);
             talkPanel.SetActive(true);
             panelActive = true;
-            if (myIndex <= myLastIndex)//³» ´ëÈ­°¡ ³¡³ª±â Àü±îÁö¸¸ ¾Ö¶û ´ëÈ­ ÁÖ°í¹Ş±â
+            if (myIndex <= myLastIndex)//ë‚´ ëŒ€í™”ê°€ ëë‚˜ê¸° ì „ê¹Œì§€ë§Œ ì• ë‘ ëŒ€í™” ì£¼ê³ ë°›ê¸°
             {
                 if (isMyTurn)
                     popMyText(value);
@@ -171,7 +171,7 @@ public class gameManager3 : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftAlt) && isTouch)//´Ü¼­ ÁÖ´Â ¹°°Çµé
+        if (Input.GetKeyDown(KeyCode.LeftAlt) && isTouch)//ë‹¨ì„œ ì£¼ëŠ” ë¬¼ê±´ë“¤
         {
             if (touchThings.name == "car_pivot")
             {
@@ -179,16 +179,16 @@ public class gameManager3 : MonoBehaviour
                 isCarRotate = true;
             }
 
-            if (touchThings.name == "mole")//µÎ´õÁö ÆÄ¹¯ÇôÀÖ´Â°Å Ã³À½ ¹ß°ßÇÏ°í ²¨³»´Â °úÁ¤
+            if (touchThings.name == "mole")//ë‘ë”ì§€ íŒŒë¬»í˜€ìˆëŠ”ê±° ì²˜ìŒ ë°œê²¬í•˜ê³  êº¼ë‚´ëŠ” ê³¼ì •
             {
                 if (molePopUp)
-                    active_moleFunc = true;//mole popup ÄÚ·çÆ¾ µ¹¸±ÁØºñ ¿Ï·á
+                    active_moleFunc = true;//mole popup ì½”ë£¨í‹´ ëŒë¦´ì¤€ë¹„ ì™„ë£Œ
             }
         }
 
         switch (check)
         {
-            case 1://²ÉÀÌ ¸» °É Â÷·Ê´Ù
+            case 1://ê½ƒì´ ë§ ê±¸ ì°¨ë¡€ë‹¤
                 StartCoroutine(FlowerSay());
                 break;
 
@@ -196,7 +196,7 @@ public class gameManager3 : MonoBehaviour
                 StopCoroutine(FlowerSay());
                 break;
 
-            case 2://²ÉÀÌ¶û ´ëÈ­ ÇÏ°í ¾ÆÆÄÆ®·Î °¡¼­ specialPlane¹â´Â°Í±îÁö
+            case 2://ê½ƒì´ë‘ ëŒ€í™” í•˜ê³  ì•„íŒŒíŠ¸ë¡œ ê°€ì„œ specialPlaneë°ŸëŠ”ê²ƒê¹Œì§€
                 if (touchThings.name == "specialPlane")
                     StartCoroutine(HouseTalk());
                 break;
@@ -209,8 +209,8 @@ public class gameManager3 : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other) //¸ø¿òÁ÷ÀÌ°Ô ÇØ¾ßÇô
-    {//´ê¾ÒÀ» ´ë Á¤º¸ ÀúÀå
+    private void OnTriggerEnter(Collider other) //ëª»ì›€ì§ì´ê²Œ í•´ì•¼í˜€
+    {//ë‹¿ì•˜ì„ ëŒ€ ì •ë³´ ì €ì¥
         if (other.tag == "Things")
         {
             touchThings = other.gameObject;
@@ -223,6 +223,11 @@ public class gameManager3 : MonoBehaviour
                     break;
 
                 case "Car":
+                    break;
+
+                case "specialPlane":
+                    saveQueue();
+                    check = 2;
                     break;
             }
 
@@ -239,13 +244,13 @@ public class gameManager3 : MonoBehaviour
             talkPanel.SetActive(false);
             talkText.text = "";
             objectData objData = other.GetComponent<objectData>();
-            value = objData.id; //value°ª °¡Á®¿À°í
-            Talk(objData.id, objData.isNpc);//´ëÈ­ °¡Á®¿Ã ÁØºñÇÏ°í
+            value = objData.id; //valueê°’ ê°€ì ¸ì˜¤ê³ 
+            Talk(objData.id, objData.isNpc);//ëŒ€í™” ê°€ì ¸ì˜¬ ì¤€ë¹„í•˜ê³ 
             isTouch = true;
             isMyTurn = true;
 
             Debug.Log("value   " + value);
-            checkLength();//´ëÈ­±æÀÌ Ã¼Å©ÇÏ°í
+            checkLength();//ëŒ€í™”ê¸¸ì´ ì²´í¬í•˜ê³ 
         }
 
         else if (other.name == "specialPlane")
@@ -266,7 +271,7 @@ public class gameManager3 : MonoBehaviour
             if (other.gameObject.name == "car_pivot")
             {
                 isCarRotate = false;
-                if (isCarRotateBack)//Â÷ ¿ø»óº¹±¸ ½ÃÄÑ¾ßÁö¸¸ ±× À§¿¡ È­»ìÇ¥ º¸ÀÌ°ÔÇÏ±â
+                if (isCarRotateBack)//ì°¨ ì›ìƒë³µêµ¬ ì‹œì¼œì•¼ì§€ë§Œ ê·¸ ìœ„ì— í™”ì‚´í‘œ ë³´ì´ê²Œí•˜ê¸°
                     arrow_blackCar.SetActive(true);
             }
             yourIndex = 0; myIndex = 0;
@@ -276,20 +281,20 @@ public class gameManager3 : MonoBehaviour
         {
             if (other.gameObject.name == "mole")
             {
-                isCarRotateBack = true;//³ª°¬À¸´Ï±î µÎ´õÁö ³»·Á°¡°í Â÷ À§Ä¡³ª È¸Àü ¿ø»óº¹±Í
-                if (isCarRotateBack)//Â÷ ¿ø»óº¹±¸ ½ÃÄÑ¾ßÁö¸¸ ±× À§¿¡ È­»ìÇ¥ º¸ÀÌ°ÔÇÏ±â
+                isCarRotateBack = true;//ë‚˜ê°”ìœ¼ë‹ˆê¹Œ ë‘ë”ì§€ ë‚´ë ¤ê°€ê³  ì°¨ ìœ„ì¹˜ë‚˜ íšŒì „ ì›ìƒë³µê·€
+                if (isCarRotateBack)//ì°¨ ì›ìƒë³µêµ¬ ì‹œì¼œì•¼ì§€ë§Œ ê·¸ ìœ„ì— í™”ì‚´í‘œ ë³´ì´ê²Œí•˜ê¸°
                     arrow_blackCar.SetActive(true);
             }
             yourIndex = 0; myIndex = 0;
 
         }
 
-        else //²ÉÀº ´ëÈ­ ÀÌ¾î°¡¾ßÇØ¼­ ÀÎµ¦½º ÃÊ±âÈ­ x
+        else //ê½ƒì€ ëŒ€í™” ì´ì–´ê°€ì•¼í•´ì„œ ì¸ë±ìŠ¤ ì´ˆê¸°í™” x
         {
             if (other.name == "flower")
             {
-                Debug.Log("³» index" + myIndex);
-                Debug.Log("³× index" + yourIndex);
+                Debug.Log("ë‚´ index" + myIndex);
+                Debug.Log("ë„¤ index" + yourIndex);
             }
 
         }
@@ -305,36 +310,36 @@ public class gameManager3 : MonoBehaviour
         talkManager.GetTalk(id, talkIndex);
     }
 
-    private void generatePlayerText()//³» ´ëÈ­ Á¦ÀÛ
+    private void generatePlayerText()//ë‚´ ëŒ€í™” ì œì‘
     {
-        //°ÔÀÓ ½ÃÀÛ ÈÄ ¹Ù·Î ³ª¿À´Â ´ëÈ­
-        textGroup.Add(0, new string[] { "(Çä.. Çä..) ¿©±ä ¾îµğÁö? \nÃ³À½ ¿À´Â °÷ÀÎµ¥...", "³Ê¹« ¸Ö¸® ¿Í¹ö·È¾î." });//mylast=2
-        //1 ¾çÀÌ¶û ÇÏ´Â ´ëÈ­
+        //ê²Œì„ ì‹œì‘ í›„ ë°”ë¡œ ë‚˜ì˜¤ëŠ” ëŒ€í™”
+        textGroup.Add(0, new string[] { "(í—‰.. í—‰..) ì—¬ê¸´ ì–´ë””ì§€? \nì²˜ìŒ ì˜¤ëŠ” ê³³ì¸ë°...", "ë„ˆë¬´ ë©€ë¦¬ ì™€ë²„ë ¸ì–´." });//mylast=2
+        //1 ì–‘ì´ë‘ í•˜ëŠ” ëŒ€í™”
         textGroup.Add(1, new string[]//mylast=3
-        { "Àú±â.. ", "±æÀ» ÀÒ¾ú¾î... ¿©±ä ´ëÃ¼ ¾îµğ¾ß?\n¿ì¸® ÁıÀº ³ë¶õ ÁöºØÀÌ ÀÖ´Â °÷ÀÎµ¥..","±×·¸±¸³ª.. Á¤¸» °í¸¶¿ö!\n¾È³ç!"});
-        //2 µÎ´õÁö¶û ´ëÈ­
+        { "ì €ê¸°.. ", "ê¸¸ì„ ìƒì—ˆì–´... ì—¬ê¸´ ëŒ€ì²´ ì–´ë””ì•¼?\nìš°ë¦¬ ì§‘ì€ ë…¸ë€ ì§€ë¶•ì´ ìˆëŠ” ê³³ì¸ë°..","ê·¸ë ‡êµ¬ë‚˜.. ì •ë§ ê³ ë§ˆì›Œ!\nì•ˆë…•!"});
+        //2 ë‘ë”ì§€ë‘ ëŒ€í™”
         textGroup.Add(2, new string[]
         {
-            "¾Ñ! ³î¶ó¶ó! ","Àú±â...","..."
+            "ì•—! ë†€ë¼ë¼! ","ì €ê¸°...","..."
         });
-        //3 ¾ÆÆÄÆ® ¿· ¸ø³­ÀÌ ²É
+        //3 ì•„íŒŒíŠ¸ ì˜† ëª»ë‚œì´ ê½ƒ
         textGroup.Add(3, new string[]
         {
-            "³×°¡ ³¯ ºÒ·¶´Ï?", "±æÀ» ÀÒ¾ú°Åµç", "¿Í, Á¤¸»ÀÌ´Ï? °í¸¶¿ö!!!", "³Ê¹«ÇÑ°Å ¾Æ´Ï¾ß? Á×À» »· ÇßÀİ¾Æ!",
-            "..Á¤¸»ÀÌÁö?","¤£(³¡)"
+            "ë„¤ê°€ ë‚  ë¶ˆë €ë‹ˆ?", "ê¸¸ì„ ìƒì—ˆê±°ë“ ", "ì™€, ì •ë§ì´ë‹ˆ? ê³ ë§ˆì›Œ!!!", "ë„ˆë¬´í•œê±° ì•„ë‹ˆì•¼? ì£½ì„ ë»” í–ˆì–ì•„!",
+            "..ì •ë§ì´ì§€?","ã„³(ë)"
         });
     }
 
     private void generateNameText()
     {
-        //0 ³ª
-        nameTextGroup.Add(0, new string[] { "³ª" });
-        //1 ¾ç
-        nameTextGroup.Add(1, new string[] { "´À±ßÇÏ°Ô ½¬´ø ¾ç" });
-        //2 Â÷ ¹Ø µÎ´õÁö
-        nameTextGroup.Add(2, new string[] { "Âü°ßÇÏ´Â µÎ´õÁö" });
-        //3 ¾ÆÆÄÆ® ¿· ²É
-        nameTextGroup.Add(3, new string[] { "¼ö»óÇÑ ²É", "???" });
+        //0 ë‚˜
+        nameTextGroup.Add(0, new string[] { "ë‚˜" });
+        //1 ì–‘
+        nameTextGroup.Add(1, new string[] { "ëŠê¸‹í•˜ê²Œ ì‰¬ë˜ ì–‘" });
+        //2 ì°¨ ë°‘ ë‘ë”ì§€
+        nameTextGroup.Add(2, new string[] { "ì°¸ê²¬í•˜ëŠ” ë‘ë”ì§€" });
+        //3 ì•„íŒŒíŠ¸ ì˜† ê½ƒ
+        nameTextGroup.Add(3, new string[] { "ìˆ˜ìƒí•œ ê½ƒ", "???" });
 
     }
 
@@ -347,17 +352,17 @@ public class gameManager3 : MonoBehaviour
     {
         return nameTextGroup[id][index];
     }
-    private void checkLength()//³» ´ëÈ­ ±æÀÌ Ã¼Å©
+    private void checkLength()//ë‚´ ëŒ€í™” ê¸¸ì´ ì²´í¬
     {
         myLastIndex = textGroup[value].Length;
     }
 
     private void popMyText(int value)
-    { // npc¶û ÇÏ´Â ³» ´ëÈ­ ¶ç¿ì±â
+    { // npcë‘ í•˜ëŠ” ë‚´ ëŒ€í™” ë„ìš°ê¸°
 
         if (value == 0)
-        { //È¥ÀÚ ¶Ù¾î´Ù´Ï´Â »óÈ² ¼³¸í
-          // if (myLastIndex <= myIndex) //´ëÈ­ÀÇ ³¡¿¡ µµ´ŞÇÏ¸é 
+        { //í˜¼ì ë›°ì–´ë‹¤ë‹ˆëŠ” ìƒí™© ì„¤ëª…
+          // if (myLastIndex <= myIndex) //ëŒ€í™”ì˜ ëì— ë„ë‹¬í•˜ë©´ 
             while (true)
             {
                 if (myLastIndex <= myIndex)
@@ -366,7 +371,7 @@ public class gameManager3 : MonoBehaviour
                     panelActive = false;
                     yourIndex = 0; myIndex = 0;
                     first = false;
-                    Debug.Log("´ëÈ­ ³¡³µ´Ù´Â");
+                    Debug.Log("ëŒ€í™” ëë‚¬ë‹¤ëŠ”");
                     break;
                 }
 
@@ -382,14 +387,14 @@ public class gameManager3 : MonoBehaviour
             }
         }
         else
-        { //npc¶û ´ëÈ­ÇÒ ¶§ ³» ¸»µé
+        { //npcë‘ ëŒ€í™”í•  ë•Œ ë‚´ ë§ë“¤
             while (true)
             {
                 if (myLastIndex <= myIndex)
                 {
                     talkPanel.SetActive(false);
                     panelActive = false;
-                    Debug.Log("´ëÈ­ ³¡³µ´Ù´Â");
+                    Debug.Log("ëŒ€í™” ëë‚¬ë‹¤ëŠ”");
 
                     yourIndex = 0; myIndex = 0;
                     yourLastIndex = 0; myLastIndex = 0;
@@ -398,11 +403,11 @@ public class gameManager3 : MonoBehaviour
                 }
                 // if (Input.GetKeyDown(KeyCode.X))
                 {
-                    if (value == 3 && myIndex== 3 && !twice)//²ÉÀÌ¶û ¸»ÇÒ¶§ ,¾ê ¼Ó¸¶À½ ¸»ÇÏ´Â°É·Î ³¡³²
+                    if (value == 3 && myIndex== 3 && !twice)//ê½ƒì´ë‘ ë§í• ë•Œ ,ì–˜ ì†ë§ˆìŒ ë§í•˜ëŠ”ê±¸ë¡œ ëë‚¨
                     {
                         talkPanel.SetActive(false);
                         panelActive = false;
-                        Debug.Log("´ëÈ­ ³¡³µ´Ù´Â");
+                        Debug.Log("ëŒ€í™” ëë‚¬ë‹¤ëŠ”");
                     }
                     else
                     {
@@ -428,17 +433,17 @@ public class gameManager3 : MonoBehaviour
             {
                 talkPanel.SetActive(false);
                 panelActive = false;
-                Debug.Log("´ëÈ­ ƒP³ª¼­ Ã¢ Á¾·á");
+                Debug.Log("ëŒ€í™” ÂƒPë‚˜ì„œ ì°½ ì¢…ë£Œ");
                 yourIndex = 0; myIndex = 0;
                 yourLastIndex = 0; myLastIndex = 0;
                 break;
             }
             // if (Input.GetKeyDown(KeyCode.X))
-                Debug.Log("X ´­¸²");
-                talkText.text = talkManager.GetTalk(value, yourIndex);//npc index ´ëÈ­ Ãâ·Â
+                Debug.Log("X ëˆŒë¦¼");
+                talkText.text = talkManager.GetTalk(value, yourIndex);//npc index ëŒ€í™” ì¶œë ¥
                 yourIndex++;
                 isMyTurn = true;
-                Debug.Log("ÇöÀç µÎ´õÁö ÀÎµ¦½º " + yourIndex + "³¡ ÀÎµ¦½º " + yourLastIndex);
+                Debug.Log("í˜„ì¬ ë‘ë”ì§€ ì¸ë±ìŠ¤ " + yourIndex + "ë ì¸ë±ìŠ¤ " + yourLastIndex);
                 nameText.text = GetName(value, 0);
                 changeNameIcon(value);
                 // changeNameIcon(value);
@@ -447,23 +452,23 @@ public class gameManager3 : MonoBehaviour
         }
     
 
-    private void changeNameIcon(int a)//value ÀÎÀÚ·Î ¹Ş¾Æ¾ßÁö
+    private void changeNameIcon(int a)//value ì¸ìë¡œ ë°›ì•„ì•¼ì§€
     {
         switch (a)
         {
-            case 0: // ³ªÀİ¾Æ
+            case 0: // ë‚˜ì–ì•„
                 nameIcon.GetComponent<Image>().sprite = images[0];
                 break;
-            case 1://¾ç
+            case 1://ì–‘
                 nameIcon.GetComponent<Image>().sprite = images[1];
                 break;
-            case 2://µÎ´õÁö
+            case 2://ë‘ë”ì§€
                 nameIcon.GetComponent<Image>().sprite = images[2];
                 break;
-            case 3://²É
+            case 3://ê½ƒ
                 nameIcon.GetComponent<Image>().sprite = images[3];
                 break;
-            case 7://ÀÍ¸í ²É
+            case 7://ìµëª… ê½ƒ
                 nameIcon.GetComponent<Image>().sprite = images[7];
                 break;
 
@@ -488,7 +493,7 @@ public class gameManager3 : MonoBehaviour
             molePopUp = true;
             remark_mole.SetActive(true);
             isCarRotate = false;
-            Debug.Log("°¢µµ Àß µé¾î¿È");
+            Debug.Log("ê°ë„ ì˜ ë“¤ì–´ì˜´");
             yield return null;
         }
         // StopCoroutine(carRotateFunc(car));
@@ -510,7 +515,7 @@ public class gameManager3 : MonoBehaviour
 
         if (car.transform.rotation == Quaternion.Euler(new Vector3(0, 180, 0)))
         {
-            Debug.Log("°¢µµ µüµü ¸ÂÃç");
+            Debug.Log("ê°ë„ ë”±ë”± ë§ì¶°");
             car.transform.position = preCar;
             mole.GetComponent<BoxCollider>().enabled = false;
             car.GetComponent<BoxCollider>().enabled = true;
@@ -551,17 +556,17 @@ public class gameManager3 : MonoBehaviour
             nameText.text = GetName(3, 1);
             changeNameIcon(7);
 
-            talkText.text = "¾ß! ³Ê! ÀÌ¸®¿Í ºÁ!";
+            talkText.text = "ì•¼! ë„ˆ! ì´ë¦¬ì™€ ë´!";
         }
         else if (4f < time && time < 6f)
         {
-            talkText.text = "¾î? ³¯ ºÎ¸£´Â°Ç°¡?";
+            talkText.text = "ì–´? ë‚  ë¶€ë¥´ëŠ”ê±´ê°€?";
             nameText.text = GetName(0, 0);
             changeNameIcon(0);
         }
         else if (6f < time && time < 9f)
         {
-            talkText.text = "±×·¡ ³Ê ~ \n¾ÆÆÄÆ® ¿· ¾²·¹±âÅëÀ¸·Î ¿ÍºÁ!";
+            talkText.text = "ê·¸ë˜ ë„ˆ ~ \nì•„íŒŒíŠ¸ ì˜† ì“°ë ˆê¸°í†µìœ¼ë¡œ ì™€ë´!";
             nameText.text = GetName(3, 1);
             changeNameIcon(7);
         }
@@ -580,7 +585,7 @@ public class gameManager3 : MonoBehaviour
     }
     //mole=-11.87
 
-    IEnumerator HouseTalk()//¾ÆÆÄÆ®¿¡¼­ È¥Àã¸»ÇÏ´Â°Å
+    IEnumerator HouseTalk()//ì•„íŒŒíŠ¸ì—ì„œ í˜¼ì£ë§í•˜ëŠ”ê±°
     {
         value = 0;
         talkPanel.SetActive(true);
@@ -588,7 +593,7 @@ public class gameManager3 : MonoBehaviour
         nameText.text = GetName(0, 0);
         changeNameIcon(0);
 
-        talkText.text = "¾î?,, ¾îÁö·¯¿ö¤Ì";
+        talkText.text = "ì–´?,, ì–´ì§€ëŸ¬ì›Œã…œ";
         isTimerOn = true;
         if (time > 2f)
         {
