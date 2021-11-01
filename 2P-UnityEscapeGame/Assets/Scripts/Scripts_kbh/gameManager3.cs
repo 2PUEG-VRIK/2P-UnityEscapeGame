@@ -5,10 +5,16 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 
+/// <summary>
+/// npc 만나는 순서
+/// 양 -> 대화끝나면 꽃이 부름 -> 꽃한테 감 -> 속아서 아파트 감 -> monsterMap ->꽃한테 따지러 감
+/// -> 제대로 알려줘 그 곳으로 감 -> 문이 고장나 있음 ->
+/// </summary>
+//value
 //0 나 혼자
 //1 양
 //2 두더지
-
+//3 꽃
 
 /*check(초기값 0)
 1- 차 회전 원상복구 끝나고 꽃이 말 걸 때 필요해서
@@ -17,7 +23,7 @@ using UnityEngine.SceneManagement;
 2 (꽃 말 듣고) 아파트로 가서 specialPlane 밟아->monsterMap으로 이동까지.
 -2 houseTalk코루틴 중단시키는 조건. monsterMap에서 여기로 돌아오면 check=-2
 
-
+3 문앞에 있는 쪽지 발견! 오리 찾으러 가
 
 */
 public class gameManager3 : MonoBehaviour
@@ -74,7 +80,12 @@ public class gameManager3 : MonoBehaviour
     //GameObject saveM;
     GameObject judge;//씬 이동 했는지 판별
     judginScript judgeSc;
-    private bool twice = false;
+    private bool twice = false;//한 번 이동하면 그 후로 쭉 true
+
+
+    //꽃이 알려준대로 문에 감
+    GameObject exitDoor;
+    GameObject hidden;//door 앞 hiddenPlane
 
     private void Start()
     {
@@ -122,6 +133,9 @@ public class gameManager3 : MonoBehaviour
             Debug.Log("yours" + yourIndex);
             twice = true;
         }
+
+        exitDoor = GameObject.Find("exitDoor");
+        hidden = GameObject.Find("hiddenPlane_1");
 
     }
 
@@ -206,6 +220,14 @@ public class gameManager3 : MonoBehaviour
                 StopCoroutine(HouseTalk());
                 StartCoroutine(CallOtherMap(2));
                 break;
+
+            case 3:
+                StartCoroutine(doorText());
+                break;
+            case -3:
+                StopCoroutine(doorText());
+                hidden.SetActive(false);
+                break;
         }
     }
 
@@ -256,6 +278,15 @@ public class gameManager3 : MonoBehaviour
             judge.GetComponent<judginScript>().saveQue((int)this.transform.position.x, (int)this.transform.position.y
                       , (int)this.transform.position.z, check, value, myIndex, yourIndex);
         }
+
+        else if (other.name == "hiddenPlane_1")//문을 만났다~
+        {
+            touchThings = other.gameObject;
+            isTouch = true;
+
+            Debug.Log("hiddne");
+            check = 3;
+        }
         Debug.Log(isTouch);
     }
 
@@ -299,7 +330,7 @@ public class gameManager3 : MonoBehaviour
 
 
     }
-    
+
     void Talk(int id, bool isNpc)
     {
         talkManager.GetTalk(id, talkIndex);
@@ -311,7 +342,7 @@ public class gameManager3 : MonoBehaviour
         textGroup.Add(0, new string[] { "(헉.. 헉..) 여긴 어디지? \n처음 오는 곳인데...", "너무 멀리 와버렸어." });//mylast=2
         //1 양이랑 하는 대화
         textGroup.Add(1, new string[]//mylast=3
-        { "저기.. ", "길을 잃었어... 여긴 대체 어디야?\n우리 집은 노란 지붕이 있는 곳인데..","그렇구나.. 정말 고마워!\n안녕!"});
+        { "저기.. ", "길을 잃었어... 여긴 대체 어디야?\n한 눈 팔다가... 여기까지 오게됐어","그렇구나.. 정말 고마워!\n안녕!"});
         //2 두더지랑 대화
         textGroup.Add(2, new string[]
         {
@@ -393,6 +424,8 @@ public class gameManager3 : MonoBehaviour
 
                     yourIndex = 0; myIndex = 0;
                     yourLastIndex = 0; myLastIndex = 0;
+                   
+
 
                     break;
                 }
@@ -431,6 +464,8 @@ public class gameManager3 : MonoBehaviour
                 Debug.Log("대화 긑나서 창 종료");
                 yourIndex = 0; myIndex = 0;
                 yourLastIndex = 0; myLastIndex = 0;
+                if (value == 1)//양이랑 대화가 끝나면
+                    check = 1;
                 break;
             }
             // if (Input.GetKeyDown(KeyCode.X))
@@ -519,7 +554,6 @@ public class gameManager3 : MonoBehaviour
             isCarRotate = false; isCarRotateBack = false;
             arrow_blackCar.SetActive(true);
 
-            check = 1;
 
             yield return null;
         }
@@ -551,7 +585,7 @@ public class gameManager3 : MonoBehaviour
             nameText.text = GetName(3, 1);
             changeNameIcon(7);
 
-            talkText.text = "야! 너! 이리와 봐!";
+            talkText.text = "야~ 너! 이리와 봐~";
         }
         else if (4f < time && time < 6f)
         {
@@ -561,7 +595,7 @@ public class gameManager3 : MonoBehaviour
         }
         else if (6f < time && time < 9f)
         {
-            talkText.text = "그래 너 ~ \n아파트 옆 쓰레기통으로 와봐!";
+            talkText.text = "그래 너 ~ \n아파트 옆 쓰레기통으로 와 봐!";
             nameText.text = GetName(3, 1);
             changeNameIcon(7);
         }
@@ -613,6 +647,46 @@ public class gameManager3 : MonoBehaviour
             DontDestroyOnLoad(judge);
             while (!async.isDone)
                 yield return null;
+        }
+    }
+
+    IEnumerator doorText() //문에 이렇게 쓰여잇네,,! 말하는 함수
+    {
+        value = 0;
+        isTimerOn = true;
+        Debug.Log(time);
+        if (2f < time && time < 4f)
+        {
+            talkPanel.SetActive(true);
+            panelActive = true;
+            nameText.text = GetName(0,0);
+            changeNameIcon(0);
+
+            talkText.text = "문에 빛바랜 쪽지가 있네?";
+        }
+        else if(4f<time && time < 7f)
+        {
+            talkText.text = "이 문..은 고장..났습니다... \n뭐?????";
+
+        }
+        else if (7f < time && time < 10f)
+        {
+            talkText.text = "하지..만 강에 사는 요리? 아 오리..\n오리를 만나..부탁하면 고칠 수 있습니다!!";
+
+        }
+        else if (10f < time && time < 13f)
+        {
+            talkText.text = "아!! 정말 다행이다!! \n강에 산다는 오리를 찾으러 가야겠어!";
+
+        }
+        else if (13f < time)
+        {
+            talkPanel.SetActive(false);
+            panelActive = false;
+            talkText.text = "";
+            isTimerOn = false; time = 0.0f;
+            check = -3;
+            yield return null;
         }
     }
 }
