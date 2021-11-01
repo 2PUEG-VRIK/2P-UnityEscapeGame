@@ -30,11 +30,12 @@ public class Teleport : MonoBehaviour
                 position.y += target.transform.lossyScale.y / 2.0f;
                 other.transform.position = position;
             }
+
             if (TargetType == TargetTypes.Things && other.gameObject.tag == "Boxsj")
             {
                 StartCooldown();
                 Vector3 next_pos = target.transform.position;
-                next_pos.y += other.gameObject.transform.position.y;
+                next_pos.y = other.gameObject.transform.position.y; 
                 other.transform.position = next_pos;
             }
         }
@@ -53,6 +54,6 @@ public class Teleport : MonoBehaviour
     {
         yield return new WaitForSeconds(1.0f);
         target.GetComponent<Teleport>().cooldown = false;
-        StopCoroutine("toggleCooldown");
+        StopCoroutine("EndCooldown");
     }
 }
