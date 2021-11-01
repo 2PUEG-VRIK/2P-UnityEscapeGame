@@ -161,10 +161,16 @@ public class gameManager3 : MonoBehaviour
                 break;
 
             case 2://꽃이랑 대화 하고 아파트로 가서 specialPlane밟는것까지
-                StartCoroutine(HouseTalk());
+                if (touchThings.name == "specialPlane")
+                    StartCoroutine(HouseTalk());
+                    
                 break;
-            case -2://꽃이랑 대화 하고 아파트로 가서 specialPlane밟는것까지
+
+
+            case -2:
                 StopCoroutine(HouseTalk());
+                StartCoroutine(CallOtherMap(2));
+
                 break;
         } 
     }
@@ -190,7 +196,6 @@ public class gameManager3 : MonoBehaviour
 
                 case "specialPlane":
                     check = 2;
-                    Debug.Log(check);
                     break;
             }
             
@@ -567,7 +572,6 @@ public class gameManager3 : MonoBehaviour
 
     IEnumerator HouseTalk()//아파트에서 혼잣말하는거
     {
-        Debug.Log("하톡이 시작");
         value = 0;
         talkPanel.SetActive(true);
         panelActive = true;
@@ -581,20 +585,22 @@ public class gameManager3 : MonoBehaviour
             talkPanel.SetActive(false);
             panelActive = false;
             talkText.text = "";
-            //check = -2;
             isTimerOn = false; time = 0.0f;
             check = -2;
-            CallOtherMap(2);
+            yield return null;
         }
-
-        yield return null;
+        //}
     }
 
-    void CallOtherMap(int c)
+    IEnumerator CallOtherMap(int c)
     {
 
         audioListener.enabled = false;
-        if(c==2)
-            SceneManager.LoadScene("monsterMap", LoadSceneMode.Additive);
+        if (c == 2)
+        {
+            AsyncOperation async = SceneManager.LoadSceneAsync("monsterMap");
+            while (!async.isDone)
+                yield return null;
+        }
     }
 }
