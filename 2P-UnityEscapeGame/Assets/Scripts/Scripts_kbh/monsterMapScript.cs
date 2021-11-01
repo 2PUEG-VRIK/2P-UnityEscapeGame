@@ -6,22 +6,6 @@ using UnityEngine.UI;
 
 public class monsterMapScript : MonoBehaviour
 {
-    //1층- 큐브들관련
-    //public GameObject[] Cubes;
-    //private bool isHold = false;//상자 들고있나여~
-    //Rigidbody rigid;
-    //theCubes cube;
-    //GameObject grabCube;//손에 들고잇는 큐브
-    //int cubeValue;//손에 들고있는 큐브 값
-    //Ray ray;
-    //RaycastHit hit;
-    //Renderer cubeColor;
-    //int cubeNum = 18;//큐브 개수
-    //bool goDown;//느낌표 크기 관련 변수
-    //GameObject tele;
-    //GameObject remark;//느낌표
-
-
     //2층
     GameObject _obj;
     GameObject holdPosition;

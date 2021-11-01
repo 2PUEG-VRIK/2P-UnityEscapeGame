@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+
 //0 나 혼자
 //1 양
 //2 두더지
@@ -66,7 +67,8 @@ public class gameManager3 : MonoBehaviour
 
     //맵 간 이동
     AudioListener audioListener;//이동할 때 이전 맵의 오디오 리스너 끄기
-
+    dataSaveScript data;
+    public Queue que = new Queue();
 
     private void Start()
     {
@@ -74,7 +76,7 @@ public class gameManager3 : MonoBehaviour
         value = 0; myLastIndex = -1;
         first = true;//내가 먼저 말 시작하면서 게임 시작해야하니까
         firstTouch = false;//아직 동물이랑 안 닿은 상태니까
-        isCarRotate = false; isCarRotateBack = false;
+        isCarRotate = false;    isCarRotateBack = false;
         textGroup = new Dictionary<int, string[]>();
         nameTextGroup = new Dictionary<int, string[]>();
         molePopUp = false;
@@ -83,10 +85,10 @@ public class gameManager3 : MonoBehaviour
         remark_mole = GameObject.Find("npcArrow").transform.GetChild(2).gameObject;
         mole = GameObject.Find("mole");
         audioListener = GameObject.Find("PlayerCam").GetComponent<AudioListener>();
+        data = GameObject.Find("saveManager").GetComponent<dataSaveScript>();
         //sprite = gameObject.GetComponent<SpriteRenderer>().sprite;
         isTimerOn = false;
         isTouch = false;
-
         check = 0;
         time = 0f;
 
@@ -163,7 +165,6 @@ public class gameManager3 : MonoBehaviour
             case 2://꽃이랑 대화 하고 아파트로 가서 specialPlane밟는것까지
                 if (touchThings.name == "specialPlane")
                     StartCoroutine(HouseTalk());
-                    
                 break;
 
 
@@ -174,8 +175,6 @@ public class gameManager3 : MonoBehaviour
                 break;
         } 
     }
-
-    
 
     private void OnTriggerEnter(Collider other) //못움직이게 해야혀
     {//닿았을 대 정보 저장
@@ -195,6 +194,7 @@ public class gameManager3 : MonoBehaviour
                     break;
 
                 case "specialPlane":
+                    saveQueue();
                     check = 2;
                     break;
             }
@@ -221,41 +221,6 @@ public class gameManager3 : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-      
-    }
-
-    //public void Action(GameObject scanObj)
-    //{
-    //    //  playerText();
-    //    if (isAction)
-    //        isAction = false;
-
-    //    else //Action==false
-    //    {
-    //        //scanObject = scanObj;
-    //        //objectData objData = scanObject.GetComponent<objectData>();
-    //        isAction = true;
-
-    //        //Talk(objData.id, objData.isNpc);
-    //        //talkPanel.SetActive(true);
-    //        //panelActive = true;
-    //        //value = objData.id;
-    //        //myLastIndex = textGroup[objData.id].Length;//내 대화 길이 체크하고
-    //       // firstTouch = false;
-
-    //        //if (myIndex <= myLastIndex)//내 대화가 끝나기 전까지만 애랑 대화 주고받기
-    //        //{
-    //        //    if (isMyTurn)
-    //        //        popMyText(value);
-    //        //    else
-    //        //        popNPCText(value);
-    //        //}
-    //    }
-    //}
-
-
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Things")
@@ -281,6 +246,16 @@ public class gameManager3 : MonoBehaviour
 
     }
 
+    private void saveQueue()//큐에 맵 정보들 넣어 그 후에 메모장에 쓰는 코드로 넘길거임
+    {
+        que.Enqueue(this.transform.position.x);//vector3값
+        que.Enqueue(this.transform.position.y);//vector3값
+        que.Enqueue(this.transform.position.z);//vector3값
+
+        que.Enqueue(check);//check값
+        que.Enqueue(value);//value값
+       
+    }
     void Talk(int id, bool isNpc)
     {
         talkManager.GetTalk(id, talkIndex);
@@ -443,34 +418,18 @@ public class gameManager3 : MonoBehaviour
 
         }
     }
+
+    
+
     private float carRot = 0f;
     private float carPos = 0f;
     IEnumerator carRotateFunc(GameObject car)
     {
-        //car.transform.position = new Vector3(car.transform.position.x, 
-        //    car.transform.position.y + 0.3f, car.transform.position.z);
-        //while (true)
-        //{
-        //    carPos += 0.07f * Time.deltaTime;
-        //    car.transform.position = new Vector3(car.transform.position.x, car.transform.position.y + carPos,
-        //        car.transform.position.z);
-        //    if (carPos > 2)
-        //        break;
-        //}
-
         car.transform.position = new Vector3(preCar.x, preCar.y + 2f, preCar.z);
 
         arrow_blackCar.SetActive(false);
         car.transform.rotation = Quaternion.Slerp(
                car.transform.localRotation, Quaternion.Euler(new Vector3(0, 180, 65f)), Time.time * 0.03f);
-
-        //while (true)
-        //{ 
-        //    carRot += 0.001f * Time.deltaTime;
-        //    car.transform.rotation = Quaternion.Euler(0, 180, carRot);
-        //    if (carRot >= 75f)
-        //        break;
-        //}
         if (car.transform.rotation == Quaternion.Euler(0, 180, 65))
         {
             mole.GetComponent<BoxCollider>().enabled = true;
@@ -592,12 +551,13 @@ public class gameManager3 : MonoBehaviour
         //}
     }
 
+    public bool saveData = false;
     IEnumerator CallOtherMap(int c)
     {
-
         audioListener.enabled = false;
         if (c == 2)
         {
+            saveData = true;
             AsyncOperation async = SceneManager.LoadSceneAsync("monsterMap");
             while (!async.isDone)
                 yield return null;
