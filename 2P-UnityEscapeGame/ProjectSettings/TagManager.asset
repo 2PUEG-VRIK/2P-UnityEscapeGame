@@ -26,6 +26,7 @@ TagManager:
   - Swing
   - NPC
   - Door
+  - dont
   layers:
   - Default
   - TransparentFX

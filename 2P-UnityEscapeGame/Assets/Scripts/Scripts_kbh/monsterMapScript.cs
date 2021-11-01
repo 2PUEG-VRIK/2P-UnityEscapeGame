@@ -26,8 +26,11 @@ public class monsterMapScript : MonoBehaviour
     private bool _mouseState;//마우스 상태
     GameObject exit;
     private bool goApartment;
-    public Queue q = new Queue();
-    string fullpth = "Assets/Resources/kbh";
+    //saveManagerScript manager;
+    judginScript judge;
+    //public Queue q = new Queue();
+
+    //string fullpth = "Assets/Resources/kbh";
 
 
     private void Start()
@@ -41,14 +44,8 @@ public class monsterMapScript : MonoBehaviour
         exit = GameObject.Find("2nd").transform.GetChild(5).gameObject;
         goApartment = false;
         holdPosition = GameObject.Find("holdingCoin");
-        //ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //rigid = GameObject.FindWithTag("Player").GetComponent<Rigidbody>();
-        //input = GameObject.Find("Canvas_2").transform.GetChild(1).gameObject;
-        //rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
-        //grabCube = GameObject.Find("holdingCube").transform.GetChild(0).gameObject;
-        // tele = GameObject.Find("final").transform.GetChild(0).gameObject;
-
-        //remark = GameObject.Find("final").transform.GetChild(1).gameObject;
+        judge = GameObject.Find("judging").GetComponent<judginScript>();
+        ///anager = GameObject.Find("saveManager").GetComponent<saveManagerScript>();
 
     }
 
@@ -141,11 +138,10 @@ public class monsterMapScript : MonoBehaviour
     {
         if (other.name == "Exit")/////////////////exit에 닿으면~
         {
-            readText();
+            //manager.twice = true;
+            judge.yes = true;
             goApartment = true;
-            Debug.Log("Exit");
         }
-
         if (other.tag == "Things")
         {
             //2층
@@ -171,22 +167,23 @@ public class monsterMapScript : MonoBehaviour
             
         }
     }
-    void readText()//이전 맵 데이터 저장되어있는 txt의 정보 빼와서 다시 que에 넣기~ ㅎ
-    {
-        TextAsset data = Resources.Load("kbh/mapData", typeof(TextAsset)) as TextAsset;
-        StringReader sr = new StringReader(data.text);
+    //void readText()//이전 맵 데이터 저장되어있는 txt의 정보 빼와서 다시 que에 넣기~ ㅎ
+    //{
+    //    TextAsset data = Resources.Load("kbh/mapData", typeof(TextAsset)) as TextAsset;
+    //    StringReader sr = new StringReader(data.text);
 
-        //먼저 한 줄 읽기
-        string source = sr.ReadLine();
+    //    //먼저 한 줄 읽기
+    //    string source = sr.ReadLine();
 
-        while (source != null)
-        {
-            q.Enqueue(source.Split('\n')) ;
-            Debug.Log(q.Dequeue());
-        }
-    }
+    //    while (source != null)
+    //    {
+    //        q.Enqueue(source.Split('\n')) ;
+    //        Debug.Log(q.Dequeue());
+    //    }
+    
     IEnumerator goApartmentCo()
     {
+
             AsyncOperation async = SceneManager.LoadSceneAsync("md1_3");
             while (!async.isDone)
                 yield return null;
