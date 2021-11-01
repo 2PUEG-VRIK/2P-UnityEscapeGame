@@ -22,6 +22,11 @@ public class Water : MonoBehaviour
         {
             gameObject.GetComponent<BoxCollider>().enabled = true;
         }
+
+        if (other.tag == "Box")
+        {
+            gameObject.GetComponent<BoxCollider>().enabled = true;
+        }
     }
 
 }

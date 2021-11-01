@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class gr_Button : MonoBehaviour
 {
-    // ÃÊ·Ï¹öÆ° ´­·ÈÀ» ¶§
-    // (1) ÇÃ·¹ÀÌ¾î°¡ ¹Ú½º¸¦ ¹Ð´ø ¹æÇâÀ¸·Î ¹Ú½º ºü¸£°Ô ÀÌµ¿
-    // (2) ÇÃ·¹ÀÌ¾î°¡ ¿òÁ÷ÀÌ´ø ¹æÇâÀ¸·Î ÇÃ·¹ÀÌ¾î ºü¸£°Ô ÀÌµ¿
-    // °á·Ð : µÑ ´Ù ÇÃ·¹ÀÌ¾î°¡ ¿òÁ÷ÀÌ´ø ¹æÇâÀ¸·Î ÀÌµ¿½ÃÄÑÁÖ¸é µÊ
+    // ì´ˆë¡ë²„íŠ¼ ëˆŒë ¸ì„ ë•Œ
+    // (1) í”Œë ˆì´ì–´ê°€ ë°•ìŠ¤ë¥¼ ë°€ë˜ ë°©í–¥ìœ¼ë¡œ ë°•ìŠ¤ ë¹ ë¥´ê²Œ ì´ë™
+    // (2) í”Œë ˆì´ì–´ê°€ ì›€ì§ì´ë˜ ë°©í–¥ìœ¼ë¡œ í”Œë ˆì´ì–´ ë¹ ë¥´ê²Œ ì´ë™
+    // ê²°ë¡  : ë‘˜ ë‹¤ í”Œë ˆì´ì–´ê°€ ì›€ì§ì´ë˜ ë°©í–¥ìœ¼ë¡œ ì´ë™ì‹œì¼œì£¼ë©´ ë¨
 
-    public Transform gr_buttonPos;     // ÇÃ·¹ÀÌ¾î°¡ ¿òÁ÷ÀÌ´ø ¹æÇâ °¡Á®¿À±â À§ÇÑ empty. ÇÃ·¹ÀÌ¾î¾È¿¡ ÀÖÀ¸´Ï ´Ù¸¥ ¶§¿¡ ÇÊ¿äÇÏ¸é ÀÌ°Å ³Ö¾î¼­ ¾²¸é µÊ.
+    public Transform gr_buttonPos;     // í”Œë ˆì´ì–´ê°€ ì›€ì§ì´ë˜ ë°©í–¥ ê°€ì ¸ì˜¤ê¸° ìœ„í•œ empty. í”Œë ˆì´ì–´ì•ˆì— ìžˆìœ¼ë‹ˆ ë‹¤ë¥¸ ë•Œì— í•„ìš”í•˜ë©´ ì´ê±° ë„£ì–´ì„œ ì“°ë©´ ë¨.
     Material mat;
 
-    private bool isPushed;
+
+    public bool isPushed;
 
     void Start()
     {

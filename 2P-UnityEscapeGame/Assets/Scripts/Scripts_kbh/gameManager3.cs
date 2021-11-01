@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 //0 나 혼자
 //1 양
@@ -12,7 +14,10 @@ using UnityEngine.UI;
 1- 차 회전 원상복구 끝나고 꽃이 말 걸 때 필요해서
 -1- 꽃이 말 거는거 끝나면 
 
-2 꽃 말 듣고 아파트로 가서 specialPlane 밟아
+2 (꽃 말 듣고) 아파트로 가서 specialPlane 밟아->monsterMap으로 이동까지.
+-2 houseTalk코루틴 중단시키는 조건
+
+
 
 */
 public class gameManager3 : MonoBehaviour
@@ -54,12 +59,20 @@ public class gameManager3 : MonoBehaviour
 
     private float time;//꽃 관련 시간 on
     private bool isTimerOn;
-    private int check;//여러곳에 쓰일 변수
+    public int check;//여러곳에 쓰일 변수
 
     public Sprite[] images;
     private GameObject touchThings;//닿은 물체
     private bool isTouch;//콜라이더 닿았을 때 true놓는 변수
 
+    //맵 간 이동
+    AudioListener audioListener;//이동할 때 이전 맵의 오디오 리스너 끄기
+    saveManagerScript data;
+    //public static List<int> l1 = new List<int>();//몬스텁 가기 전 맵의 모든 정보
+    //static List<int> l2= new List<int>();
+    public bool alreadyCame = false;//맵 한번 갔다온거임~
+    //GameObject saveM;
+    GameObject judge;//씬 이동 했는지 판별
 
     private void Start()
     {
@@ -67,7 +80,7 @@ public class gameManager3 : MonoBehaviour
         value = 0; myLastIndex = -1;
         first = true;//내가 먼저 말 시작하면서 게임 시작해야하니까
         firstTouch = false;//아직 동물이랑 안 닿은 상태니까
-        isCarRotate = false; isCarRotateBack = false;
+        isCarRotate = false;    isCarRotateBack = false;
         textGroup = new Dictionary<int, string[]>();
         nameTextGroup = new Dictionary<int, string[]>();
         molePopUp = false;
@@ -75,10 +88,13 @@ public class gameManager3 : MonoBehaviour
         arrow_blackCar = GameObject.Find("npcArrow").transform.GetChild(1).gameObject;
         remark_mole = GameObject.Find("npcArrow").transform.GetChild(2).gameObject;
         mole = GameObject.Find("mole");
-        //sprite = gameObject.GetComponent<SpriteRenderer>().sprite;
+        audioListener = GameObject.Find("PlayerCam").GetComponent<AudioListener>();
+        judge = GameObject.Find("judging");
+        //saveM = GameObject.Find("saveManager");
+        //data = saveM.GetComponent<saveManagerScript>();
         isTimerOn = false;
         isTouch = false;
-
+        alreadyCame = false;
         check = 0;
         time = 0f;
 
@@ -87,6 +103,12 @@ public class gameManager3 : MonoBehaviour
         checkLength();
     }
 
+    private void Awake()
+    {
+        //var obj = GameObject.FindGameObjectsWithTag("dont") ;
+        //if (obj.Length != 1)
+        //    Destroy(gameObject);
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.X) && isMyTurn)
@@ -151,10 +173,20 @@ public class gameManager3 : MonoBehaviour
             case -1:
                 StopCoroutine(FlowerSay());
                 break;
+
+            case 2://꽃이랑 대화 하고 아파트로 가서 specialPlane밟는것까지
+                if (touchThings.name == "specialPlane")
+                    StartCoroutine(HouseTalk());
+                break;
+
+
+            case -2:
+                StopCoroutine(HouseTalk());
+                StartCoroutine(CallOtherMap(2));
+
+                break;
         } 
     }
-
-    
 
     private void OnTriggerEnter(Collider other) //못움직이게 해야혀
     {//닿았을 대 정보 저장
@@ -174,6 +206,8 @@ public class gameManager3 : MonoBehaviour
                     break;
 
                 case "specialPlane":
+
+                    saveQueue();
                     check = 2;
                     break;
             }
@@ -200,41 +234,6 @@ public class gameManager3 : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-       
-    }
-
-    //public void Action(GameObject scanObj)
-    //{
-    //    //  playerText();
-    //    if (isAction)
-    //        isAction = false;
-
-    //    else //Action==false
-    //    {
-    //        //scanObject = scanObj;
-    //        //objectData objData = scanObject.GetComponent<objectData>();
-    //        isAction = true;
-
-    //        //Talk(objData.id, objData.isNpc);
-    //        //talkPanel.SetActive(true);
-    //        //panelActive = true;
-    //        //value = objData.id;
-    //        //myLastIndex = textGroup[objData.id].Length;//내 대화 길이 체크하고
-    //       // firstTouch = false;
-
-    //        //if (myIndex <= myLastIndex)//내 대화가 끝나기 전까지만 애랑 대화 주고받기
-    //        //{
-    //        //    if (isMyTurn)
-    //        //        popMyText(value);
-    //        //    else
-    //        //        popNPCText(value);
-    //        //}
-    //    }
-    //}
-
-
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Things")
@@ -260,6 +259,18 @@ public class gameManager3 : MonoBehaviour
 
     }
 
+    private void saveQueue()//
+    {
+
+        judge.GetComponent<judginScript>().q1.Enqueue(this.transform.position);
+        judge.GetComponent<judginScript>().q1.Enqueue(check);
+        judge.GetComponent<judginScript>().q1.Enqueue(value);
+        //l1.Add((int)this.transform.position.x);
+        //l1.Add((int)this.transform.position.y);
+        //l1.Add((int)this.transform.position.z);
+        //l1.Add(check);
+        //l1.Add(value);
+    }
     void Talk(int id, bool isNpc)
     {
         talkManager.GetTalk(id, talkIndex);
@@ -422,34 +433,18 @@ public class gameManager3 : MonoBehaviour
 
         }
     }
+
+    
+
     private float carRot = 0f;
     private float carPos = 0f;
     IEnumerator carRotateFunc(GameObject car)
     {
-        //car.transform.position = new Vector3(car.transform.position.x, 
-        //    car.transform.position.y + 0.3f, car.transform.position.z);
-        //while (true)
-        //{
-        //    carPos += 0.07f * Time.deltaTime;
-        //    car.transform.position = new Vector3(car.transform.position.x, car.transform.position.y + carPos,
-        //        car.transform.position.z);
-        //    if (carPos > 2)
-        //        break;
-        //}
-
         car.transform.position = new Vector3(preCar.x, preCar.y + 2f, preCar.z);
 
         arrow_blackCar.SetActive(false);
         car.transform.rotation = Quaternion.Slerp(
                car.transform.localRotation, Quaternion.Euler(new Vector3(0, 180, 65f)), Time.time * 0.03f);
-
-        //while (true)
-        //{ 
-        //    carRot += 0.001f * Time.deltaTime;
-        //    car.transform.rotation = Quaternion.Euler(0, 180, carRot);
-        //    if (carRot >= 75f)
-        //        break;
-        //}
         if (car.transform.rotation == Quaternion.Euler(0, 180, 65))
         {
             mole.GetComponent<BoxCollider>().enabled = true;
@@ -513,7 +508,7 @@ public class gameManager3 : MonoBehaviour
     {
         isTimerOn = true;
         value = 7;
-        if (2f < time && time < 5f)
+        if (2f < time && time < 4f)
         {
             talkPanel.SetActive(true);
             panelActive = true;
@@ -522,19 +517,19 @@ public class gameManager3 : MonoBehaviour
 
             talkText.text = "야! 너! 이리와 봐!";
         }
-        else if (5f < time && time < 7f)
+        else if (4f < time && time < 6f)
         {
             talkText.text = "어? 날 부르는건가?";
             nameText.text = GetName(0,0);
             changeNameIcon(0);
         }
-        else if (7f < time && time < 10f)
+        else if (6f < time && time < 9f)
         {
             talkText.text = "그래 너 ~ \n아파트 옆 쓰레기통으로 와봐!";
             nameText.text = GetName(3, 1);
             changeNameIcon(7);
         }
-        else if (time > 10f)
+        else if (time > 9f)
         {
             isTimerOn = false;
             check = -1;
@@ -542,10 +537,46 @@ public class gameManager3 : MonoBehaviour
             talkPanel.SetActive(false);
             panelActive = false;
             talkText.text = "";
+            time = 0.0f;
 
             yield return null;
         }
     }
     //mole=-11.87
 
+    IEnumerator HouseTalk()//아파트에서 혼잣말하는거
+    {
+        value = 0;
+        talkPanel.SetActive(true);
+        panelActive = true;
+        nameText.text = GetName(0,0);
+        changeNameIcon(0);
+
+        talkText.text = "어?,, 어지러워ㅜ" ;
+        isTimerOn = true;
+        if (time > 2f)
+        {
+            talkPanel.SetActive(false);
+            panelActive = false;
+            talkText.text = "";
+            isTimerOn = false; time = 0.0f;
+            check = -2;
+            yield return null;
+        }
+        //}
+    }
+
+    public bool saveData = false;
+    IEnumerator CallOtherMap(int c)
+    {
+        audioListener.enabled = false;
+        if (c == 2)
+        {
+            saveData = true;
+            AsyncOperation async = SceneManager.LoadSceneAsync("monsterMap");
+            DontDestroyOnLoad(judge);
+            while (!async.isDone)
+                yield return null;
+        }
+    }
 }
