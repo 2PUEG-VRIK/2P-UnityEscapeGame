@@ -558,7 +558,7 @@ public class gameManager3 : MonoBehaviour
 
         molePopUp = false;
         active_moleFunc = false;
-        mole.transform.localPosition = new Vector3(290, -0.2f, 24);
+        mole.transform.localPosition = new Vector3(223, -20, 182);
         remark_mole.SetActive(false);
         car.transform.rotation = Quaternion.Slerp(
                car.transform.localRotation, Quaternion.Euler(new Vector3(0, 180, 0)), Time.time * 0.01f);
