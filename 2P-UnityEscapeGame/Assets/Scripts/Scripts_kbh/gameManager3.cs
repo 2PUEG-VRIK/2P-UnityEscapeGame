@@ -85,6 +85,13 @@ public class gameManager3 : MonoBehaviour
         generatePlayerText();
         generateNameText();
         checkLength();
+
+        if (GameObject.Find("judging").GetComponent<judginScript>().yes)
+        {
+            Debug.Log("judging");
+            GameObject.Find("specialPlane").SetActive(false);
+        }
+
     }
 
     private void Update()
@@ -174,6 +181,10 @@ public class gameManager3 : MonoBehaviour
                     break;
 
                 case "specialPlane":
+<<<<<<< Updated upstream
+=======
+                    saveQueue();
+>>>>>>> Stashed changes
                     check = 2;
                     break;
             }

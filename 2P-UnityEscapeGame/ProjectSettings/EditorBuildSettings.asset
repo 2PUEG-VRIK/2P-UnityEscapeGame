@@ -60,6 +60,20 @@ EditorBuildSettings:
     path: Assets/Scenes/Final/Stage3.unity
     guid: 09f8967f0f33ea340aa0ad2f98176e9b
   - enabled: 1
+<<<<<<< Updated upstream
     path: Assets/Scenes/Final/Finish Scene.unity
     guid: 06fe697448261364fbdfb8ea4d516fae
+=======
+    path: Assets/Scenes/Mode1/md1_kbh/md1_3.unity
+    guid: 9bc72cf5f904030448ab1c0ff581c4ee
+  - enabled: 1
+    path: Assets/Scenes/Final/Stage2.unity
+    guid: 2a1c2e410e09ba94cab0776b788d487d
+  - enabled: 1
+    path: Assets/Scenes/Final/Stage3.unity
+    guid: 7a155d8a6cef428479da13996b90100a
+  - enabled: 1
+    path: Assets/Scenes/Final/Stage4.unity
+    guid: 569ee9cc56bee6546bc98571f94c62a7
+>>>>>>> Stashed changes
   m_configObjects: {}

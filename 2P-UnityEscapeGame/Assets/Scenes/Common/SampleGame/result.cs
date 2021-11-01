@@ -32,7 +32,6 @@ public class result : MonoBehaviour
     public void Pause()
     {
         SingleGameMNG.Instance.Pause();
-
     }
 
     //public void NowScene()

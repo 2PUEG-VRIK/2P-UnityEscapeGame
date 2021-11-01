@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3410227606657524969}
   - component: {fileID: 3418374849945121531}
   - component: {fileID: 3441202257914158085}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: Swing_Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 3418684818960522013}
   - component: {fileID: 622586744}
   - component: {fileID: 622586743}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 4469301735357876851}
   - component: {fileID: 7416333024050952820}
   - component: {fileID: 375701769886107779}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: Knob
   m_TagString: Untagged
   m_Icon: {fileID: 0}

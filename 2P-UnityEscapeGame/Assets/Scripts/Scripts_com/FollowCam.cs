@@ -9,8 +9,10 @@ public class FollowCam : MonoBehaviour
 
     void Update()
     {
+<<<<<<< Updated upstream
         transform.position = target.position+ offset;
+=======
+        transform.position = target.position + offset;
+>>>>>>> Stashed changes
     }
-
-
 }

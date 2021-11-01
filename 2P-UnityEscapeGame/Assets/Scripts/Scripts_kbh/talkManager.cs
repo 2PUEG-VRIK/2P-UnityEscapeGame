@@ -14,7 +14,7 @@ public class talkManager : MonoBehaviour
         talkData = new Dictionary<int, string[]>();
         
         GenerateData();
-        CheckLength(value);
+        //CheckLength(value);
     }
     private void Start()
     {
@@ -50,9 +50,9 @@ public class talkManager : MonoBehaviour
 
     public int CheckLength(int value)
     {
+
         value = GameObject.Find("Man").GetComponent<gameManager3>().value;
 
         return length = talkData[value].Length;
-
     }
 }

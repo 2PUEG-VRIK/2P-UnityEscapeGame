@@ -82,8 +82,8 @@ public class SimpleCollectibleScript : MonoBehaviour {
 			
 			//sample1에 있는 노란 열쇠. 먹으면 캐릭 머리위 활성화
 			GameObject player = GameObject.Find("Man").gameObject;
-			GameObject key = GameObject.Find("Man").transform.GetChild(3).gameObject;
-
+            GameObject key = GameObject.Find("Man").transform.GetChild(1).gameObject;
+ 
 			player.GetComponent<Man>().hasKey = true;
  			key.SetActive(true);
 		}
