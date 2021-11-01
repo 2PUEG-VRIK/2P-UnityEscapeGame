@@ -1,108 +1,34 @@
 {
   "project_info": {
-    "project_number": "588983011347",
-    "firebase_url": "https://escape-game-3382c-default-rtdb.firebaseio.com",
-    "project_id": "escape-game-3382c",
-    "storage_bucket": "escape-game-3382c.appspot.com"
+    "project_number": "244871513123",
+    "firebase_url": "https://realtime-unity-default-rtdb.firebaseio.com/",
+    "project_id": "realtime-unity",
+    "storage_bucket": "realtime-unity.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:588983011347:android:59aeb73531c041608f17e6",
-        "android_client_info": {
-          "package_name": "com.vrik.EscapeGame"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "588983011347-istr9dk58jcjkbsghogkisn76s6u33sd.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.vrik.EscapeGame",
-            "certificate_hash": "a0c693c274b1d9087edcccf595d62c85da15277a"
-          }
-        },
-        {
-          "client_id": "588983011347-afamu8cc1jgh1l4jgqi7ik8g61tinnes.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDJbxdLwR-5-ORC6Flliwmkjv_Uwax7YBY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "588983011347-afamu8cc1jgh1l4jgqi7ik8g61tinnes.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:588983011347:android:3253587013606bc38f17e6",
-        "android_client_info": {
-          "package_name": "com.vrik.Escape_Game"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "588983011347-0vq4h1tusic2geqs9d4q47maln7rjju5.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.vrik.Escape_Game",
-            "certificate_hash": "a0c693c274b1d9087edcccf595d62c85da15277a"
-          }
-        },
-        {
-          "client_id": "588983011347-afamu8cc1jgh1l4jgqi7ik8g61tinnes.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDJbxdLwR-5-ORC6Flliwmkjv_Uwax7YBY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "588983011347-afamu8cc1jgh1l4jgqi7ik8g61tinnes.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:588983011347:android:f4dc0be842f4acad8f17e6",
+        "mobilesdk_app_id": "1:244871513123:android:d24cf8a913329d441cdd96",
         "android_client_info": {
           "package_name": "com.vrik.unity_escape_game"
         }
       },
       "oauth_client": [
         {
-          "client_id": "588983011347-afamu8cc1jgh1l4jgqi7ik8g61tinnes.apps.googleusercontent.com",
+          "client_id": "244871513123-v286p3761p9if59qs5pgcsg8aqtf6tt1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDJbxdLwR-5-ORC6Flliwmkjv_Uwax7YBY"
+          "current_key": "AIzaSyAcsn2XLmOhuIcdJTNZJqerEVWUvybXnnQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "588983011347-afamu8cc1jgh1l4jgqi7ik8g61tinnes.apps.googleusercontent.com",
+              "client_id": "244871513123-v286p3761p9if59qs5pgcsg8aqtf6tt1.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
