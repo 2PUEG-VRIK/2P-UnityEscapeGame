@@ -353,7 +353,7 @@ public class gameManager3 : MonoBehaviour
         //2 두더지랑 대화
         textGroup.Add(2, new string[]
         {
-            "앗! 놀라라! ","저기...","..."
+            "앗! 놀라라! ","하하, 미안", "어, 응! 어떻게 알았어?", "뭐? 가로등에? 장난이지?","으응...ㅠ"
         });
         //3 아파트 옆 못난이 꽃
         textGroup.Add(3, new string[]
