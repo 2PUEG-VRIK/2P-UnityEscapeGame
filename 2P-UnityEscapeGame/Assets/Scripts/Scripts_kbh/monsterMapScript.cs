@@ -45,14 +45,13 @@ public class monsterMapScript : MonoBehaviour
         goApartment = false;
         holdPosition = GameObject.Find("holdingCoin");
         judge = GameObject.Find("judging").GetComponent<judginScript>();
-        ///anager = GameObject.Find("saveManager").GetComponent<saveManagerScript>();
 
+        for(int i = 0; i < 5; i++)
+        {
+            Debug.Log(judge.arr1[i]);
+        }
     }
 
-    private void Awake()
-    {
-
-    }
     private void Update()
     {
         //2층
@@ -164,7 +163,7 @@ public class monsterMapScript : MonoBehaviour
                 open = 1;
             }
 
-            
+
         }
     }
     //void readText()//이전 맵 데이터 저장되어있는 txt의 정보 빼와서 다시 que에 넣기~ ㅎ
@@ -180,16 +179,15 @@ public class monsterMapScript : MonoBehaviour
     //        q.Enqueue(source.Split('\n')) ;
     //        Debug.Log(q.Dequeue());
     //    }
-    
+
     IEnumerator goApartmentCo()
     {
 
-            AsyncOperation async = SceneManager.LoadSceneAsync("md1_3");
-            while (!async.isDone)
-                yield return null;
+        AsyncOperation async = SceneManager.LoadSceneAsync("md1_3");
+        while (!async.isDone)
+            yield return null;
     }
 }
 
-    
 
 
