@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class monsterMapScript : MonoBehaviour
@@ -39,6 +40,7 @@ public class monsterMapScript : MonoBehaviour
     private GameObject target;//마우스가 클릭한 객체
     private bool _mouseState;//마우스 상태
     GameObject exit;
+    private bool goApartment;
 
     private void Start()
     {
@@ -57,7 +59,7 @@ public class monsterMapScript : MonoBehaviour
         //remark = GameObject.Find("final").transform.GetChild(1).gameObject;
         holdPosition = GameObject.Find("holdingCoin");
         exit = GameObject.Find("2nd").transform.GetChild(5).gameObject;
-
+        goApartment = false;
 
     }
 
@@ -67,25 +69,6 @@ public class monsterMapScript : MonoBehaviour
     }
     private void Update()
     {
-        //if (isHold && check == 1)
-        //    StartCoroutine("goBack");
-
-        //if (cubeNum ==0 )
-        //{
-        //    tele.SetActive(true);
-        //    remark.SetActive(true); //느낌표 꺼내
-
-        //    if (goDown)
-        //    {
-        //        StartCoroutine(remarkSmaller(remark));
-        //    }
-
-        //    else if (!goDown)
-        //    {
-        //        StartCoroutine(remarkBigger(remark));
-        //    }
-        //}
-
         //2층
         if (Input.GetKeyDown(KeyCode.Return))//엔터누르면 
         {
@@ -123,6 +106,9 @@ public class monsterMapScript : MonoBehaviour
                 Door.transform.parent.GetComponent<BoxCollider>().enabled = false;
             }
         }
+
+        if (goApartment)
+            StartCoroutine(goApartmentCo());
     }
 
     private void mumchwo()//update에서 isBack=false하면 뒤로 가기도 전에 멈춰버려서~ 안됨
@@ -164,41 +150,13 @@ public class monsterMapScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.name == "Exit")
+        {
+            goApartment = true;
+            Debug.Log("Exit");
+        }
         if (other.tag == "Things")
         {
-            //if (other.transform.name == "Cube")
-            //{
-            //    cube = other.transform.gameObject.GetComponent<theCubes>();
-            //    if (!isHold)//들고있지않은 상태에서 애를 만났따!
-            //    {
-            //        grabCube.transform.gameObject.SetActive(true);//들고있게 하고
-            //        grabCube.GetComponent<Renderer>().material.color = cube.GetComponent<Renderer>().material.color;
-            //        cube.gameObject.SetActive(false);//닿은 애 없애고
-            //        cubeValue = cube.value;//변수에 밸류값 넣어
-            //        isHold = true;
-            //    }
-
-            //    else // 든 상태에서 상자를 터치해따!
-            //    {
-            //        if (cubeValue == cube.value)//들고있는애랑 닿은 애랑 값이 같다면
-            //        {
-            //            cube.transform.gameObject.SetActive(false);//닿은 애 없애고,, ㅜ 존나하기싫다 쉽발
-            //            grabCube.transform.gameObject.SetActive(false);//들고있는애 없애고
-            //            cubeValue = -1;
-            //            isHold = false;
-            //            cubeNum -= 2;
-            //        }
-            //        else //값이 다르다~~~ 다른 애를 찍엇다!
-            //        {
-            //            cube.GetComponent<Renderer>().material.color = Color.red;
-            //            check = 1;
-            //            //한 0.5초 뒤에 색 원상복구
-            //            StartCoroutine(restoreColor(cube));
-
-            //        }
-            //    }
-            //}
-
             //2층
             if (other.name == "teleB")
             {
@@ -206,8 +164,7 @@ public class monsterMapScript : MonoBehaviour
 
                 scrLight.transform.rotation = Quaternion.Euler(-90, 0, 0);//빛 off
                 _obj = GameObject.Find("Canvas_2").transform.GetChild(0).gameObject;//text임
-                _obj.SetActive(true);//what we need 켜
-
+                _obj.SetActive(true);//what we eneed켜
                 input.SetActive(true);//입력받는 창 켜
 
                 check = 2;
@@ -219,52 +176,63 @@ public class monsterMapScript : MonoBehaviour
                 isBack = true;//뒤로 튕길 준비 완.
                 open = 1;
             }
+
+            
         }
     }
+
+    IEnumerator goApartmentCo()
+    {
+            AsyncOperation async = SceneManager.LoadSceneAsync("md1_3");
+            while (!async.isDone)
+                yield return null;
+    }
+}
 
     //IEnumerator goBack()//1층에서 상자랑 닿으면 뒤로 튕기는거
     //{
     //    ///rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
     //    this.transform.Translate(new Vector3(0, 0, -30) * Time.deltaTime);
 
-    //    check = -1;
-    //    isHold = true;
+//    check = -1;
+//    isHold = true;
 
-    //    yield return null;
+//    yield return null;
 
-    //}
-    //IEnumerator restoreColor(theCubes cube)
-    //{
+//}
+//IEnumerator restoreColor(theCubes cube)
+//{
 
-    //    yield return new WaitForSeconds(0.5f);
+//    yield return new WaitForSeconds(0.5f);
 
-    //    switch (cube.value)
-    //    {
-    //        case 1: // 분홍
-    //            cube.GetComponent<Renderer>().material.color = new Color(255f / 255f, 181f / 255f, 242f / 255f, 255f / 255f);
-    //            break;
-    //        case 2: //노란색
-    //            cube.GetComponent<Renderer>().material.color = new Color(253f / 255f, 235f / 255f, 103f / 255f, 255f / 255f);
-    //            break;
-    //        case 3://하늘
-    //            cube.GetComponent<Renderer>().material.color = new Color(110f / 255f, 241f / 255f, 255f/ 255f, 255f / 255f);
-    //            break;  
-    //    }
-    //}
+//    switch (cube.value)
+//    {
+//        case 1: // 분홍
+//            cube.GetComponent<Renderer>().material.color = new Color(255f / 255f, 181f / 255f, 242f / 255f, 255f / 255f);
+//            break;
+//        case 2: //노란색
+//            cube.GetComponent<Renderer>().material.color = new Color(253f / 255f, 235f / 255f, 103f / 255f, 255f / 255f);
+//            break;
+//        case 3://하늘
+//            cube.GetComponent<Renderer>().material.color = new Color(110f / 255f, 241f / 255f, 255f/ 255f, 255f / 255f);
+//            break;  
+//    }
+//}
 
-    //IEnumerator remarkBigger(GameObject r)
-    //{
-    //    r.transform.localScale += new Vector3(0.4f, 0.4f, 0.4f);
-    //    if (r.transform.localScale.x >= 30)
-    //        goDown = true;
-    //    yield return null;
-    //}
+//IEnumerator remarkBigger(GameObject r)
+//{
+//    r.transform.localScale += new Vector3(0.4f, 0.4f, 0.4f);
+//    if (r.transform.localScale.x >= 30)
+//        goDown = true;
+//    yield return null;
+//}
 
-    //IEnumerator remarkSmaller(GameObject r)
-    //{
-    //    r.transform.localScale -= new Vector3(0.4f, 0.4f, 0.4f);
-    //    if (r.transform.localScale.x <= 20)
-    //        goDown = false;
-    //    yield return null;
-    //}
-}
+//IEnumerator remarkSmaller(GameObject r)
+//{
+//    r.transform.localScale -= new Vector3(0.4f, 0.4f, 0.4f);
+//    if (r.transform.localScale.x <= 20)
+//        goDown = false;
+//    yield return null;
+//}
+
+
