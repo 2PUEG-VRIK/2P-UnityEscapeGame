@@ -22,12 +22,10 @@ TagManager:
   - Water
   - fButton
   - Boxsj
-
   - teleport
   - Swing
   - NPC
   - Door
-
   layers:
   - Default
   - TransparentFX
@@ -42,11 +40,8 @@ TagManager:
   - nonMini
   - camArea
   - Box
-
   - Teleport
-
   - Door
-
   - 
   - 
   - 
