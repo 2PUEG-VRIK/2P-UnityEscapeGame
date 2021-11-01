@@ -8,13 +8,18 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// npc 만나는 순서
 /// 양 -> 대화끝나면 꽃이 부름 -> 꽃한테 감 -> 속아서 아파트 감 -> monsterMap ->꽃한테 따지러 감
-/// -> 제대로 알려줘 그 곳으로 감 -> 문이 고장나 있음 ->
+/// -> 제대로 알려줘 그 곳으로 감 -> 문이 고장나 있음 -> 오리한테 가라는 쪽지 읽고 오리에게 감 -> 문을 고치려면 망치 필요
+
 /// </summary>
+/// 
+
 //value
 //0 나 혼자
 //1 양
 //2 두더지
 //3 꽃
+//4 오리
+
 
 /*check(초기값 0)
 1- 차 회전 원상복구 끝나고 꽃이 말 걸 때 필요해서
@@ -23,7 +28,8 @@ using UnityEngine.SceneManagement;
 2 (꽃 말 듣고) 아파트로 가서 specialPlane 밟아->monsterMap으로 이동까지.
 -2 houseTalk코루틴 중단시키는 조건. monsterMap에서 여기로 돌아오면 check=-2
 
-3 문앞에 있는 쪽지 발견! 오리 찾으러 가
+3 문앞에 있는 쪽지 발견! 
+-3 이제 오리 찾으러 가
 
 */
 public class gameManager3 : MonoBehaviour
@@ -125,7 +131,7 @@ public class gameManager3 : MonoBehaviour
             GameObject.Find("specialPlane").SetActive(false);
             nameText.text = GetName(0, 0);
             changeNameIcon(0);
-            talkText.text = "가서 따져야겠어";
+            talkText.text = "그 꽃이 날 속인건가? 가서 따져야겠어!";
             first = false;
             myIndex = (int)judgeSc.arr1[5];
             yourIndex = (int)judgeSc.arr1[6];
@@ -141,9 +147,7 @@ public class gameManager3 : MonoBehaviour
 
     private void Awake()
     {
-        //var obj = GameObject.FindGameObjectsWithTag("dont") ;
-        //if (obj.Length != 1)
-        //    Destroy(gameObject);
+
     }
     private void Update()
     {
@@ -257,6 +261,9 @@ public class gameManager3 : MonoBehaviour
 
         else if (other.tag == "NPC")
         {
+            if (value == 4 && check != -3)//문 지나지 않고 오리만남
+                return;
+
             touchThings = other.gameObject;
             talkPanel.SetActive(false);
             talkText.text = "";
@@ -354,6 +361,14 @@ public class gameManager3 : MonoBehaviour
             "네가 날 불렀니?", "길을 잃었거든", "와, 정말이니? 고마워!!!", "너무한거 아니야? 죽을 뻔 했잖아!",
             "..정말이지?","ㄳ(끝)"
         });
+
+        //4 오리
+        textGroup.Add(4, new string[]
+        {
+            "혹시 날개재주 좋은 오리 있니?", "아, 네가 밖으로 나가는 문을 고칠 수 있는 오리야?","와~ 정말? 잘됐다~ 그럼 혹시 " +
+            "지금 고쳐줄 수 있을까?\n집에 돌아가고싶은데 저 문이 고장났대..","망치? 나한텐 없는데...","나 너무 지쳤는데 미안하지만" +
+            "같이 가서 도와줄 순 없을까?","그렇구나.. 좋아! 힘내서 얼른 다녀올게! 알려줘서 고마워 오리야!"
+        });
     }
 
     private void generateNameText()
@@ -366,6 +381,8 @@ public class gameManager3 : MonoBehaviour
         nameTextGroup.Add(2, new string[] { "참견하는 두더지" });
         //3 아파트 옆 꽃
         nameTextGroup.Add(3, new string[] { "수상한 꽃", "???" });
+        //4 오리
+        nameTextGroup.Add(4, new string[] { "날개재주 좋은 오리" });
 
     }
 
@@ -497,6 +514,9 @@ public class gameManager3 : MonoBehaviour
                 break;
             case 3://꽃
                 nameIcon.GetComponent<Image>().sprite = images[3];
+                break;
+            case 4://오리
+                nameIcon.GetComponent<Image>().sprite = images[4];
                 break;
             case 7://익명 꽃
                 nameIcon.GetComponent<Image>().sprite = images[7];
@@ -654,7 +674,6 @@ public class gameManager3 : MonoBehaviour
     {
         value = 0;
         isTimerOn = true;
-        Debug.Log(time);
         if (2f < time && time < 4f)
         {
             talkPanel.SetActive(true);
@@ -671,7 +690,7 @@ public class gameManager3 : MonoBehaviour
         }
         else if (7f < time && time < 10f)
         {
-            talkText.text = "하지..만 강에 사는 요리? 아 오리..\n오리를 만나..부탁하면 고칠 수 있습니다!!";
+            talkText.text = "하지..만 강에 사는 오리..\n오리를 만나..부탁하면 고칠 수 있습니다!!";
 
         }
         else if (10f < time && time < 13f)
