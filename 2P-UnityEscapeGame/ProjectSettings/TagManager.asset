@@ -24,6 +24,7 @@ TagManager:
   - Boxsj
   - NPC
   - Door
+  - dont
   layers:
   - Default
   - TransparentFX

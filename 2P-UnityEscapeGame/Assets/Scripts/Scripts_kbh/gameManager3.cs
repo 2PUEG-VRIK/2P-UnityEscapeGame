@@ -59,7 +59,7 @@ public class gameManager3 : MonoBehaviour
 
     private float time;//꽃 관련 시간 on
     private bool isTimerOn;
-    private int check;//여러곳에 쓰일 변수
+    public int check;//여러곳에 쓰일 변수
 
     public Sprite[] images;
     private GameObject touchThings;//닿은 물체
@@ -67,8 +67,12 @@ public class gameManager3 : MonoBehaviour
 
     //맵 간 이동
     AudioListener audioListener;//이동할 때 이전 맵의 오디오 리스너 끄기
-    dataSaveScript data;
-    public Queue que = new Queue();
+    saveManagerScript data;
+    //public static List<int> l1 = new List<int>();//몬스텁 가기 전 맵의 모든 정보
+    //static List<int> l2= new List<int>();
+    public bool alreadyCame = false;//맵 한번 갔다온거임~
+    //GameObject saveM;
+    GameObject judge;//씬 이동 했는지 판별
 
     private void Start()
     {
@@ -85,10 +89,12 @@ public class gameManager3 : MonoBehaviour
         remark_mole = GameObject.Find("npcArrow").transform.GetChild(2).gameObject;
         mole = GameObject.Find("mole");
         audioListener = GameObject.Find("PlayerCam").GetComponent<AudioListener>();
-        data = GameObject.Find("saveManager").GetComponent<dataSaveScript>();
-        //sprite = gameObject.GetComponent<SpriteRenderer>().sprite;
+        judge = GameObject.Find("judging");
+        //saveM = GameObject.Find("saveManager");
+        //data = saveM.GetComponent<saveManagerScript>();
         isTimerOn = false;
         isTouch = false;
+        alreadyCame = false;
         check = 0;
         time = 0f;
 
@@ -97,6 +103,12 @@ public class gameManager3 : MonoBehaviour
         checkLength();
     }
 
+    private void Awake()
+    {
+        //var obj = GameObject.FindGameObjectsWithTag("dont") ;
+        //if (obj.Length != 1)
+        //    Destroy(gameObject);
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.X) && isMyTurn)
@@ -194,6 +206,7 @@ public class gameManager3 : MonoBehaviour
                     break;
 
                 case "specialPlane":
+
                     saveQueue();
                     check = 2;
                     break;
@@ -246,15 +259,17 @@ public class gameManager3 : MonoBehaviour
 
     }
 
-    private void saveQueue()//큐에 맵 정보들 넣어 그 후에 메모장에 쓰는 코드로 넘길거임
+    private void saveQueue()//
     {
-        que.Enqueue(this.transform.position.x);//vector3값
-        que.Enqueue(this.transform.position.y);//vector3값
-        que.Enqueue(this.transform.position.z);//vector3값
 
-        que.Enqueue(check);//check값
-        que.Enqueue(value);//value값
-       
+        judge.GetComponent<judginScript>().q1.Enqueue(this.transform.position);
+        judge.GetComponent<judginScript>().q1.Enqueue(check);
+        judge.GetComponent<judginScript>().q1.Enqueue(value);
+        //l1.Add((int)this.transform.position.x);
+        //l1.Add((int)this.transform.position.y);
+        //l1.Add((int)this.transform.position.z);
+        //l1.Add(check);
+        //l1.Add(value);
     }
     void Talk(int id, bool isNpc)
     {
@@ -559,6 +574,7 @@ public class gameManager3 : MonoBehaviour
         {
             saveData = true;
             AsyncOperation async = SceneManager.LoadSceneAsync("monsterMap");
+            DontDestroyOnLoad(judge);
             while (!async.isDone)
                 yield return null;
         }
