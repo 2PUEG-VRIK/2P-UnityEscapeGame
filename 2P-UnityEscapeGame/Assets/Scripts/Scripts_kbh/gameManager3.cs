@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 //0 나 혼자
 //1 양
@@ -12,7 +13,10 @@ using UnityEngine.UI;
 1- 차 회전 원상복구 끝나고 꽃이 말 걸 때 필요해서
 -1- 꽃이 말 거는거 끝나면 
 
-2 꽃 말 듣고 아파트로 가서 specialPlane 밟아
+2 (꽃 말 듣고) 아파트로 가서 specialPlane 밟아->monsterMap으로 이동까지.
+-2 houseTalk코루틴 중단시키는 조건
+
+
 
 */
 public class gameManager3 : MonoBehaviour
@@ -60,6 +64,9 @@ public class gameManager3 : MonoBehaviour
     private GameObject touchThings;//닿은 물체
     private bool isTouch;//콜라이더 닿았을 때 true놓는 변수
 
+    //맵 간 이동
+    AudioListener audioListener;//이동할 때 이전 맵의 오디오 리스너 끄기
+
 
     private void Start()
     {
@@ -75,6 +82,7 @@ public class gameManager3 : MonoBehaviour
         arrow_blackCar = GameObject.Find("npcArrow").transform.GetChild(1).gameObject;
         remark_mole = GameObject.Find("npcArrow").transform.GetChild(2).gameObject;
         mole = GameObject.Find("mole");
+        audioListener = GameObject.Find("PlayerCam").GetComponent<AudioListener>();
         //sprite = gameObject.GetComponent<SpriteRenderer>().sprite;
         isTimerOn = false;
         isTouch = false;
@@ -151,6 +159,13 @@ public class gameManager3 : MonoBehaviour
             case -1:
                 StopCoroutine(FlowerSay());
                 break;
+
+            case 2://꽃이랑 대화 하고 아파트로 가서 specialPlane밟는것까지
+                StartCoroutine(HouseTalk());
+                break;
+            case -2://꽃이랑 대화 하고 아파트로 가서 specialPlane밟는것까지
+                StopCoroutine(HouseTalk());
+                break;
         } 
     }
 
@@ -175,6 +190,7 @@ public class gameManager3 : MonoBehaviour
 
                 case "specialPlane":
                     check = 2;
+                    Debug.Log(check);
                     break;
             }
             
@@ -202,7 +218,7 @@ public class gameManager3 : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-       
+      
     }
 
     //public void Action(GameObject scanObj)
@@ -513,7 +529,7 @@ public class gameManager3 : MonoBehaviour
     {
         isTimerOn = true;
         value = 7;
-        if (2f < time && time < 5f)
+        if (2f < time && time < 4f)
         {
             talkPanel.SetActive(true);
             panelActive = true;
@@ -522,19 +538,19 @@ public class gameManager3 : MonoBehaviour
 
             talkText.text = "야! 너! 이리와 봐!";
         }
-        else if (5f < time && time < 7f)
+        else if (4f < time && time < 6f)
         {
             talkText.text = "어? 날 부르는건가?";
             nameText.text = GetName(0,0);
             changeNameIcon(0);
         }
-        else if (7f < time && time < 10f)
+        else if (6f < time && time < 9f)
         {
             talkText.text = "그래 너 ~ \n아파트 옆 쓰레기통으로 와봐!";
             nameText.text = GetName(3, 1);
             changeNameIcon(7);
         }
-        else if (time > 10f)
+        else if (time > 9f)
         {
             isTimerOn = false;
             check = -1;
@@ -542,10 +558,43 @@ public class gameManager3 : MonoBehaviour
             talkPanel.SetActive(false);
             panelActive = false;
             talkText.text = "";
+            time = 0.0f;
 
             yield return null;
         }
     }
     //mole=-11.87
 
+    IEnumerator HouseTalk()//아파트에서 혼잣말하는거
+    {
+        Debug.Log("하톡이 시작");
+        value = 0;
+        talkPanel.SetActive(true);
+        panelActive = true;
+        nameText.text = GetName(0,0);
+        changeNameIcon(0);
+
+        talkText.text = "어?,, 어지러워ㅜ" ;
+        isTimerOn = true;
+        if (time > 2f)
+        {
+            talkPanel.SetActive(false);
+            panelActive = false;
+            talkText.text = "";
+            //check = -2;
+            isTimerOn = false; time = 0.0f;
+            check = -2;
+            CallOtherMap(2);
+        }
+
+        yield return null;
+    }
+
+    void CallOtherMap(int c)
+    {
+
+        audioListener.enabled = false;
+        if(c==2)
+            SceneManager.LoadScene("monsterMap", LoadSceneMode.Additive);
+    }
 }
