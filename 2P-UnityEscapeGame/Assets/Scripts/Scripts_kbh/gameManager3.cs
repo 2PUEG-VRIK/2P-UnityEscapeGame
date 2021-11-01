@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 /// npc 만나는 순서
 /// 양 -> 대화끝나면 꽃이 부름 -> 꽃한테 감 -> 속아서 아파트 감 -> monsterMap ->꽃한테 따지러 감
 /// -> 제대로 알려줘 그 곳으로 감 -> 문이 고장나 있음 -> 오리한테 가라는 쪽지 읽고 오리에게 감 -> 문을 고치려면 망치 필요
+
 /// </summary>
 /// 
 
@@ -18,7 +19,6 @@ using UnityEngine.SceneManagement;
 //2 두더지
 //3 꽃
 //4 오리
-
 
 
 /*check(초기값 0)
