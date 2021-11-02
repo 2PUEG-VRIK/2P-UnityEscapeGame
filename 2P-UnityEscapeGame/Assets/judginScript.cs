@@ -23,7 +23,11 @@ public class judginScript : MonoBehaviour
         if (gameManager.check == -1)
             gameManager.check = 2;
         else if (gameManager.check == 4)
+        {
             gameManager.check = -4;
+            myIn = 6;
+            yourIn = 5;
+        }
         Debug.Log(gameManager.check);
         arr1.Add(x);
         arr1.Add(y);
@@ -32,5 +36,8 @@ public class judginScript : MonoBehaviour
         arr1.Add(v);
         arr1.Add(myIn);//꽃이랑 대화이어가야하므로 내 index
         arr1.Add(yourIn);//꽃 index 저장
+
+        for (int i = 0; i < arr1.Count; i++)
+            Debug.Log(arr1[i]);
     }
 }

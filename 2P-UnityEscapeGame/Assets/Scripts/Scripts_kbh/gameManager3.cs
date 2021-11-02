@@ -115,7 +115,7 @@ public class gameManager3 : MonoBehaviour
         isTimerOn = false;
         isTouch = false;
         alreadyCame = false;
-        check = 0;
+        check = -3;
         time = 0f;
         //GameObject plane = GameObject.Find("specialPlane");
         //if (judge.GetComponent<judginScript>().yes)
@@ -138,6 +138,7 @@ public class gameManager3 : MonoBehaviour
             Debug.Log("myindex" + myIndex);
             Debug.Log("yours" + yourIndex);
             twice = true;
+           
         }
 
         if (GameObject.Find("judging").GetComponent<judginScript>().yes
@@ -151,8 +152,8 @@ public class gameManager3 : MonoBehaviour
             mole.GetComponent<BoxCollider>().enabled = false;
 
             first = false;
-            myIndex = (int)judgeSc.arr1[5];
-            yourIndex = (int)judgeSc.arr1[6];
+            myIndex = 6;
+            yourIndex = 5;
             twice = true; third = true;
             arrow_blackCar.SetActive(false);
             
@@ -314,6 +315,9 @@ public class gameManager3 : MonoBehaviour
 
             Debug.Log("hiddne");
             check = 3;
+            if(!third)//문 닿고 아직 두번째 여행 안갔을 때 첫번째 여행에서의 정보들 삭제함
+                for (int i = 0; i < judgeSc.arr1.Count; i++)
+                    judgeSc.arr1.Remove(i);
         }
 
         else if (other.name == "Light" && check==4)//두더지랑 대화 끝나고 가로등에 갖다 박아
@@ -337,7 +341,6 @@ public class gameManager3 : MonoBehaviour
                 if (isCarRotateBack)//차 원상복구 시켜야지만 그 위에 화살표 보이게하기
                     arrow_blackCar.SetActive(true);
             }
-            yourIndex = 0; myIndex = 0;
 
         }
         if (other.tag == "NPC" && other.name != "flower")
@@ -350,7 +353,7 @@ public class gameManager3 : MonoBehaviour
                     arrow_blackCar.SetActive(true);
             }
             yourIndex = 0; myIndex = 0;
-
+           
         }
 
         else //꽃은 대화 이어가야해서 인덱스 초기화 x
@@ -360,7 +363,11 @@ public class gameManager3 : MonoBehaviour
                 Debug.Log("내 index" + myIndex);
                 Debug.Log("네 index" + yourIndex);
             }
-
+            else if (other.name == "duck")
+            {
+                Debug.Log("내 index" + myIndex);
+                Debug.Log("네 index" + yourIndex);
+            }
         }
         talkText.text = "";
         Debug.Log("trigger exit " + other.name);
@@ -486,7 +493,6 @@ public class gameManager3 : MonoBehaviour
                         Debug.Log("대화 끝났다는");
                     }
 
-                    
                     else 
                     {
                         if (value == 2)//두더지랑 대화 끝났고 que에 저장하면서 check=-4될 예정. 이 코드 맞는코드임
@@ -528,7 +534,7 @@ public class gameManager3 : MonoBehaviour
             {
                 talkPanel.SetActive(false);
                 panelActive = false;
-                Debug.Log("대화 끝났다는");
+                Debug.Log("대화 끝났다는sk");
             }
             Debug.Log("X 눌림");
             talkText.text = talkManager.GetTalk(value, yourIndex);//npc index 대화 출력
@@ -600,7 +606,7 @@ public class gameManager3 : MonoBehaviour
 
         molePopUp = false;
         active_moleFunc = false;
-        mole.transform.localPosition = new Vector3(223, -20, 182);
+        mole.transform.localPosition = new Vector3(262.5f,0.3f,299);
         remark_mole.SetActive(false);
         car.transform.rotation = Quaternion.Slerp(
                car.transform.localRotation, Quaternion.Euler(new Vector3(0, 180, 0)), Time.time * 0.01f);
@@ -712,8 +718,9 @@ public class gameManager3 : MonoBehaviour
         }
         if (c == -4)
         {
+            Debug.Log(myIndex + "    " + yourIndex);
             saveData = true;
-            AsyncOperation async = SceneManager.LoadSceneAsync("monsterMap");
+            AsyncOperation async = SceneManager.LoadSceneAsync("cubeMap");
             DontDestroyOnLoad(judge);
 
             while (!async.isDone)
