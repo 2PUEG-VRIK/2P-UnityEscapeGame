@@ -23,11 +23,9 @@ public class saveManagerScript : MonoBehaviour
         j = GameObject.Find("judging").GetComponent<judginScript>();
         if (j.yes)//arr에있던 수들 각 변수에 넣어
         {
-            man.transform.position =new Vector3((int)j.arr1[0], (int)j.arr1[1], (int)j.arr1[2] );
+            man.transform.position =new Vector3((int)j.arr1[0]-15, (int)j.arr1[1], (int)j.arr1[2] );
             manager.check = (int)j.arr1[3];
             manager.value = (int)j.arr1[4];
-            manager.myIndex = (int)j.arr1[5];
-            manager.yourIndex= (int)j.arr1[6];
         }
 
     }

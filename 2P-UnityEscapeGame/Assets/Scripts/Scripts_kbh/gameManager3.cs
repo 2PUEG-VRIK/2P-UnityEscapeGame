@@ -32,6 +32,9 @@ using UnityEngine.SceneManagement;
 -3 이제 오리 찾으러 가
 
 4 두더지랑 말 끝나면 check=4됨. 두더지가 가로등으로 걸어가라고 함(가로등에 닿아서 맵 이동하는 조건 ==(check=4)
+-4 맵 이동
+
+5 맵에서 나옴!(마을로 돌아왔딴뜻)
 
 */
 public class gameManager3 : MonoBehaviour
@@ -92,6 +95,7 @@ public class gameManager3 : MonoBehaviour
     //꽃이 알려준대로 문에 감
     GameObject exitDoor;
     GameObject hidden;//door 앞 hiddenPlane
+    GameObject lightHidden;//가로등 밑 큐브
 
     private void Start()
     {
@@ -110,12 +114,13 @@ public class gameManager3 : MonoBehaviour
         audioListener = GameObject.Find("PlayerCam").GetComponent<AudioListener>();
         judge = GameObject.Find("judging");
         judgeSc = judge.GetComponent<judginScript>();
+        lightHidden = GameObject.Find("lightHidden");
         //saveM = GameObject.Find("saveManager");
         //data = saveM.GetComponent<saveManagerScript>();
         isTimerOn = false;
         isTouch = false;
         alreadyCame = false;
-        check = -3;
+        check = 0;
         time = 0f;
         //GameObject plane = GameObject.Find("specialPlane");
         //if (judge.GetComponent<judginScript>().yes)
@@ -133,8 +138,10 @@ public class gameManager3 : MonoBehaviour
             changeNameIcon(0);
             talkText.text = "그 꽃이 날 속인건가? 가서 따져야겠어!";
             first = false;
-            myIndex = (int)judgeSc.arr1[5];
-            yourIndex = (int)judgeSc.arr1[6];
+            myIndex = 3;
+            yourIndex = 3;
+            check = 0;
+            value = 0;
             Debug.Log("myindex" + myIndex);
             Debug.Log("yours" + yourIndex);
             twice = true;
@@ -149,13 +156,17 @@ public class gameManager3 : MonoBehaviour
             GameObject.Find("flowerArrow").SetActive(false);//꽃 위에 있는 화살표 없애고
             GameObject.Find("car_pivot").GetComponent<BoxCollider>().enabled = false;//차랑 두더지 콜라이더 없애
             GameObject.Find("blackCarArrow").SetActive(false);
+            lightHidden.SetActive(false);
             mole.GetComponent<BoxCollider>().enabled = false;
+
 
             first = false;
             myIndex = 6;
             yourIndex = 5;
+            check = 5;
             twice = true; third = true;
             arrow_blackCar.SetActive(false);
+            GameObject.Find("WeaponPoint").transform.GetChild(0).gameObject.SetActive(true);
             
         }
         exitDoor = GameObject.Find("exitDoor");
@@ -283,20 +294,38 @@ public class gameManager3 : MonoBehaviour
 
         else if (other.tag == "NPC")
         {
-            if (value == 4 && check != -3)//문 지나지 않고 오리만남
-                return;
+            if (value == 4)
+            {
+                if ( check == 3 || check == -3 | check == 5) 
+                {
+                    touchThings = other.gameObject;
+                    talkPanel.SetActive(false);
+                    talkText.text = "";
+                    objectData objData = other.GetComponent<objectData>();
+                    value = objData.id; //value값 가져오고
+                    Talk(objData.id, objData.isNpc);//대화 가져올 준비하고
+                    isTouch = true;
+                    isMyTurn = true;
 
-            touchThings = other.gameObject;
-            talkPanel.SetActive(false);
-            talkText.text = "";
-            objectData objData = other.GetComponent<objectData>();
-            value = objData.id; //value값 가져오고
-            Talk(objData.id, objData.isNpc);//대화 가져올 준비하고
-            isTouch = true;
-            isMyTurn = true;
+                    Debug.Log("value   " + value);
+                    checkLength();//대화길이 체크하고
+                }
+            }
 
-            Debug.Log("value   " + value);
-            checkLength();//대화길이 체크하고
+            else
+            {
+                touchThings = other.gameObject;
+                talkPanel.SetActive(false);
+                talkText.text = "";
+                objectData objData = other.GetComponent<objectData>();
+                value = objData.id; //value값 가져오고
+                Talk(objData.id, objData.isNpc);//대화 가져올 준비하고
+                isTouch = true;
+                isMyTurn = true;
+
+                Debug.Log("value   " + value);
+                checkLength();//대화길이 체크하고
+            }
         }
 
         else if (other.name == "specialPlane")
@@ -305,7 +334,7 @@ public class gameManager3 : MonoBehaviour
             isTouch = true;
 
             judge.GetComponent<judginScript>().saveQue((int)this.transform.position.x, (int)this.transform.position.y
-                      , (int)this.transform.position.z, check, value, myIndex, yourIndex);
+                      , (int)this.transform.position.z, check, value);
         }
 
         else if (other.name == "hiddenPlane_1")//문을 만났다~
@@ -313,20 +342,19 @@ public class gameManager3 : MonoBehaviour
             touchThings = other.gameObject;
             isTouch = true;
 
-            Debug.Log("hiddne");
             check = 3;
             if(!third)//문 닿고 아직 두번째 여행 안갔을 때 첫번째 여행에서의 정보들 삭제함
                 for (int i = 0; i < judgeSc.arr1.Count; i++)
                     judgeSc.arr1.Remove(i);
         }
 
-        else if (other.name == "Light" && check==4)//두더지랑 대화 끝나고 가로등에 갖다 박아
+        else if (other.name == "lightHidden" && check==4)//두더지랑 대화 끝나고 가로등에 갖다 박아
         {
             touchThings = other.gameObject;
             isTouch = true;
 
             judge.GetComponent<judginScript>().saveQue((int)this.transform.position.x, (int)this.transform.position.y
-                      , (int)this.transform.position.z, check, value, myIndex, yourIndex);
+                      , (int)this.transform.position.z, 4,value);
         }
         Debug.Log(isTouch);
     }
@@ -340,10 +368,11 @@ public class gameManager3 : MonoBehaviour
                 isCarRotate = false;
                 if (isCarRotateBack)//차 원상복구 시켜야지만 그 위에 화살표 보이게하기
                     arrow_blackCar.SetActive(true);
+                check = 4;
             }
 
         }
-        if (other.tag == "NPC" && other.name != "flower")
+        if (other.tag == "NPC" && (other.name != "flower" ||other.name!="duck"))
         {
             if (other.gameObject.name == "mole")
             {
@@ -352,8 +381,10 @@ public class gameManager3 : MonoBehaviour
                 if (isCarRotateBack)//차 원상복구 시켜야지만 그 위에 화살표 보이게하기
                     arrow_blackCar.SetActive(true);
             }
-            yourIndex = 0; myIndex = 0;
-           
+            else
+            {
+                yourIndex = 0; myIndex = 0;
+            }
         }
 
         else //꽃은 대화 이어가야해서 인덱스 초기화 x
@@ -482,6 +513,8 @@ public class gameManager3 : MonoBehaviour
                     yourIndex = 0; myIndex = 0;
                     yourLastIndex = 0; myLastIndex = 0;
 
+                    if (value == 2)//두더지랑 대화 끝났고 que에 저장하면서 check=-4될 예정. 이 코드 맞는코드임
+                        check = 4;
                     break;
                 }
                 // if (Input.GetKeyDown(KeyCode.X))
@@ -536,11 +569,10 @@ public class gameManager3 : MonoBehaviour
                 panelActive = false;
                 Debug.Log("대화 끝났다는sk");
             }
-            Debug.Log("X 눌림");
             talkText.text = talkManager.GetTalk(value, yourIndex);//npc index 대화 출력
             yourIndex++;
             isMyTurn = true;
-            Debug.Log("현재 두더지 인덱스 " + yourIndex + "끝 인덱스 " + yourLastIndex);
+            Debug.Log("현재 "+value+" 인덱스 " + yourIndex + "끝 인덱스 " + yourLastIndex);
             nameText.text = GetName(value, 0);
             changeNameIcon(value);
             // changeNameIcon(value);
@@ -591,7 +623,6 @@ public class gameManager3 : MonoBehaviour
             molePopUp = true;
             remark_mole.SetActive(true);
             isCarRotate = false;
-            Debug.Log("각도 잘 들어옴");
             yield return null;
         }
         // StopCoroutine(carRotateFunc(car));
@@ -613,7 +644,6 @@ public class gameManager3 : MonoBehaviour
 
         if (car.transform.rotation == Quaternion.Euler(new Vector3(0, 180, 0)))
         {
-            Debug.Log("각도 딱딱 맞춰");
             car.transform.position = preCar;
             mole.GetComponent<BoxCollider>().enabled = false;
             car.GetComponent<BoxCollider>().enabled = true;
@@ -718,11 +748,9 @@ public class gameManager3 : MonoBehaviour
         }
         if (c == -4)
         {
-            Debug.Log(myIndex + "    " + yourIndex);
             saveData = true;
             AsyncOperation async = SceneManager.LoadSceneAsync("cubeMap");
             DontDestroyOnLoad(judge);
-
             while (!async.isDone)
                 yield return null;
         }
