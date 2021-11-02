@@ -18,26 +18,36 @@ public class judginScript : MonoBehaviour
 
     }
 
-    public void saveQue(int x, int y, int z, int c, int v, int myIn, int yourIn)//check¿Í value ¹Ş´Â´ô
+    public void saveQue(int x, int y, int z, int c, int v)//check¿Í value ¹Ş´Â´ô
     {
         if (gameManager.check == -1)
-            gameManager.check = 2;
-        else if (gameManager.check == 4)
         {
+            gameManager.check = 2;
+
+            arr1.Add(x);
+            arr1.Add(y);
+            arr1.Add(z);
+            arr1.Add(gameManager.check);
+            arr1.Add(v);
+            arr1.Add(3);
+            arr1.Add(3);
+
+        }
+        else if (c == 4)
+        {
+            arr1.Add(x);
+            arr1.Add(y);
+            arr1.Add(z);
+            arr1.Add(gameManager.check);
+            arr1.Add(v);
+            arr1.Add(6);//²ÉÀÌ¶û ´ëÈ­ÀÌ¾î°¡¾ßÇÏ¹Ç·Î ³» index
+            arr1.Add(5);//²É index ÀúÀå
+            for (int i = 0; i < arr1.Count; i++)
+                Debug.Log(arr1[i]);
             gameManager.check = -4;
-            myIn = 6;
-            yourIn = 5;
         }
         Debug.Log(gameManager.check);
-        arr1.Add(x);
-        arr1.Add(y);
-        arr1.Add(z);
-        arr1.Add(gameManager.check);
-        arr1.Add(v);
-        arr1.Add(myIn);//²ÉÀÌ¶û ´ëÈ­ÀÌ¾î°¡¾ßÇÏ¹Ç·Î ³» index
-        arr1.Add(yourIn);//²É index ÀúÀå
 
-        for (int i = 0; i < arr1.Count; i++)
-            Debug.Log(arr1[i]);
+      
     }
 }
