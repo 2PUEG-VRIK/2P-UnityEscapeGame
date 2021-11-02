@@ -29,9 +29,8 @@ public class cubeMapManager : MonoBehaviour
         //input = GameObject.Find("Canvas_2").transform.GetChild(1).gameObject;
         rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
         grabCube = GameObject.Find("holdingCube").transform.GetChild(0).gameObject;
-        tele = GameObject.Find("final").transform.GetChild(0).gameObject;
-        exit = GameObject.Find("2nd").transform.GetChild(5).gameObject;
-
+        //tele = GameObject.Find("final").transform.GetChild(0).gameObject;
+        //exit = GameObject.Find("2nd").transform.GetChild(5).gameObject;
     }
 
     private void Update()
@@ -42,6 +41,7 @@ public class cubeMapManager : MonoBehaviour
         if (cubeNum == 0)
         {
             Debug.Log("큐부 0개남음!");
+
 
         }
 
@@ -85,14 +85,13 @@ public class cubeMapManager : MonoBehaviour
                     }
                 }
             }
-
         }
     }
 
     IEnumerator goBack()//1층에서 상자랑 닿으면 뒤로 튕기는거
     {
         ///rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
-        this.transform.Translate(new Vector3(0, 0, -30) * Time.deltaTime);
+        this.transform.Translate(new Vector3(0, 0, -40) * Time.deltaTime);
 
         check = -1;
         isHold = true;

@@ -13,7 +13,6 @@ public class theCubes : MonoBehaviour
     RaycastHit hit;
     private theCubes _obj;//마우스로 선택한 큐브
     public float rotationSpeed;
-    public GameObject newMonster;//상자 건들면 나오는 애들
     private int count = 0;
     private GameObject clickObject;
     private Vector3 camPos;
@@ -35,6 +34,10 @@ public class theCubes : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 _obj = hit.transform.GetComponent<theCubes>();//_obj는 선택한 큐브임 이제
+                if (_obj.name == "_Cube")
+                {
+                    Debug.Log("이걸직었따");
+                }
             }
         }
     }
@@ -52,7 +55,7 @@ public class theCubes : MonoBehaviour
     {
         // 이거 z값을 카메라의 z값 기준으로 설정 했음.
         camPos = GameObject.Find("Man Cam").transform.position;
-        Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, camPos.z + 70);
+        Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, camPos.z + 80);
         transform.position = Camera.main.ScreenToWorldPoint(mousePosition);
         //transform.position = new Vector3(Camera.main.ScreenToWorldPoint(mousePosition).x , Camera.main.ScreenToWorldPoint(mousePosition).y, 50);
 
