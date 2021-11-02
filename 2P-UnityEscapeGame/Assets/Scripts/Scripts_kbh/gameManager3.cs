@@ -345,6 +345,7 @@ public class gameManager3 : MonoBehaviour
             if (other.gameObject.name == "mole")
             {
                 isCarRotateBack = true;//나갔으니까 두더지 내려가고 차 위치나 회전 원상복귀
+                check = 4;
                 if (isCarRotateBack)//차 원상복구 시켜야지만 그 위에 화살표 보이게하기
                     arrow_blackCar.SetActive(true);
             }
@@ -463,6 +464,8 @@ public class gameManager3 : MonoBehaviour
         { //npc랑 대화할 때 내 말들
             while (true)
             {
+                if (value == 2) check = 2;
+
                 if (myLastIndex <= myIndex)
                 {
                     talkPanel.SetActive(false);
@@ -471,8 +474,6 @@ public class gameManager3 : MonoBehaviour
 
                     yourIndex = 0; myIndex = 0;
                     yourLastIndex = 0; myLastIndex = 0;
-
-
 
                     break;
                 }
@@ -485,12 +486,7 @@ public class gameManager3 : MonoBehaviour
                         Debug.Log("대화 끝났다는");
                     }
 
-                    else if(value==4 && myIndex==6 && !third )
-                    {
-                        talkPanel.SetActive(false);
-                        panelActive = false;
-                        Debug.Log("대화 끝났다는");
-                    }
+                    
                     else 
                     {
                         if (value == 2)//두더지랑 대화 끝났고 que에 저장하면서 check=-4될 예정. 이 코드 맞는코드임
@@ -528,6 +524,12 @@ public class gameManager3 : MonoBehaviour
                 break;
             }
             // if (Input.GetKeyDown(KeyCode.X))
+            else if (value == 4 && yourIndex == 5 && !third)//오리랑 말할 때
+            {
+                talkPanel.SetActive(false);
+                panelActive = false;
+                Debug.Log("대화 끝났다는");
+            }
             Debug.Log("X 눌림");
             talkText.text = talkManager.GetTalk(value, yourIndex);//npc index 대화 출력
             yourIndex++;

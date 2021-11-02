@@ -24,6 +24,7 @@ public class cubeMapManagerScript : MonoBehaviour
     GameObject exit;
     public GameObject hammer_prefab;
     GameObject hammerGrab;
+    judginScript judge;
 
     private void Start()
     {
@@ -35,6 +36,8 @@ public class cubeMapManagerScript : MonoBehaviour
         //tele = GameObject.Find("final").transform.GetChild(0).gameObject;
         //exit = GameObject.Find("2nd").transform.GetChild(5).gameObject;
         hammerGrab = GameObject.Find("WeaponPoint").transform.GetChild(0).gameObject;
+        judge = GameObject.Find("judging").GetComponent<judginScript>();
+
     }
 
     private void Update()
@@ -42,9 +45,11 @@ public class cubeMapManagerScript : MonoBehaviour
         if (isHold && check == 1)
             StartCoroutine("goBack");
 
-        if (cubeNum == 0)
+        if (cubeNum == 18)
         {
             GameObject.Find("Weapon Hammer").GetComponent<SphereCollider>().isTrigger = true;
+            judge.yes_2 = true;
+
             if (goApartment)
                 StartCoroutine(goApartmentCo());
 
