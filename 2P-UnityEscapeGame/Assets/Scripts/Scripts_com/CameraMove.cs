@@ -44,7 +44,6 @@ public class CameraMove : MonoBehaviour
         }
         else
         {
-            Debug.Log("else");
             transform.rotation = defaultPos; // 마우스 떼면 다시 정면 보기. 이게 끝.
         }
     }
