@@ -7,6 +7,7 @@ using System.IO;
 
 public class monsterMapScript : MonoBehaviour
 {
+  
     //2Ãþ
     GameObject _obj;
     GameObject holdPosition;
@@ -52,7 +53,9 @@ public class monsterMapScript : MonoBehaviour
             Debug.Log(judge.arr1[i]);
         }
     }
-
+    private void Awake()
+    {
+    }
     private void Update()
     {
         //2Ãþ
@@ -171,6 +174,10 @@ public class monsterMapScript : MonoBehaviour
         AsyncOperation async = SceneManager.LoadSceneAsync("md1_3");
         while (!async.isDone)
             yield return null;
+    }
+    public void audioGunFunc()
+    {
+
     }
 }
 

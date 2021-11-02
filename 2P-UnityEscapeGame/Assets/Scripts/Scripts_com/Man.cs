@@ -69,6 +69,10 @@ public class Man : MonoBehaviour
     IEnumerator enu1; //ladder에 필요
     Vector3 prePos;//뒤로 점프하기 전 플레이어의 기존 위치
 
+    public AudioClip audioGunShot;
+    public AudioClip audioJump;
+    AudioSource audioSource;
+
     void Start()
     {
         //jumpPower = 150.0f;
@@ -86,6 +90,8 @@ public class Man : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
         rigid = GetComponent<Rigidbody>();
+        this.audioSource = GetComponent<AudioSource>();
+
     }
 
     void Update()
@@ -216,6 +222,8 @@ public class Man : MonoBehaviour
         // 점프 키 눌렀을 때 아이템 있으면 아이템 먹음.
         if (jDown)
         {
+            audioSource.clip = audioJump;
+            audioSource.Play();
             Debug.Log(isJump.ToString());
             if (nearObject != null)
             {
@@ -287,6 +295,9 @@ public class Man : MonoBehaviour
             anim.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "Swing" : "Shot");
             if (equipWeapon.type != Weapon.Type.Melee)//총이면 총알 -1
             {
+                audioSource.clip = audioGunShot;
+                audioSource.Play();
+
                 ammo--;
                 if (ammo <= 0)
                     ammo = 0;

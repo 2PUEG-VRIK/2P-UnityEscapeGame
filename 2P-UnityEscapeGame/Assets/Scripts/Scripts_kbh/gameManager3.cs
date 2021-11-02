@@ -489,7 +489,7 @@ public class gameManager3 : MonoBehaviour
                     break;
                 }
 
-                if (Input.GetKeyDown(KeyCode.X))
+                //if (Input.GetKeyDown(KeyCode.X))//////////////////////////////////////여기~~~~~~~~
                 {
                     talkText.text = GetMyTalk(value, myIndex);
                     myIndex++;
@@ -633,10 +633,6 @@ public class gameManager3 : MonoBehaviour
     IEnumerator carRotateBackFunc(GameObject car)
     {
         myIndex = 0; myLastIndex = 0; yourIndex = 0; yourLastIndex = 0;
-        //mole.transform.Translate(new Vector3(0, -0.2f, 0));
-        ////yield return new WaitForSecondsRealtime(6f);
-        //while(mole.transform.position.y >=-0.2)
-
         molePopUp = false;
         active_moleFunc = false;
         mole.transform.localPosition = new Vector3(262.5f,0.3f,299);
@@ -722,7 +718,7 @@ public class gameManager3 : MonoBehaviour
         nameText.text = GetName(0, 0);
         changeNameIcon(0);
 
-        talkText.text = "어?,, 어지러워ㅜ";
+        talkText.text = "앗..어지러워..";
         isTimerOn = true;
         if (time > 2f)
         {
@@ -769,21 +765,21 @@ public class gameManager3 : MonoBehaviour
             nameText.text = GetName(0, 0);
             changeNameIcon(0);
 
-            talkText.text = "문에 빛바랜 쪽지가 있네?";
+            talkText.text = "이게뭐야~~ 흑흑...";
         }
         else if (4f < time && time < 7f)
         {
-            talkText.text = "이 문..은 고장..났습니다... \n뭐?????";
+            talkText.text = "종이가 붙어있네... 관리자.. 강에 사는 김오리?";
 
         }
         else if (7f < time && time < 10f)
         {
-            talkText.text = "하지..만 강에 사는 오리..\n오리를 만나..부탁하면 고칠 수 있습니다!!";
+            talkText.text = "김오리한테 말해야하는구나..";
 
         }
         else if (10f < time && time < 13f)
         {
-            talkText.text = "아!! 정말 다행이다!! \n강에 산다는 오리를 찾으러 가야겠어!";
+            talkText.text = "저 밑에 강이 있던데! 다시 가야겠다~";
 
         }
         else if (13f < time)
