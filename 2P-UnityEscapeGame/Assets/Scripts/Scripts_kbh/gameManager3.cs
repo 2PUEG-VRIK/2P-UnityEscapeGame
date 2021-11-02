@@ -134,9 +134,6 @@ public class gameManager3 : MonoBehaviour
             &&!GameObject.Find("judging").GetComponent<judginScript>().yes_2)//monsterMap만 갔다옴
         {//꽃 위에 떠있는 화살표 없애기
             GameObject.Find("specialPlane").SetActive(false);//아파트 앞 발판 없애고
-            nameText.text = GetName(0, 0);
-            changeNameIcon(0);
-            talkText.text = "그 꽃이 날 속인건가? 가서 따져야겠어!";
             first = false;
             myIndex = 3;
             yourIndex = 3;
@@ -145,6 +142,9 @@ public class gameManager3 : MonoBehaviour
             Debug.Log("myindex" + myIndex);
             Debug.Log("yours" + yourIndex);
             twice = true;
+            nameText.text = GetName(0, 0);
+            changeNameIcon(0);
+            talkText.text = "놀라라.. 너무 무서웠어.. 그 꽃이 날 속인건가?\n다시 가서 따져야겠어!!!";
            
         }
 
@@ -158,8 +158,6 @@ public class gameManager3 : MonoBehaviour
             GameObject.Find("blackCarArrow").SetActive(false);
             lightHidden.SetActive(false);
             mole.GetComponent<BoxCollider>().enabled = false;
-
-
             this.transform.position = new Vector3(164, 2.6f, 38);
             first = false;
             myIndex = 6;
@@ -169,6 +167,10 @@ public class gameManager3 : MonoBehaviour
             arrow_blackCar.SetActive(false);
             GameObject.Find("WeaponPoint").transform.GetChild(0).gameObject.SetActive(true);
             
+            nameText.text = GetName(0, 0);
+            changeNameIcon(0);
+            talkText.text = "휴~ 이제 오리한테 망치를 갖다줘야지!";
+
         }
         exitDoor = GameObject.Find("exitDoor");
         hidden = GameObject.Find("hiddenPlane_1");
@@ -427,8 +429,8 @@ public class gameManager3 : MonoBehaviour
         //3 아파트 옆 못난이 꽃
         textGroup.Add(3, new string[]
         {
-            "네가 날 불렀니?", "길을 잃었거든", "와, 정말이니? 고마워!!!", "너무한거 아니야? 죽을 뻔 했잖아!",
-            "..정말이지?","ㄳ(끝)"
+            "네가 날 불렀니?", "아..길을 잃었거든\n그래서 나가는 법을 두더지에게 물어보려고", "와, 정말이니? 고마워!!!", "너무한거 아니야? 죽을 뻔 했잖아!",
+            "..정말이지?","고마워! 안녕!"
         });
 
         //4 오리
@@ -436,7 +438,7 @@ public class gameManager3 : MonoBehaviour
         {
             "혹시 날개재주 좋은 오리 있니?", "아, 네가 밖으로 나가는 문을 고칠 수 있는 오리야?","와~ 정말? 잘됐다~ 그럼 혹시 " +
             "지금 고쳐줄 수 있을까?\n집에 돌아가고싶은데 저 문이 고장났대..","망치? 나한텐 없는데...","나 너무 지쳤는데 미안하지만" +
-            "같이 가서 도와줄 순 없을까?","그렇구나.. 좋아! 힘내서 얼른 다녀올게! 알려줘서 고마워 오리야!","망치갖고왔는데~"
+            "같이 가서 도와줄 순 없을까?","그렇구나.. 좋아! 힘내서 얼른 다녀올게! 알려줘서 고마워 오리야!","망치갖고왔는데~","와! 얼른 가자!"
         });
     }
 
