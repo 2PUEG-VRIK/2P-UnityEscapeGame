@@ -31,6 +31,8 @@ using UnityEngine.SceneManagement;
 3 문앞에 있는 쪽지 발견! 
 -3 이제 오리 찾으러 가
 
+4 두더지랑 말 끝나면 check=4됨. 두더지가 가로등으로 걸어가라고 함(가로등에 닿아서 맵 이동하는 조건 ==(check=4)
+
 */
 public class gameManager3 : MonoBehaviour
 {
@@ -43,7 +45,6 @@ public class gameManager3 : MonoBehaviour
     public Image nameIcon;//말하는 애 아이콘 뜨는 곳~
     public Text nameText;//이름 뜨는 text
 
-    //public bool isAction = false;
     public int talkIndex;
     public int yourIndex;//npc대화 인덱스
     public int myIndex;//내 대화 인덱스
@@ -80,13 +81,12 @@ public class gameManager3 : MonoBehaviour
     //맵 간 이동
     AudioListener audioListener;//이동할 때 이전 맵의 오디오 리스너 끄기
     saveManagerScript data;
-    //public static List<int> l1 = new List<int>();//몬스텁 가기 전 맵의 모든 정보
-    //static List<int> l2= new List<int>();
     public bool alreadyCame = false;//맵 한번 갔다온거임~
     //GameObject saveM;
     GameObject judge;//씬 이동 했는지 판별
     judginScript judgeSc;
     private bool twice = false;//한 번 이동하면 그 후로 쭉 true
+    private bool third = false;
 
 
     //꽃이 알려준대로 문에 감
@@ -125,10 +125,10 @@ public class gameManager3 : MonoBehaviour
         generateNameText();
         checkLength();
 
-        if (GameObject.Find("judging").GetComponent<judginScript>().yes)//갔다옴
-        {
-            Debug.Log("judging");
-            GameObject.Find("specialPlane").SetActive(false);
+        if (GameObject.Find("judging").GetComponent<judginScript>().yes 
+            &&!GameObject.Find("judging").GetComponent<judginScript>().yes_2)//monsterMap만 갔다옴
+        {//꽃 위에 떠있는 화살표 없애기
+            GameObject.Find("specialPlane").SetActive(false);//아파트 앞 발판 없애고
             nameText.text = GetName(0, 0);
             changeNameIcon(0);
             talkText.text = "그 꽃이 날 속인건가? 가서 따져야겠어!";
@@ -140,9 +140,25 @@ public class gameManager3 : MonoBehaviour
             twice = true;
         }
 
+        if (GameObject.Find("judging").GetComponent<judginScript>().yes
+          && GameObject.Find("judging").GetComponent<judginScript>().yes_2)//맵 두 개 다 다녀옴
+        {
+            //배경 밤으로 설정
+            GameObject.Find("specialPlane").SetActive(false);//아파트 앞 발파 ㄴ없애고ㅛ
+            GameObject.Find("flowerArrow").SetActive(false);//꽃 위에 있는 화살표 없애고
+            GameObject.Find("car_pivot").GetComponent<BoxCollider>().enabled = false;//차랑 두더지 콜라이더 없애
+            GameObject.Find("blackCarArrow").SetActive(false);
+            mole.GetComponent<BoxCollider>().enabled = false;
+
+            first = false;
+            myIndex = (int)judgeSc.arr1[5];
+            yourIndex = (int)judgeSc.arr1[6];
+            twice = true; third = true;
+            arrow_blackCar.SetActive(false);
+            
+        }
         exitDoor = GameObject.Find("exitDoor");
         hidden = GameObject.Find("hiddenPlane_1");
-
     }
 
     private void Awake()
@@ -232,6 +248,11 @@ public class gameManager3 : MonoBehaviour
                 StopCoroutine(doorText());
                 hidden.SetActive(false);
                 break;
+
+            case -4://더쥐랑 얘기 끝내고~ 가로등에 박은 상태
+                StartCoroutine(CallOtherMap(-4));
+                    break;
+
         }
     }
 
@@ -293,6 +314,15 @@ public class gameManager3 : MonoBehaviour
 
             Debug.Log("hiddne");
             check = 3;
+        }
+
+        else if (other.name == "Light" && check==4)//두더지랑 대화 끝나고 가로등에 갖다 박아
+        {
+            touchThings = other.gameObject;
+            isTouch = true;
+
+            judge.GetComponent<judginScript>().saveQue((int)this.transform.position.x, (int)this.transform.position.y
+                      , (int)this.transform.position.z, check, value, myIndex, yourIndex);
         }
         Debug.Log(isTouch);
     }
@@ -367,7 +397,7 @@ public class gameManager3 : MonoBehaviour
         {
             "혹시 날개재주 좋은 오리 있니?", "아, 네가 밖으로 나가는 문을 고칠 수 있는 오리야?","와~ 정말? 잘됐다~ 그럼 혹시 " +
             "지금 고쳐줄 수 있을까?\n집에 돌아가고싶은데 저 문이 고장났대..","망치? 나한텐 없는데...","나 너무 지쳤는데 미안하지만" +
-            "같이 가서 도와줄 순 없을까?","그렇구나.. 좋아! 힘내서 얼른 다녀올게! 알려줘서 고마워 오리야!"
+            "같이 가서 도와줄 순 없을까?","그렇구나.. 좋아! 힘내서 얼른 다녀올게! 알려줘서 고마워 오리야!","망치갖고왔는데~"
         });
     }
 
@@ -448,14 +478,23 @@ public class gameManager3 : MonoBehaviour
                 }
                 // if (Input.GetKeyDown(KeyCode.X))
                 {
-                    if (value == 3 && myIndex == 3 && !twice)//꽃이랑 말할때 ,얘 속마음 말하는걸로 끝남
+                    if (value == 3 && myIndex == 3 && !twice)//꽃이랑 말할때
+                    { 
+                        talkPanel.SetActive(false);
+                        panelActive = false;
+                        Debug.Log("대화 끝났다는");
+                    }
+
+                    else if(value==4 && myIndex==6 && !third )
                     {
                         talkPanel.SetActive(false);
                         panelActive = false;
                         Debug.Log("대화 끝났다는");
                     }
-                    else
+                    else 
                     {
+                        if (value == 2)//두더지랑 대화 끝났고 que에 저장하면서 check=-4될 예정. 이 코드 맞는코드임
+                            check = 4;
                         talkText.text = GetMyTalk(value, myIndex);
                         myIndex++;
                         nameText.text = GetName(0, 0);
@@ -483,6 +522,9 @@ public class gameManager3 : MonoBehaviour
                 yourLastIndex = 0; myLastIndex = 0;
                 if (value == 1)//양이랑 대화가 끝나면
                     check = 1;
+
+                else if (value == 2)//두더지랑 대화 끝났고 que에 저장하면서 check=-4될 예정. 이 코드 맞는코드임
+                    check = 4;
                 break;
             }
             // if (Input.GetKeyDown(KeyCode.X))
@@ -524,8 +566,6 @@ public class gameManager3 : MonoBehaviour
 
         }
     }
-
-
 
     private float carRot = 0f;
     private float carPos = 0f;
@@ -665,6 +705,15 @@ public class gameManager3 : MonoBehaviour
             saveData = true;
             AsyncOperation async = SceneManager.LoadSceneAsync("monsterMap");
             DontDestroyOnLoad(judge);
+            while (!async.isDone)
+                yield return null;
+        }
+        if (c == -4)
+        {
+            saveData = true;
+            AsyncOperation async = SceneManager.LoadSceneAsync("monsterMap");
+            DontDestroyOnLoad(judge);
+
             while (!async.isDone)
                 yield return null;
         }
