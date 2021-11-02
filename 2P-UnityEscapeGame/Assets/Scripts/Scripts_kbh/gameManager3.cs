@@ -160,6 +160,7 @@ public class gameManager3 : MonoBehaviour
             mole.GetComponent<BoxCollider>().enabled = false;
 
 
+            this.transform.position = new Vector3(164, 2.6f, 38);
             first = false;
             myIndex = 6;
             yourIndex = 5;
@@ -355,6 +356,7 @@ public class gameManager3 : MonoBehaviour
 
             judge.GetComponent<judginScript>().saveQue((int)this.transform.position.x, (int)this.transform.position.y
                       , (int)this.transform.position.z, 4,value);
+            check = -4;
         }
         Debug.Log(isTouch);
     }
@@ -368,7 +370,6 @@ public class gameManager3 : MonoBehaviour
                 isCarRotate = false;
                 if (isCarRotateBack)//차 원상복구 시켜야지만 그 위에 화살표 보이게하기
                     arrow_blackCar.SetActive(true);
-                check = 4;
             }
 
         }
@@ -377,7 +378,6 @@ public class gameManager3 : MonoBehaviour
             if (other.gameObject.name == "mole")
             {
                 isCarRotateBack = true;//나갔으니까 두더지 내려가고 차 위치나 회전 원상복귀
-                check = 4;
                 if (isCarRotateBack)//차 원상복구 시켜야지만 그 위에 화살표 보이게하기
                     arrow_blackCar.SetActive(true);
             }
