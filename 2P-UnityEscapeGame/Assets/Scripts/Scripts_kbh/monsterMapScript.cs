@@ -27,11 +27,7 @@ public class monsterMapScript : MonoBehaviour
     private bool _mouseState;//마우스 상태
     GameObject exit;
     private bool goApartment;
-    //saveManagerScript manager;
     judginScript judge;
-    //public Queue q = new Queue();
-
-    //string fullpth = "Assets/Resources/kbh";
 
 
     private void Start()
@@ -46,7 +42,6 @@ public class monsterMapScript : MonoBehaviour
         goApartment = false;
         holdPosition = GameObject.Find("holdingCoin");
         judge = GameObject.Find("judging").GetComponent<judginScript>();
-
 
         for (int i = 0; i < 5; i++)
         {
@@ -72,6 +67,7 @@ public class monsterMapScript : MonoBehaviour
                 Invoke("tryAgain", 0.5f);
             }
         }
+
 
     
 

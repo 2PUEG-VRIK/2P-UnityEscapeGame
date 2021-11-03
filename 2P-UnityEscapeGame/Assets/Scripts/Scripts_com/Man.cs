@@ -224,7 +224,6 @@ public class Man : MonoBehaviour
         {
             audioSource.clip = audioJump;
             audioSource.Play();
-            Debug.Log(isJump.ToString());
             if (nearObject != null)
             {
                 // 아이템 먹기
@@ -381,7 +380,7 @@ public class Man : MonoBehaviour
 
         else if (other.tag == "Enemy")
         {
-            //prePos = this.transform.position;
+            //prePos = this.transform.position;ㅁㅁaaaaaaAAAAAA
             health--;
             Bump();
             //Debug.Log("닿았따----------------------------");

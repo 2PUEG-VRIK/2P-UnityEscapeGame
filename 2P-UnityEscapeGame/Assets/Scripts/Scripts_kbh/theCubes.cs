@@ -34,14 +34,23 @@ public class theCubes : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 _obj = hit.transform.GetComponent<theCubes>();//_obj는 선택한 큐브임 이제
-                if (_obj.name == "_Cube")
-                {
-                    Debug.Log("이걸직었따");
-                }
             }
         }
     }
 
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.tag == "Floor")//땅이랑 닿으면
+        {
+            if (this.name == "Cube" || this.name == "_Cube")
+            {
+                this.transform.position += new Vector3(0, 0.1f, 0);
+                Debug.Log("들어옴");   
+                //this.transform.position = new Vector3(this.transform.position.x, this.transform.localPosition.y + 0.1f,
+                //    this.transform.position.z);
+            }
+        }
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor")
@@ -55,7 +64,7 @@ public class theCubes : MonoBehaviour
     {
         // 이거 z값을 카메라의 z값 기준으로 설정 했음.
         camPos = GameObject.Find("Man Cam").transform.position;
-        Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, camPos.z + 80);
+        Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, camPos.z + 140);
         transform.position = Camera.main.ScreenToWorldPoint(mousePosition);
         //transform.position = new Vector3(Camera.main.ScreenToWorldPoint(mousePosition).x , Camera.main.ScreenToWorldPoint(mousePosition).y, 50);
 
