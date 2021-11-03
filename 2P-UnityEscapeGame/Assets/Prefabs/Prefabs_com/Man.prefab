@@ -124,7 +124,7 @@ MonoBehaviour:
   ammo: 0
   maxAmmo: 0
   audioGunShot: {fileID: 8300000, guid: 4310474905e266640852f43bd609a1a4, type: 3}
-  audioJump: {fileID: 8300000, guid: ffb159a21c8a04135a5616979c828fab, type: 3}
+  audioJump: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
   check: -1
 --- !u!82 &4667515617107387953
 AudioSource:

@@ -25,18 +25,33 @@ public class cubeMapManagerScript : MonoBehaviour
     public GameObject hammer_prefab;
     GameObject hammerGrab;
     judginScript judge;
+    GameObject howTo;
+    float time;
+    private bool isTimerOn;
+
+    public AudioClip audioCubeTouch;//큐브먹었을때
+    public AudioClip audioCubeCorrect;
+    public AudioClip audioCubeWrong;
+    AudioSource audioSource;
+
 
     private void Start()
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         rigid = GameObject.FindWithTag("Player").GetComponent<Rigidbody>();
-        //input = GameObject.Find("Canvas_2").transform.GetChild(1).gameObject;
         rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
         grabCube = GameObject.Find("holdingCube").transform.GetChild(0).gameObject;
-        //tele = GameObject.Find("final").transform.GetChild(0).gameObject;
         //exit = GameObject.Find("2nd").transform.GetChild(5).gameObject;
         hammerGrab = GameObject.Find("WeaponPoint").transform.GetChild(0).gameObject;
-        judge = GameObject.Find("judging").GetComponent<judginScript>();
+        // judge = GameObject.Find("judging").GetComponent<judginScript>();
+        howTo = GameObject.Find("bbo").transform.GetChild(0).gameObject;
+        time = 0.0f;
+        isTimerOn = true;
+
+    }
+    private void Awake()
+    {
+        this.audioSource = GetComponent<AudioSource>();
 
     }
 
@@ -47,18 +62,23 @@ public class cubeMapManagerScript : MonoBehaviour
 
         if (cubeNum == 18)
         {
-            GameObject.Find("Weapon Hammer").GetComponent<SphereCollider>().isTrigger = true;
-            judge.yes_2 = true;
+            //GameObject.Find("Weapon Hammer").GetComponent<SphereCollider>().isTrigger = true;
+            //judge.yes_2 = true;
 
             if (goApartment)
                 StartCoroutine(goApartmentCo());
 
         }
+        if (isTimerOn)
+        {
+            time += Time.deltaTime;
+            StartCoroutine(popHowTo());
+        }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
-        if (other.tag == "Things")
+        if (other.transform.tag == "Things")
         {
             if (other.transform.name == "Cube" || other.transform.name == "_Cube")
             {
@@ -67,6 +87,8 @@ public class cubeMapManagerScript : MonoBehaviour
                 {
                     if (other.transform.name == "_Cube")
                         Instantiate(hammer_prefab, other.transform.position, Quaternion.identity);
+                    audioSource.clip = audioCubeTouch;
+                    audioSource.Play();
                     grabCube.transform.gameObject.SetActive(true);//들고있게 하고
                     grabCube.GetComponent<Renderer>().material.color = cube.GetComponent<Renderer>().material.color;
                     cube.gameObject.SetActive(false);//닿은 애 없애고
@@ -80,6 +102,8 @@ public class cubeMapManagerScript : MonoBehaviour
                     {
                         if (other.transform.name == "_Cube")
                             Instantiate(hammer_prefab, other.transform.position, other.transform.rotation);
+                        audioSource.clip = audioCubeCorrect;
+                        audioSource.Play();
                         cube.transform.gameObject.SetActive(false);//닿은 애 없애고,, ㅜ 존나하기싫다 쉽발
                         grabCube.transform.gameObject.SetActive(false);//들고있는애 없애고
                         cubeValue = -1;
@@ -88,6 +112,8 @@ public class cubeMapManagerScript : MonoBehaviour
                     }
                     else //값이 다르다~~~ 다른 애를 찍엇다!
                     {
+                        audioSource.clip = audioCubeWrong;
+                        audioSource.Play();
                         cube.GetComponent<Renderer>().material.color = Color.red;
                         check = 1;
                         //한 0.5초 뒤에 색 원상복구
@@ -99,7 +125,7 @@ public class cubeMapManagerScript : MonoBehaviour
 
         }
 
-        if (other.tag == "Item")
+        if (other.transform.tag == "Item")
         {
             hammerGrab.SetActive(true);
             goApartment = true;
@@ -144,4 +170,15 @@ public class cubeMapManagerScript : MonoBehaviour
             yield return null;
     }
 
+    IEnumerator popHowTo()
+    {
+        if (10f < time && time < 15f)
+            howTo.SetActive(true);
+        else if (time > 14f)
+        {
+            howTo.SetActive(false);
+            isTimerOn = false;
+        }
+        yield return null;
+    }
 }
