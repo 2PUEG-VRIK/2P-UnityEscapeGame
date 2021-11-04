@@ -7,6 +7,7 @@ public class Button : MonoBehaviour
     public GameObject door;
     ParticleSystem particle;
     Material mat;
+    Color OGcolor;
 
     bool isPushed;
 
@@ -14,6 +15,7 @@ public class Button : MonoBehaviour
     {
         particle = GetComponentInChildren<ParticleSystem>();
         particle.gameObject.SetActive(false);
+        OGcolor = GetComponent<MeshRenderer>().material.color;
         mat = GetComponent<MeshRenderer>().material;
         isPushed = false;
     }
@@ -47,7 +49,7 @@ public class Button : MonoBehaviour
         {
             transform.position += new Vector3(0, +0.5f, 0);
             isPushed = false;
-            mat.color = Color.white;
+            mat.color = OGcolor;
 
             if (door.GetComponent<Door>().isOpen)
             {
