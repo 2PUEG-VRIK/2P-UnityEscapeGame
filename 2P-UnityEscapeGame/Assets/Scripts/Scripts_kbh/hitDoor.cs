@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class hitDoor : MonoBehaviour
 {
@@ -16,8 +18,12 @@ public class hitDoor : MonoBehaviour
     private bool goBack = false;//문 열리면 뒤로 튕기렴
     private GameObject player;
     Vector3 prePlayerPos;//문에 튕기기 전 내 위치
-    //Vector3 offset;//문과 나 사이의 거리
-    //float sqrLen;//거리관련 변수
+                         //Vector3 offset;//문과 나 사이의 거리
+                         //float sqrLen;//거리관련 변수
+    public AudioClip audioDoorOpen;
+    AudioSource audioSource;
+    int check = 0;
+
 
     private void Awake()
     {
@@ -27,6 +33,9 @@ public class hitDoor : MonoBehaviour
         mat = GetComponentInChildren<MeshRenderer>().material;
         pre = GetComponentInChildren<MeshRenderer>().material;
         player = GameObject.FindWithTag("Player");
+        check = 0;
+        this.audioSource = GetComponent<AudioSource>();
+
     }
 
     private void Update()
@@ -43,15 +52,18 @@ public class hitDoor : MonoBehaviour
         //        goBack = true;
         //}
         prePlayerPos = player.transform.position;
+        if (check != 0)
+            StopCoroutine(playAudioCo());
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Weapon" &&this.value == 0)
+        if (other.tag == "Weapon" && this.value == 0)
         {
             Weapon weapon = other.GetComponent<Weapon>();
             ch -= weapon.damage;
             Vector3 reactVec = transform.position - other.transform.position;
             Debug.Log("아프다는 ㅜ");
+            check = 0;
             StartCoroutine(OnDamage());
 
         }
@@ -62,12 +74,16 @@ public class hitDoor : MonoBehaviour
             if (bullet.damage == 10 && value == 1)
             {
                 ch -= bullet.damage;
+                check = 0;
+
                 StartCoroutine(OnDamage());
             }
 
             else if (bullet.damage != 10 && value == 2)
             {
                 ch -= bullet.damage;
+                check = 0;
+
                 StartCoroutine(OnDamage());
             }
 
@@ -104,10 +120,13 @@ public class hitDoor : MonoBehaviour
 
                 this.transform.rotation = Quaternion.Slerp(
                          this.transform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), Time.deltaTime); // 문열어
-
+                if(check==0)
+                    StartCoroutine(playAudioCo());
                 if (player.transform.position.x <= 240f)
                     goBack = false;
-
+                // AudioSource.Destroy(this);
+                PBoxcollider.enabled = false;
+                boxcollider.enabled = false;
                 break;
 
             case 1: //초록문
@@ -119,10 +138,12 @@ public class hitDoor : MonoBehaviour
 
                 this.transform.rotation = Quaternion.Slerp(
                          this.transform.rotation, Quaternion.Euler(new Vector3(0, 90, 0)), Time.deltaTime); // 문열어
-
+                if (check == 0)
+                    StartCoroutine(playAudioCo());
                 if (player.transform.position.x <= 292f)
                     goBack = false;
-
+                PBoxcollider.enabled = false;
+                boxcollider.enabled = false;
 
                 break;
 
@@ -131,15 +152,21 @@ public class hitDoor : MonoBehaviour
                 //    player.transform.position = Vector3.Lerp(
                 //         prePlayerPos,
                 //         new Vector3(388f, 3f, 31f), Time.deltaTime * 2); //사람이동시켜
-
+                if (check == 0)
+                    StartCoroutine(playAudioCo());
                 this.transform.rotation = Quaternion.Slerp(
                          this.transform.rotation, Quaternion.Euler(new Vector3(0, 180, 0)), Time.deltaTime); // 문열어
+                PBoxcollider.enabled = false;
+                boxcollider.enabled = false;
                 break;
         }
-
-        PBoxcollider.enabled = false;
-        boxcollider.enabled = false;
-
+                yield return null;
+    }
+    IEnumerator playAudioCo()
+    {
+        audioSource.clip = audioDoorOpen;
+        audioSource.PlayOneShot(audioDoorOpen);
+        check++;
         yield return null;
     }
 }
