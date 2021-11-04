@@ -12,10 +12,17 @@ public class gr_Button : MonoBehaviour
     public Transform gr_buttonPos;     // 플레이어가 움직이던 방향 가져오기 위한 empty. 플레이어안에 있으니 다른 때에 필요하면 이거 넣어서 쓰면 됨.
     Material mat;
 
+    public AudioClip audioFast;
+    AudioSource audioSource;
 
     public bool isPushed;
 
-    void Start()
+    void Awake()
+    {
+        this.audioSource = GetComponent<AudioSource>();
+    }
+
+void Start()
     {
         //mat = GetComponent<MeshRenderer>().material;
         isPushed = false;
@@ -26,6 +33,9 @@ public class gr_Button : MonoBehaviour
         {  
             if (other.gameObject.tag == "Player" || other.gameObject.tag == "Box" || other.gameObject.tag == "Boxsj")       
             {
+                audioSource.clip = audioFast;
+                audioSource.Play();
+
                 transform.position += new Vector3(0, -0.5f, 0);
                 isPushed = true;
 

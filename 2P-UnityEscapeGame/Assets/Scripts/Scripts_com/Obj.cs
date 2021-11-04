@@ -54,7 +54,6 @@ public class Obj : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
         Rigidbody rigid = other.gameObject.GetComponent<Rigidbody>();
         if (!istoWALL)
         {
