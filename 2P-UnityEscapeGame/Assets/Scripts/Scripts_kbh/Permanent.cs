@@ -38,12 +38,14 @@ public class Permanent : MonoBehaviour
     private bool first = false;
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.transform.name == "Plain" && !first)
-        {
+        //if (collision.transform.name == "Plain" && !first)
+        //{
             
-            for (int i = 0; i < 5; i++)
-                GameObject.Find("Monster").transform.GetChild(i).gameObject.SetActive(true);
-            first = true;
-        }
+        //    for (int i = 0; i < 5; i++)
+        //        GameObject.Find("Monster").transform.GetChild(i).gameObject.SetActive(true);
+        //    first = true;
+        //}
+
+
     }
 }
