@@ -20,7 +20,7 @@ public class Man : MonoBehaviour
     bool isSwap;        // 스왑할땐 아무런 뭣도 안하도록 함.
     bool isBump;
     public bool isJump;
-    bool sDown1;        //무기바꾸는 변수
+    public bool sDown1;        //무기바꾸는 변수
     bool sDown2;
     bool sDown3;
     bool iDown;
@@ -244,7 +244,7 @@ public class Man : MonoBehaviour
             }
         }
     }
-    void Swap()
+    public void Swap()
     {
         if (sDown1 && (!hasWeapons[0] || equipWeaponIndex == 0))
             return;

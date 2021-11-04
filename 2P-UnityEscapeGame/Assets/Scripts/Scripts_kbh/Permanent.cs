@@ -114,8 +114,6 @@ public class Permanent : MonoBehaviour
     }
     IEnumerator playAudioCo()//fence
     {
-        Debug.Log("펜스코");
-
         audioSource.clip = audioFenceOpen;
         audioSource.PlayOneShot(audioFenceOpen);
         check++;
@@ -123,8 +121,6 @@ public class Permanent : MonoBehaviour
     }
     IEnumerator popUpAudioCo()//사용설명서 pop up
     {
-        Debug.Log("팝업코");
-
         audioSource.clip = audioInform;
         audioSource.PlayOneShot(audioInform);
         check_p++;

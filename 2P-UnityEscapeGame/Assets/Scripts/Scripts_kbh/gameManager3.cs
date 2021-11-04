@@ -34,7 +34,7 @@ using UnityEngine.SceneManagement;
 4 두더지랑 말 끝나면 check=4됨. 두더지가 가로등으로 걸어가라고 함(가로등에 닿아서 맵 이동하는 조건 ==(check=4)
 -4 맵 이동
 
-5 맵에서 나옴!(마을로 돌아왔딴뜻)
+5 맵에서 나옴!(마을로 돌아왔딴뜻) 오리한테 가서 말걸고 말이 끝날때까지 check=5
 
 */
 public class gameManager3 : MonoBehaviour
@@ -96,6 +96,17 @@ public class gameManager3 : MonoBehaviour
     GameObject exitDoor;
     GameObject hidden;//door 앞 hiddenPlane
     GameObject lightHidden;//가로등 밑 큐브
+    Man man;
+    //날 따라오는 오리 구현
+    public bool followDuck;
+    attackRock Rock;
+
+
+    public AudioClip audioWithNPCTalk;
+    public AudioClip audioClear;
+    AudioSource audioSource;
+    private int final;
+    GameObject howTo;
 
     private void Start()
     {
@@ -117,11 +128,12 @@ public class gameManager3 : MonoBehaviour
         lightHidden = GameObject.Find("lightHidden");
         //saveM = GameObject.Find("saveManager");
         //data = saveM.GetComponent<saveManagerScript>();
-        isTimerOn = false;
+        isTimerOn = true;
         isTouch = false;
         alreadyCame = false;
         check = 0;
         time = 0f;
+        final = 0;
         //GameObject plane = GameObject.Find("specialPlane");
         //if (judge.GetComponent<judginScript>().yes)
         //    plane.SetActive(false);
@@ -130,8 +142,11 @@ public class gameManager3 : MonoBehaviour
         generateNameText();
         checkLength();
 
-        if (GameObject.Find("judging").GetComponent<judginScript>().yes 
-            &&!GameObject.Find("judging").GetComponent<judginScript>().yes_2)//monsterMap만 갔다옴
+        man = this.GetComponent<Man>();
+        howTo = GameObject.Find("bbo").transform.GetChild(0).gameObject;
+
+        if (GameObject.Find("judging").GetComponent<judginScript>().yes
+            && GameObject.Find("judging").GetComponent<judginScript>().yes_2 == false)//monsterMap만 갔다옴
         {//꽃 위에 떠있는 화살표 없애기
             GameObject.Find("specialPlane").SetActive(false);//아파트 앞 발판 없애고
             first = false;
@@ -144,8 +159,9 @@ public class gameManager3 : MonoBehaviour
             twice = true;
             nameText.text = GetName(0, 0);
             changeNameIcon(0);
+            talkPanel.SetActive(true);
             talkText.text = "놀라라.. 너무 무서웠어.. 그 꽃이 날 속인건가?\n다시 가서 따져야겠어!!!";
-           
+
         }
 
         if (GameObject.Find("judging").GetComponent<judginScript>().yes
@@ -158,26 +174,36 @@ public class gameManager3 : MonoBehaviour
             GameObject.Find("blackCarArrow").SetActive(false);
             lightHidden.SetActive(false);
             mole.GetComponent<BoxCollider>().enabled = false;
-            this.transform.position = new Vector3(164, 2.6f, 38);
+            //this.transform.localPosition = new Vector3(150, 6, 32);
             first = false;
+            twice = true; third = true;
             myIndex = 6;
             yourIndex = 5;
             check = 5;
-            twice = true; third = true;
             arrow_blackCar.SetActive(false);
             GameObject.Find("WeaponPoint").transform.GetChild(0).gameObject.SetActive(true);
-            
+            man.hasWeapons[0] = true;
+            man.sDown1 = true;
+            man.Swap();
+            this.transform.localPosition = new Vector3(150, 6, 32);
+            Debug.Log(check);
+            Debug.Log(this.transform.position);
+            talkPanel.SetActive(true);
             nameText.text = GetName(0, 0);
             changeNameIcon(0);
             talkText.text = "휴~ 이제 오리한테 망치를 갖다줘야지!";
+            howTo.SetActive(false);
 
         }
-        exitDoor = GameObject.Find("exitDoor");
+        exitDoor = GameObject.Find("hinder");
         hidden = GameObject.Find("hiddenPlane_1");
+        followDuck = false;
+        Rock = GameObject.Find("RockRock").GetComponent<attackRock>();
     }
 
     private void Awake()
     {
+        this.audioSource = GetComponent<AudioSource>();
 
     }
     private void Update()
@@ -202,8 +228,11 @@ public class gameManager3 : MonoBehaviour
 
 
         if (isTimerOn)
+        {
             time += Time.deltaTime;
-
+            if (first)
+                StartCoroutine(popHowTo());
+        }
         if (Input.GetKeyDown(KeyCode.X) && isTouch)//말하는 npc랑 닿았고 X를 눌렀다면~
         {
             myLastIndex = textGroup[value].Length;//내 대화 길이 체크하고
@@ -246,10 +275,12 @@ public class gameManager3 : MonoBehaviour
                 break;
 
             case 2://꽃이랑 대화 하고 아파트로 가서 specialPlane밟는것까지
-                if (touchThings.name == "specialPlane")
-                    StartCoroutine(HouseTalk());
+                if (twice == false)
+                {
+                    if (touchThings.name == "specialPlane")
+                        StartCoroutine(HouseTalk());
+                }
                 break;
-
 
             case -2:
                 StopCoroutine(HouseTalk());
@@ -266,8 +297,15 @@ public class gameManager3 : MonoBehaviour
 
             case -4://더쥐랑 얘기 끝내고~ 가로등에 박은 상태
                 StartCoroutine(CallOtherMap(-4));
-                    break;
+                break;
 
+        }
+
+        if (Rock.Final)
+        {
+            if(final==0)
+                StartCoroutine(FinalAudio());
+            StartCoroutine(FinalTalk());
         }
     }
 
@@ -297,9 +335,9 @@ public class gameManager3 : MonoBehaviour
 
         else if (other.tag == "NPC")
         {
-            if (value == 4)
+            if (value == 4)//오리랑 대화
             {
-                if ( check == 3 || check == -3 | check == 5) 
+                if (check == 3 || check == -3 | check == 5)
                 {
                     touchThings = other.gameObject;
                     talkPanel.SetActive(false);
@@ -346,18 +384,22 @@ public class gameManager3 : MonoBehaviour
             isTouch = true;
 
             check = 3;
-            if(!third)//문 닿고 아직 두번째 여행 안갔을 때 첫번째 여행에서의 정보들 삭제함
+            if (!third)//문 닿고 아직 두번째 여행 안갔을 때 첫번째 여행에서의 정보들 삭제함
                 for (int i = 0; i < judgeSc.arr1.Count; i++)
                     judgeSc.arr1.Remove(i);
+            if (followDuck && check == 3)
+            {
+                check = -5;
+            }
         }
 
-        else if (other.name == "lightHidden" && check==4)//두더지랑 대화 끝나고 가로등에 갖다 박아
+        else if (other.name == "lightHidden" && check == 4)//두더지랑 대화 끝나고 가로등에 갖다 박아
         {
             touchThings = other.gameObject;
             isTouch = true;
 
             judge.GetComponent<judginScript>().saveQue((int)this.transform.position.x, (int)this.transform.position.y
-                      , (int)this.transform.position.z, 4,value);
+                      , (int)this.transform.position.z, 4, value);
             check = -4;
         }
         Debug.Log(isTouch);
@@ -375,7 +417,7 @@ public class gameManager3 : MonoBehaviour
             }
 
         }
-        if (other.tag == "NPC" && (other.name != "flower" ||other.name!="duck"))
+        if (other.tag == "NPC" && (other.name != "flower" || other.name != "duck"))
         {
             if (other.gameObject.name == "mole")
             {
@@ -400,6 +442,10 @@ public class gameManager3 : MonoBehaviour
             {
                 Debug.Log("내 index" + myIndex);
                 Debug.Log("네 index" + yourIndex);
+                if (check == 5)
+                {
+
+                }
             }
         }
         talkText.text = "";
@@ -417,20 +463,20 @@ public class gameManager3 : MonoBehaviour
     private void generatePlayerText()//내 대화 제작
     {
         //게임 시작 후 바로 나오는 대화
-        textGroup.Add(0, new string[] { "(헉.. 헉..) 여긴 어디지? \n처음 오는 곳인데...", "너무 멀리 와버렸어." });//mylast=2
+        textGroup.Add(0, new string[] { "(헉.. 헉..) 여긴 어디지? \n처음 오는 곳인데...", "딴 생각하며 산책하다 너무 멀리 와버렸어..." });//mylast=2
         //1 양이랑 하는 대화
         textGroup.Add(1, new string[]//mylast=3
-        { "저기.. ", "길을 잃었어... 여긴 대체 어디야?\n한 눈 팔다가... 여기까지 오게됐어","그렇구나.. 정말 고마워!\n안녕!"});
+        { "저기.. ", "길을 잃었어... 여긴 대체 어디야?\n집에 가고싶어...","와 진짜? ... 고마워! 지금 바로 두더지 찾으러가야지!"});
         //2 두더지랑 대화
         textGroup.Add(2, new string[]
         {
-            "앗! 놀라라! ","하하, 미안", "어, 응! 어떻게 알았어?", "뭐? 가로등에? 장난이지?","으응...ㅠ"
+            "앗! 놀라라! ","하하, 미안", "어, 응! 어떻게 알았어?", "뭐? 가로등에? 장난이지?","윽.. 알겠어!"
         });
         //3 아파트 옆 못난이 꽃
         textGroup.Add(3, new string[]
         {
             "네가 날 불렀니?", "아..길을 잃었거든\n그래서 나가는 법을 두더지에게 물어보려고", "와, 정말이니? 고마워!!!", "너무한거 아니야? 죽을 뻔 했잖아!",
-            "..정말이지?","고마워! 안녕!"
+            "..정말이지?","괜찮아. 알려줘서 고마워! 안녕!"
         });
 
         //4 오리
@@ -453,7 +499,7 @@ public class gameManager3 : MonoBehaviour
         //3 아파트 옆 꽃
         nameTextGroup.Add(3, new string[] { "수상한 꽃", "???" });
         //4 오리
-        nameTextGroup.Add(4, new string[] { "날개재주 좋은 오리" });
+        nameTextGroup.Add(4, new string[] { "날개재주 좋은 오리", "착하고 귀여운 오리" });
 
     }
 
@@ -485,17 +531,18 @@ public class gameManager3 : MonoBehaviour
                     panelActive = false;
                     yourIndex = 0; myIndex = 0;
                     first = false;
-                    Debug.Log("대화 끝났다는");
+
                     break;
                 }
-
-                //if (Input.GetKeyDown(KeyCode.X))//////////////////////////////////////여기~~~~~~~~
                 {
+                    talkPanel.SetActive(true);
+
                     talkText.text = GetMyTalk(value, myIndex);
                     myIndex++;
                     Debug.Log(myIndex);
                     nameText.text = GetName(0, 0);
-                    changeNameIcon(0);
+                    changeNameIcon(0); audioSource.clip = audioWithNPCTalk;
+                    audioSource.Play();
                     break;
                 }
             }
@@ -510,7 +557,6 @@ public class gameManager3 : MonoBehaviour
                 {
                     talkPanel.SetActive(false);
                     panelActive = false;
-                    Debug.Log("대화 끝났다는");
 
                     yourIndex = 0; myIndex = 0;
                     yourLastIndex = 0; myLastIndex = 0;
@@ -522,13 +568,13 @@ public class gameManager3 : MonoBehaviour
                 // if (Input.GetKeyDown(KeyCode.X))
                 {
                     if (value == 3 && myIndex == 3 && !twice)//꽃이랑 말할때
-                    { 
+                    {
                         talkPanel.SetActive(false);
                         panelActive = false;
                         Debug.Log("대화 끝났다는");
                     }
 
-                    else 
+                    else
                     {
                         if (value == 2)//두더지랑 대화 끝났고 que에 저장하면서 check=-4될 예정. 이 코드 맞는코드임
                             check = 4;
@@ -536,6 +582,8 @@ public class gameManager3 : MonoBehaviour
                         myIndex++;
                         nameText.text = GetName(0, 0);
                         changeNameIcon(0);
+                        audioSource.clip = audioWithNPCTalk;
+                        audioSource.Play();
                     }
                     break;
 
@@ -562,6 +610,12 @@ public class gameManager3 : MonoBehaviour
 
                 else if (value == 2)//두더지랑 대화 끝났고 que에 저장하면서 check=-4될 예정. 이 코드 맞는코드임
                     check = 4;
+                else if (value == 4)//오리랑 아예 대화 끝났으면 이제 날 따라올 차례
+                {
+                    followDuck = true;
+                    check = 5;
+                    Debug.Log("followDuck" + followDuck); Debug.Log(check);
+                }
                 break;
             }
             // if (Input.GetKeyDown(KeyCode.X))
@@ -574,9 +628,11 @@ public class gameManager3 : MonoBehaviour
             talkText.text = talkManager.GetTalk(value, yourIndex);//npc index 대화 출력
             yourIndex++;
             isMyTurn = true;
-            Debug.Log("현재 "+value+" 인덱스 " + yourIndex + "끝 인덱스 " + yourLastIndex);
+            Debug.Log("현재 " + value + " 인덱스 " + yourIndex + "끝 인덱스 " + yourLastIndex);
             nameText.text = GetName(value, 0);
             changeNameIcon(value);
+            audioSource.clip = audioWithNPCTalk;
+            audioSource.Play();
             // changeNameIcon(value);
             break;
         }
@@ -635,7 +691,7 @@ public class gameManager3 : MonoBehaviour
         myIndex = 0; myLastIndex = 0; yourIndex = 0; yourLastIndex = 0;
         molePopUp = false;
         active_moleFunc = false;
-        mole.transform.localPosition = new Vector3(262.5f,0.3f,299);
+        mole.transform.localPosition = new Vector3(262.5f, 0.3f, 299);
         remark_mole.SetActive(false);
         car.transform.rotation = Quaternion.Slerp(
                car.transform.localRotation, Quaternion.Euler(new Vector3(0, 180, 0)), Time.time * 0.01f);
@@ -672,30 +728,38 @@ public class gameManager3 : MonoBehaviour
 
     IEnumerator FlowerSay()
     {
-        isTimerOn = true;
-        value = 7;
-        if (2f < time && time < 4f)
+        isTimerOn = true; value = 1;
+        if (2.5f < time && time < 5f)
         {
             talkPanel.SetActive(true);
             panelActive = true;
+            nameText.text = GetName(1, 0);
+            changeNameIcon(1);
+
+            talkText.text = "잠깐! 꼬마야! 두더지가 어디있는지 모르잖아!";
+        }
+
+        value = 7;
+        if (5.5f < time && time < 8f)
+        {
             nameText.text = GetName(3, 1);
             changeNameIcon(7);
 
             talkText.text = "야~ 너! 이리와 봐~";
         }
-        else if (4f < time && time < 6f)
+        else if (8f < time && time < 11f)
         {
             talkText.text = "어? 날 부르는건가?";
             nameText.text = GetName(0, 0);
             changeNameIcon(0);
         }
-        else if (6f < time && time < 9f)
+        else if (11f < time && time < 14f)
         {
-            talkText.text = "그래 너 ~ \n아파트 옆 쓰레기통으로 와 봐!";
+            talkText.text = "그래 너 ~ \n건물 옆 쓰레기통으로 얼른 와 봐!";
             nameText.text = GetName(3, 1);
             changeNameIcon(7);
         }
-        else if (time > 9f)
+        else if (time > 14f)
         {
             isTimerOn = false;
             check = -1;
@@ -718,7 +782,7 @@ public class gameManager3 : MonoBehaviour
         nameText.text = GetName(0, 0);
         changeNameIcon(0);
 
-        talkText.text = "앗..어지러워..";
+        talkText.text = "앗..어지러워......어엇??!";
         isTimerOn = true;
         if (time > 2f)
         {
@@ -765,21 +829,21 @@ public class gameManager3 : MonoBehaviour
             nameText.text = GetName(0, 0);
             changeNameIcon(0);
 
-            talkText.text = "이게뭐야~~ 흑흑...";
+            talkText.text = "앗?! 이게뭐야~~ 흑흑... 돌들로 막혀있잖아..";
         }
         else if (4f < time && time < 7f)
         {
-            talkText.text = "종이가 붙어있네... 관리자.. 강에 사는 김오리?";
+            talkText.text = "어? 종이가 붙어있네... \n여기 관리자가, 강에 살고 가장 날개재주가 좋은 오리라구?";
 
         }
         else if (7f < time && time < 10f)
         {
-            talkText.text = "김오리한테 말해야하는구나..";
+            talkText.text = "좋아! 오리한테 말해야하는구나!";
 
         }
         else if (10f < time && time < 13f)
         {
-            talkText.text = "저 밑에 강이 있던데! 다시 가야겠다~";
+            talkText.text = "저 아래에 강이 있던데! 다시 가야겠다~";
 
         }
         else if (13f < time)
@@ -791,5 +855,84 @@ public class gameManager3 : MonoBehaviour
             check = -3;
             yield return null;
         }
+    }
+    IEnumerator FinalAudio()
+    {
+        if (final == 0)
+        {
+            audioSource.clip = audioClear;
+            audioSource.PlayOneShot(audioClear);
+        }
+        final++;
+        yield return null;
+    }
+    IEnumerator FinalTalk()
+    {
+        isTimerOn = true;
+        value = 4;
+        if (2f < time && time < 4f)
+        {
+            talkPanel.SetActive(true);
+            panelActive = true;
+            nameText.text = GetName(0, 0);
+            changeNameIcon(0);
+
+            talkText.text = "와~~!! 드디어 돌이 깨졌어! 집에 갈 수 있어!!";
+        }
+        else if (4f < time && time < 6f)
+        {
+            talkText.text = "축하해~~^3^";
+            nameText.text = GetName(4, 1);
+            changeNameIcon(4);
+        }
+        else if (6f < time && time < 9f)
+        {
+            nameText.text = GetName(0, 0);
+            changeNameIcon(0);
+
+            talkText.text = "고마워 오리야! 고마워 동식물들아! 다 너희 덕이야~!";
+        }
+        else if (9f < time && time < 13f)
+        {
+            talkText.text = "헤헷, 뭘 ~!! 그나저나 밤이 깊었어. 얼른 가 봐!";
+            nameText.text = GetName(4, 1);
+            changeNameIcon(4);
+        }
+        else if (13f < time && time < 16f)
+        {
+            nameText.text = GetName(0, 0);
+            changeNameIcon(0);
+
+            talkText.text = "응! 고마워 얘들아! 안녕~~~";
+        }
+        else if (16f<time && time<19f)
+        {
+            talkText.text = "안녕~!";
+            nameText.text = GetName(4, 1);
+            changeNameIcon(4);
+        }
+        else if (time > 19f)
+        {
+            isTimerOn = false;
+            check = -1;
+
+            talkPanel.SetActive(false);
+            panelActive = false;
+            talkText.text = "";
+            time = 0.0f;
+
+            yield return null;
+        }
+    }
+    IEnumerator popHowTo()
+    {
+        if (2f < time && time < 8f)
+            howTo.SetActive(true);
+        else if (time > 8f)
+        {
+            howTo.SetActive(false);
+            isTimerOn = false;
+        }
+        yield return null;
     }
 }

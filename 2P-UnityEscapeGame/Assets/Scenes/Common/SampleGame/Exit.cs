@@ -16,7 +16,7 @@ public class Exit : MonoBehaviour
 
     private void Start()
     {
-         isFinish = false;
+        isFinish = false;
     }
 
     private void Update()
@@ -32,15 +32,6 @@ public class Exit : MonoBehaviour
             players.transform.position = Vector3.MoveTowards(players.transform.position, players.transform.position + Vector3.up, Time.deltaTime * 15);
         }
     }
-
-    private void OnTriggerExit(Collider other)
-    {
-        //if (!isFinish && other.gameObject.tag == "Player")
-        //{
-        //    players = null;
-        //}
-    }
-
 
     // 아래 함수 2개 바뀜.
     private void OnTriggerEnter(Collider other)
@@ -58,7 +49,6 @@ public class Exit : MonoBehaviour
     }
     IEnumerator StageFinish()
     {
-        SingleGameMNG.Instance.save_time((scene == "Finish Scene"));
 
         // 하늘로 올라가라.
         yield return new WaitForSeconds(1f);

@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 
 public class Enemy : MonoBehaviour
 {
-
-    
-
     public int maxHealth;
     public int curHealth;
     public Transform target;
@@ -20,8 +18,10 @@ public class Enemy : MonoBehaviour
     BoxCollider boxCollider;
     Animator anim;
     GameObject coin;
+    public AudioClip audioEnemyDie;
+    AudioSource audioSource;
 
-   
+
     void Awake()//초기화
     {
         rigid = GetComponent<Rigidbody>();
@@ -30,6 +30,9 @@ public class Enemy : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren <Animator>();
         coin = GameObject.Find("2nd").transform.GetChild(3).gameObject;
+        this.audioSource = GetComponent<AudioSource>();
+
+
         Invoke("ChaseStart", 1);
     }
 
@@ -95,17 +98,19 @@ public class Enemy : MonoBehaviour
             isChase = false;
             nav.enabled = false;
             anim.SetTrigger("doDie");
+            audioSource.clip = audioEnemyDie;
+            audioSource.Play();
 
             reactVec = reactVec.normalized;//값 1로 통일
-            reactVec += Vector3.up*2;
-            rigid.AddForce(reactVec *7, ForceMode.Impulse);
+            reactVec += Vector3.up*1;
+            rigid.AddForce(reactVec *4, ForceMode.Impulse);
             if (this.name == "coinMonster")
             {
                 coin.transform.position = this.transform.position;
                 coin.SetActive(true);
                 Debug.Log(coin.name);
             }
-            Destroy(gameObject, 0.6f); //1초 뒤에 사라짐
+            Destroy(gameObject, 0.4f); //1초 뒤에 사라짐
         }
     }
 }

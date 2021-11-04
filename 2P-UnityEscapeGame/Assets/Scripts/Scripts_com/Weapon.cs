@@ -85,8 +85,5 @@ public class Weapon : MonoBehaviour
         Vector3 caseVec = bulletCasePos.forward * Random.Range(-3, -2) + Vector3.up * Random.Range(2, 3);
         caseRigid.AddForce(caseVec, ForceMode.Impulse);//즉각적인
         caseRigid.AddTorque(Vector3.up * 10, ForceMode.Impulse);//회전축은 마음대로
-
-
-
     }
 }

@@ -43,10 +43,6 @@ public class monsterMapScript : MonoBehaviour
         holdPosition = GameObject.Find("holdingCoin");
         judge = GameObject.Find("judging").GetComponent<judginScript>();
 
-        for (int i = 0; i < 5; i++)
-        {
-            Debug.Log(judge.arr1[i]);
-        }
     }
     private void Awake()
     {
@@ -139,7 +135,6 @@ public class monsterMapScript : MonoBehaviour
     {
         if (other.name == "Exit")/////////////////exit¿¡ ´êÀ¸¸é~
         {
-            //manager.twice = true;
             judge.yes = true;
             goApartment = true;
         }

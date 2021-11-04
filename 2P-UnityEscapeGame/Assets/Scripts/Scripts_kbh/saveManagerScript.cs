@@ -26,6 +26,8 @@ public class saveManagerScript : MonoBehaviour
             man.transform.position =new Vector3((int)j.arr1[0]-15, (int)j.arr1[1], (int)j.arr1[2] );
             manager.check = (int)j.arr1[3];
             manager.value = (int)j.arr1[4];
+            if(j.yes_2)
+                man.transform.position = new Vector3((int)j.arr1[0] , (int)j.arr1[1], (int)j.arr1[2]);
         }
 
     }

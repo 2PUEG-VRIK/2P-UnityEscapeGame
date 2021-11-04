@@ -48,9 +48,6 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/Final/Finish Scene.unity
-    guid: 06fe697448261364fbdfb8ea4d516fae
-  - enabled: 1
     path: Assets/Scenes/Final/Stage2.unity
     guid: 2a1c2e410e09ba94cab0776b788d487d
   - enabled: 1
@@ -68,4 +65,25 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Mode1/md1_kbh/cubeMap.unity
     guid: 189222cadb947804d997d7694d2e1777
+  - enabled: 1
+    path: Assets/Scenes/RealFinal/A_Start Scene.unity
+    guid: 155adf09359662a49930c3cc2d55b11a
+  - enabled: 1
+    path: Assets/Scenes/RealFinal/Stage05.unity
+    guid: 70ff8d1c7c4fdf4408af64af97eced78
+  - enabled: 1
+    path: Assets/Scenes/RealFinal/Stage06.unity
+    guid: 97540db986b44ce4c8539eb6b45f06aa
+  - enabled: 1
+    path: Assets/Scenes/RealFinal/Stage07.unity
+    guid: 4bf9ac4dde0007046a4ec9d7db163796
+  - enabled: 1
+    path: Assets/Scenes/RealFinal/Stage08.unity
+    guid: dfaf7d27154ade340bbd3d588897f7bc
+  - enabled: 1
+    path: Assets/Scenes/RealFinal/Stage09.unity
+    guid: 4ff2f9b267dd7ab4db6a77450c843ab4
+  - enabled: 1
+    path: Assets/Scenes/RealFinal/Finish Scene.unity
+    guid: 8e998643bd7f5d2418d55bb512dcdf1f
   m_configObjects: {}

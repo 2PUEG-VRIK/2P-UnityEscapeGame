@@ -45,7 +45,7 @@ public class cubeMapManagerScript : MonoBehaviour
         grabCube = GameObject.Find("holdingCube").transform.GetChild(0).gameObject;
         //exit = GameObject.Find("2nd").transform.GetChild(5).gameObject;
         hammerGrab = GameObject.Find("WeaponPoint").transform.GetChild(0).gameObject;
-        // judge = GameObject.Find("judging").GetComponent<judginScript>();
+        judge = GameObject.Find("judging").GetComponent<judginScript>();
         howTo = GameObject.Find("bbo").transform.GetChild(0).gameObject;
         time = 0.0f;
         isTimerOn = true;
@@ -62,10 +62,11 @@ public class cubeMapManagerScript : MonoBehaviour
         if (isHold && check == 1)
             StartCoroutine("goBack");
 
-        if (cubeNum == 18)
+        if (cubeNum == 16)
         {
-            //GameObject.Find("Weapon Hammer").GetComponent<SphereCollider>().isTrigger = true;
-            //judge.yes_2 = true;
+            GameObject.Find("Weapon Hammer").GetComponent<SphereCollider>().isTrigger = true;
+            judge.yes_2 = true;
+            judge.yes = true;
 
             if (goApartment)
                 StartCoroutine(goApartmentCo());
@@ -144,7 +145,7 @@ public class cubeMapManagerScript : MonoBehaviour
             }
         }
 
-        if (other.transform.tag == "Item" && cubeNum==0)
+        if (other.transform.tag == "Item" && cubeNum==16)
         {
             hammerGrab.SetActive(true);
             goApartment = true;
