@@ -9,7 +9,15 @@ public class Button : MonoBehaviour
     Material mat;
     Color OGcolor;
 
+    public AudioClip audioDoorbtn;
+    AudioSource audioSource;
+
     bool isPushed;
+
+    private void Awake()
+    {
+        this.audioSource = GetComponent<AudioSource>();
+    }
 
     void Start()
     {
@@ -19,6 +27,15 @@ public class Button : MonoBehaviour
         mat = GetComponent<MeshRenderer>().material;
         isPushed = false;
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player" || other.tag == "Box" || other.tag == "Boxsj")
+        {
+            audioSource.clip = audioDoorbtn;
+            audioSource.Play();
+        }
+    }
+
     private void OnTriggerStay(Collider other)
     {
         // 꼭 플레이어가 누를 필요없음. 그냥 뭐가 누르고 있으면 문 열어

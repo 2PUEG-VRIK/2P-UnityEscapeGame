@@ -329,7 +329,7 @@ public class Man : MonoBehaviour
     void OnDie()
     {
         if (!isDead)
-        {
+        { 
             anim.SetTrigger("doDie");
             isDead = true;
         }

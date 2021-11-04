@@ -6,6 +6,13 @@ public class Teleport_wjj : MonoBehaviour
 {
     public GameObject target;
     bool cooldown = false;
+    public AudioClip audioTeleport;
+    AudioSource audioSource;
+
+    void Awake()
+    {
+        this.audioSource = GetComponent<AudioSource>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -19,6 +26,8 @@ public class Teleport_wjj : MonoBehaviour
         }
         if (target != null)
         {
+            audioSource.clip = audioTeleport;
+            audioSource.Play();
             if (other.gameObject.tag == "Player")
             {
                 StartCooldown();

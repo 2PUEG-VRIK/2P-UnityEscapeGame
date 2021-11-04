@@ -28,6 +28,7 @@ TagManager:
   - Door
   - dont
   - BGwall
+  - DoorButton
   layers:
   - Default
   - TransparentFX
@@ -46,6 +47,7 @@ TagManager:
   - Door
   - Exit
   - Cube
+  - 
   - 
   - 
   - 
