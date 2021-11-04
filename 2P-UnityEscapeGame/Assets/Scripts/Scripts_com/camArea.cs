@@ -26,7 +26,9 @@ public class camArea : MonoBehaviour
     private void OnCollisionExit(Collision collision)
     {
         Debug.Log("생겨라!");
-        collision.gameObject.GetComponent<MeshRenderer>().enabled = true;
+
+        if(collision.gameObject.tag != "BGwall")
+            collision.gameObject.GetComponent<MeshRenderer>().enabled = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -39,6 +41,7 @@ public class camArea : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         Debug.Log("Triger 생겨라!");
-        other.gameObject.GetComponent<MeshRenderer>().enabled = true;
+        if (other.gameObject.tag != "BGwall")
+            other.gameObject.GetComponent<MeshRenderer>().enabled = true;
     }
 }

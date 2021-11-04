@@ -389,7 +389,7 @@ public class Man : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
 
-        if (collision.gameObject.tag == "Wall")
+        if (collision.gameObject.tag == "Wall" || collision.gameObject.tag == "BGwall")
         {
             isGRbtn = false;
         }

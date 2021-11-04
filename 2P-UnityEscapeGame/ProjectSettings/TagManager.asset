@@ -27,6 +27,7 @@ TagManager:
   - NPC
   - Door
   - dont
+  - BGwall
   layers:
   - Default
   - TransparentFX
@@ -43,7 +44,6 @@ TagManager:
   - Box
   - Teleport
   - Door
-  - 
   - 
   - 
   - 
