@@ -409,7 +409,10 @@ public class Man : MonoBehaviour
         }
           
         // 바닥 닿으면 다시 점프 가능상태로 바꿔주기.
-        //if (Physics.Raycast(transform.position, -transform.up, 3))
+        if (Physics.Raycast(transform.position, -transform.up, 3, LayerMask.GetMask("Wall")))
+        {
+            isJump = false;
+        }
         if (collision.gameObject.layer == 7 || collision.gameObject.tag == "Box" || collision.gameObject.tag == "Boxsj")
 
         {
