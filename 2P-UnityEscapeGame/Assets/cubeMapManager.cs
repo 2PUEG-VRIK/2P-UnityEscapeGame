@@ -5,18 +5,18 @@ using UnityEngine.UI;
 
 public class cubeMapManager : MonoBehaviour
 {
-    //1Ãş- Å¥ºêµé°ü·Ã
+    //1ì¸µ- íë¸Œë“¤ê´€ë ¨
     public GameObject[] Cubes;
-    private bool isHold = false;//»óÀÚ µé°íÀÖ³ª¿©~
+    private bool isHold = false;//ìƒì ë“¤ê³ ìˆë‚˜ì—¬~
     Rigidbody rigid;
     theCubes cube;
-    GameObject grabCube;//¼Õ¿¡ µé°íÀÕ´Â Å¥ºê
-    int cubeValue;//¼Õ¿¡ µé°íÀÖ´Â Å¥ºê °ª
+    GameObject grabCube;//ì†ì— ë“¤ê³ ì‡ëŠ” íë¸Œ
+    int cubeValue;//ì†ì— ë“¤ê³ ìˆëŠ” íë¸Œ ê°’
     Ray ray;
     RaycastHit hit;
     Renderer cubeColor;
-    int cubeNum = 10;//Å¥ºê °³¼ö
-    bool goDown;//´À³¦Ç¥ Å©±â °ü·Ã º¯¼ö
+    int cubeNum = 10;//íë¸Œ ê°œìˆ˜
+    bool goDown;//ëŠë‚Œí‘œ í¬ê¸° ê´€ë ¨ ë³€ìˆ˜
     GameObject tele;
 
     int check = -1;
@@ -29,9 +29,8 @@ public class cubeMapManager : MonoBehaviour
         //input = GameObject.Find("Canvas_2").transform.GetChild(1).gameObject;
         rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
         grabCube = GameObject.Find("holdingCube").transform.GetChild(0).gameObject;
-        tele = GameObject.Find("final").transform.GetChild(0).gameObject;
-        exit = GameObject.Find("2nd").transform.GetChild(5).gameObject;
-
+        //tele = GameObject.Find("final").transform.GetChild(0).gameObject;
+        //exit = GameObject.Find("2nd").transform.GetChild(5).gameObject;
     }
 
     private void Update()
@@ -41,12 +40,13 @@ public class cubeMapManager : MonoBehaviour
 
         if (cubeNum == 0)
         {
-            Debug.Log("Å¥ºÎ 0°³³²À½!");
+            Debug.Log("íë¶€ 0ê°œë‚¨ìŒ!");
+
 
         }
 
         if (cubeNum == 2)
-            Debug.Log("µÎ°³³²¾Ñ½á¿ë");
+            Debug.Log("ë‘ê°œë‚¨ì•—ì¨ìš©");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -56,43 +56,42 @@ public class cubeMapManager : MonoBehaviour
             if (other.transform.name == "Color_Sphere")
             {
                 cube = other.transform.gameObject.GetComponent<theCubes>();
-                if (!isHold)//µé°íÀÖÁö¾ÊÀº »óÅÂ¿¡¼­ ¾Ö¸¦ ¸¸³µµû!
+                if (!isHold)//ë“¤ê³ ìˆì§€ì•Šì€ ìƒíƒœì—ì„œ ì• ë¥¼ ë§Œë‚¬ë”°!
                 {
-                    grabCube.transform.gameObject.SetActive(true);//µé°íÀÖ°Ô ÇÏ°í
+                    grabCube.transform.gameObject.SetActive(true);//ë“¤ê³ ìˆê²Œ í•˜ê³ 
                     grabCube.GetComponent<Renderer>().material.color = cube.GetComponent<Renderer>().material.color;
-                    cube.gameObject.SetActive(false);//´êÀº ¾Ö ¾ø¾Ö°í
-                    cubeValue = cube.value;//º¯¼ö¿¡ ¹ë·ù°ª ³Ö¾î
+                    cube.gameObject.SetActive(false);//ë‹¿ì€ ì•  ì—†ì• ê³ 
+                    cubeValue = cube.value;//ë³€ìˆ˜ì— ë°¸ë¥˜ê°’ ë„£ì–´
                     isHold = true;
                 }
 
-                else // µç »óÅÂ¿¡¼­ »óÀÚ¸¦ ÅÍÄ¡ÇØµû!
+                else // ë“  ìƒíƒœì—ì„œ ìƒìë¥¼ í„°ì¹˜í•´ë”°!
                 {
-                    if (cubeValue == cube.value)//µé°íÀÖ´Â¾Ö¶û ´êÀº ¾Ö¶û °ªÀÌ °°´Ù¸é
+                    if (cubeValue == cube.value)//ë“¤ê³ ìˆëŠ”ì• ë‘ ë‹¿ì€ ì• ë‘ ê°’ì´ ê°™ë‹¤ë©´
                     {
-                        cube.transform.gameObject.SetActive(false);//´êÀº ¾Ö ¾ø¾Ö°í,, ¤Ì Á¸³ªÇÏ±â½È´Ù ½±¹ß
-                        grabCube.transform.gameObject.SetActive(false);//µé°íÀÖ´Â¾Ö ¾ø¾Ö°í
+                        cube.transform.gameObject.SetActive(false);//ë‹¿ì€ ì•  ì—†ì• ê³ ,, ã…œ ì¡´ë‚˜í•˜ê¸°ì‹«ë‹¤ ì‰½ë°œ
+                        grabCube.transform.gameObject.SetActive(false);//ë“¤ê³ ìˆëŠ”ì•  ì—†ì• ê³ 
                         cubeValue = -1;
                         isHold = false;
                         cubeNum -= 2;
                     }
-                    else //°ªÀÌ ´Ù¸£´Ù~~~ ´Ù¸¥ ¾Ö¸¦ Âï¾ù´Ù!
+                    else //ê°’ì´ ë‹¤ë¥´ë‹¤~~~ ë‹¤ë¥¸ ì• ë¥¼ ì°ì—‡ë‹¤!
                     {
                         cube.GetComponent<Renderer>().material.color = Color.red;
                         check = 1;
-                        //ÇÑ 0.5ÃÊ µÚ¿¡ »ö ¿ø»óº¹±¸
+                        //í•œ 0.5ì´ˆ ë’¤ì— ìƒ‰ ì›ìƒë³µêµ¬
                         StartCoroutine(restoreColor(cube));
 
                     }
                 }
             }
-
         }
     }
 
-    IEnumerator goBack()//1Ãş¿¡¼­ »óÀÚ¶û ´êÀ¸¸é µÚ·Î Æ¨±â´Â°Å
+    IEnumerator goBack()//1ì¸µì—ì„œ ìƒìë‘ ë‹¿ìœ¼ë©´ ë’¤ë¡œ íŠ•ê¸°ëŠ”ê±°
     {
         ///rigid.AddForce(Vector3.back * 15, ForceMode.Impulse);
-        this.transform.Translate(new Vector3(0, 0, -30) * Time.deltaTime);
+        this.transform.Translate(new Vector3(0, 0, -40) * Time.deltaTime);
 
         check = -1;
         isHold = true;
@@ -107,13 +106,13 @@ public class cubeMapManager : MonoBehaviour
 
         switch (cube.value)
         {
-            case 1: // ºĞÈ«
+            case 1: // ë¶„í™
                 cube.GetComponent<Renderer>().material.color = new Color(255f / 255f, 181f / 255f, 242f / 255f, 255f / 255f);
                 break;
-            case 2: //³ë¶õ»ö
+            case 2: //ë…¸ë€ìƒ‰
                 cube.GetComponent<Renderer>().material.color = new Color(253f / 255f, 235f / 255f, 103f / 255f, 255f / 255f);
                 break;
-            case 3://ÇÏ´Ã
+            case 3://í•˜ëŠ˜
                 cube.GetComponent<Renderer>().material.color = new Color(110f / 255f, 241f / 255f, 255f / 255f, 255f / 255f);
                 break;
         }

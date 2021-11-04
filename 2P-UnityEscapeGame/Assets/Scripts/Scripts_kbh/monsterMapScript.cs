@@ -7,6 +7,7 @@ using System.IO;
 
 public class monsterMapScript : MonoBehaviour
 {
+  
     //2층
     GameObject _obj;
     GameObject holdPosition;
@@ -26,11 +27,7 @@ public class monsterMapScript : MonoBehaviour
     private bool _mouseState;//마우스 상태
     GameObject exit;
     private bool goApartment;
-    //saveManagerScript manager;
     judginScript judge;
-    //public Queue q = new Queue();
-
-    //string fullpth = "Assets/Resources/kbh";
 
 
     private void Start()
@@ -45,13 +42,14 @@ public class monsterMapScript : MonoBehaviour
         goApartment = false;
         holdPosition = GameObject.Find("holdingCoin");
         judge = GameObject.Find("judging").GetComponent<judginScript>();
-        ///anager = GameObject.Find("saveManager").GetComponent<saveManagerScript>();
 
+        for (int i = 0; i < 5; i++)
+        {
+            Debug.Log(judge.arr1[i]);
+        }
     }
-
     private void Awake()
     {
-
     }
     private void Update()
     {
@@ -69,6 +67,9 @@ public class monsterMapScript : MonoBehaviour
                 Invoke("tryAgain", 0.5f);
             }
         }
+
+
+    
 
         if (coinCheck.check == 1)//동전 들고있ㄷ고
         {
@@ -144,7 +145,6 @@ public class monsterMapScript : MonoBehaviour
         }
         if (other.tag == "Things")
         {
-            //2층
             if (other.name == "teleB")
             {
                 Destroy(other.gameObject);
@@ -156,40 +156,26 @@ public class monsterMapScript : MonoBehaviour
 
                 check = 2;
             }
-
             if (other.name == "Door")//동전 들고 문 앞에 가면coinCheck.check==1
             {
                 //문열어
                 isBack = true;//뒤로 튕길 준비 완.
                 open = 1;
             }
-
-            
         }
     }
-    //void readText()//이전 맵 데이터 저장되어있는 txt의 정보 빼와서 다시 que에 넣기~ ㅎ
-    //{
-    //    TextAsset data = Resources.Load("kbh/mapData", typeof(TextAsset)) as TextAsset;
-    //    StringReader sr = new StringReader(data.text);
 
-    //    //먼저 한 줄 읽기
-    //    string source = sr.ReadLine();
-
-    //    while (source != null)
-    //    {
-    //        q.Enqueue(source.Split('\n')) ;
-    //        Debug.Log(q.Dequeue());
-    //    }
-    
     IEnumerator goApartmentCo()
     {
+        AsyncOperation async = SceneManager.LoadSceneAsync("md1_3");
+        while (!async.isDone)
+            yield return null;
+    }
+    public void audioGunFunc()
+    {
 
-            AsyncOperation async = SceneManager.LoadSceneAsync("md1_3");
-            while (!async.isDone)
-                yield return null;
     }
 }
 
-    
 
 

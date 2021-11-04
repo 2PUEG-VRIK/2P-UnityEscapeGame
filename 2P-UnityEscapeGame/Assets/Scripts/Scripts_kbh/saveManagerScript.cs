@@ -21,12 +21,11 @@ public class saveManagerScript : MonoBehaviour
         manager = GameObject.Find("Man").GetComponent<gameManager3>();
         man = GameObject.FindWithTag("Player");
         j = GameObject.Find("judging").GetComponent<judginScript>();
-        if (j.yes)
+        if (j.yes)//arr에있던 수들 각 변수에 넣어
         {
-            man.transform.position = (Vector3)j.q1.Dequeue();
-            manager.check = (int)j.q1.Dequeue();
-            manager.value = (int)j.q1.Dequeue();
-
+            man.transform.position =new Vector3((int)j.arr1[0]-15, (int)j.arr1[1], (int)j.arr1[2] );
+            manager.check = (int)j.arr1[3];
+            manager.value = (int)j.arr1[4];
         }
 
     }
@@ -34,7 +33,7 @@ public class saveManagerScript : MonoBehaviour
     void Update()
     {
 
-      
+
         //if (manager.saveData)//저장해야징
         //{
         //    while (manager.que.Count > 0)
@@ -45,7 +44,6 @@ public class saveManagerScript : MonoBehaviour
         //    sw.Flush(); sw.Close();
         //}
 
-        
+
     }
 }
-  

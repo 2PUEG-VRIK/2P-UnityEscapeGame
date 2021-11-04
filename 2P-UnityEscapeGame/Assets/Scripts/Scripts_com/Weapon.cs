@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Weapon : MonoBehaviour
 {
@@ -16,6 +17,15 @@ public class Weapon : MonoBehaviour
     public GameObject bullet;
     public Transform bulletCasePos;
     public GameObject bulletCase;
+    public AudioClip audioSwing;
+    AudioSource audioSource;
+
+
+    private void Awake()
+    {
+        this.audioSource = GetComponent<AudioSource>();
+
+    }
 
     private void Update()
     {
@@ -44,14 +54,16 @@ public class Weapon : MonoBehaviour
     }
     IEnumerator Swing()
     {
+        audioSource.clip = audioSwing;
+        audioSource.Play();
         trailEffect.enabled = true;
 
-        yield return new WaitForSeconds(0.2f);
+        //yield return new WaitForSeconds(0.2f);
         meleeArea.enabled = true;
         trailEffect.enabled = true;
 
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(1f);
         meleeArea.enabled = false;
 
         yield return new WaitForSeconds(0.6f);

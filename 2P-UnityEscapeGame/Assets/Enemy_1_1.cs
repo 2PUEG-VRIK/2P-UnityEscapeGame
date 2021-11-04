@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 
 public class Enemy_1_1 : MonoBehaviour
 {
-
-
-
     public int maxHealth;
     public int curHealth;
     public Transform target;
@@ -19,6 +17,8 @@ public class Enemy_1_1 : MonoBehaviour
     Rigidbody rigid;
     BoxCollider boxCollider;
     Animator anim;
+    public AudioClip audioEnemyDie;
+    AudioSource audioSource;
 
 
     void Awake()//초기화
@@ -28,6 +28,8 @@ public class Enemy_1_1 : MonoBehaviour
         mat = GetComponentInChildren<MeshRenderer>().material;
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
+        this.audioSource = GetComponent<AudioSource>();
+
         Invoke("ChaseStart", 1);
     }
 
@@ -58,11 +60,12 @@ public class Enemy_1_1 : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Melee")
+        if (other.tag == "Weapon" && other.name=="Weapon Hammer")
         {
             Weapon weapon = other.GetComponent<Weapon>();
             curHealth -= weapon.damage;
             Vector3 reactVec = transform.position - other.transform.position;
+            Debug.Log("아포!");
             StartCoroutine(OnDamage(reactVec));
         }
 
@@ -71,6 +74,8 @@ public class Enemy_1_1 : MonoBehaviour
             Bullet bullet = other.GetComponent<Bullet>();
             curHealth -= bullet.damage;
             Vector3 reactVec = transform.position - other.transform.position;
+            Debug.Log("아포!");
+
             Destroy(other.gameObject);//적에 닿는순간 총알 안보이게 하기~ 관통하면 안되니까
             StartCoroutine(OnDamage(reactVec));
 
@@ -92,13 +97,14 @@ public class Enemy_1_1 : MonoBehaviour
             gameObject.layer = 14;//EnemyDead로 바꿔
             isChase = false;
             nav.enabled = false;
+            audioSource.clip = audioEnemyDie;
+            audioSource.Play();
             anim.SetTrigger("doDie");
 
             reactVec = reactVec.normalized;//값 1로 통일
-            reactVec += Vector3.up * 2;
-            rigid.AddForce(reactVec * 7, ForceMode.Impulse);
-           
-            Destroy(gameObject, 0.6f); //1초 뒤에 사라짐
+            reactVec += Vector3.up * 1;
+            rigid.AddForce(reactVec * 4, ForceMode.Impulse);
+            Destroy(gameObject, 0.4f); //1초 뒤에 사라짐
             //사라진 그 자리에 아이템 하나 넣어주기
         }
     }

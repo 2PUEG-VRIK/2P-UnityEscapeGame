@@ -69,6 +69,12 @@ public class Man : MonoBehaviour
     IEnumerator enu1; //ladder에 필요
     Vector3 prePos;//뒤로 점프하기 전 플레이어의 기존 위치
 
+    public AudioClip audioGunShot;
+    public AudioClip audioJump;
+    public AudioClip audioEatItem;
+    public AudioClip audioSwap;
+    AudioSource audioSource;
+
     void Start()
     {
         //jumpPower = 150.0f;
@@ -86,6 +92,8 @@ public class Man : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
         rigid = GetComponent<Rigidbody>();
+        this.audioSource = GetComponent<AudioSource>();
+
     }
 
     void Update()
@@ -216,7 +224,8 @@ public class Man : MonoBehaviour
         // 점프 키 눌렀을 때 아이템 있으면 아이템 먹음.
         if (jDown)
         {
-            Debug.Log(isJump.ToString());
+            audioSource.clip = audioJump;
+            audioSource.Play();
             if (nearObject != null)
             {
                 // 아이템 먹기
@@ -259,6 +268,8 @@ public class Man : MonoBehaviour
             equipWeapon.gameObject.SetActive(true);
 
             anim.SetTrigger("Swap");
+            audioSource.clip = audioSwap; ;
+            audioSource.Play();
             isSwap = true;
 
             Invoke("SwapOut", 0.5f);
@@ -287,6 +298,9 @@ public class Man : MonoBehaviour
             anim.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "Swing" : "Shot");
             if (equipWeapon.type != Weapon.Type.Melee)//총이면 총알 -1
             {
+                audioSource.clip = audioGunShot;
+                audioSource.Play();
+
                 ammo--;
                 if (ammo <= 0)
                     ammo = 0;
@@ -339,6 +353,7 @@ public class Man : MonoBehaviour
         if (other.tag == "Item")
         {
             Item item = other.GetComponent<Item>();
+
             switch (item.type)
             {
                 case Item.Type.Weapon:
@@ -365,12 +380,14 @@ public class Man : MonoBehaviour
 
             }
             Interaction(other.transform.gameObject);
+            audioSource.clip = audioEatItem;
+            audioSource.Play();
             Destroy(other.gameObject);
         }
 
         else if (other.tag == "Enemy")
         {
-            //prePos = this.transform.position;
+            //prePos = this.transform.position;ㅁㅁaaaaaaAAAAAA
             health--;
             Bump();
             //Debug.Log("닿았따----------------------------");
@@ -395,7 +412,10 @@ public class Man : MonoBehaviour
         }
           
         // 바닥 닿으면 다시 점프 가능상태로 바꿔주기.
-        //if (Physics.Raycast(transform.position, -transform.up, 3))
+        if (Physics.Raycast(transform.position, -transform.up, 3, LayerMask.GetMask("Wall")))
+        {
+            isJump = false;
+        }
         if (collision.gameObject.layer == 7 || collision.gameObject.tag == "Box" || collision.gameObject.tag == "Boxsj")
 
         {
