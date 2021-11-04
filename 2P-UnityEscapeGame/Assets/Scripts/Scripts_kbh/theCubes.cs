@@ -64,7 +64,7 @@ public class theCubes : MonoBehaviour
     {
         // 이거 z값을 카메라의 z값 기준으로 설정 했음.
         camPos = GameObject.Find("Man Cam").transform.position;
-        Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, camPos.z + 140);
+        Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, camPos.z + 130);
         transform.position = Camera.main.ScreenToWorldPoint(mousePosition);
         //transform.position = new Vector3(Camera.main.ScreenToWorldPoint(mousePosition).x , Camera.main.ScreenToWorldPoint(mousePosition).y, 50);
 
