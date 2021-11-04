@@ -160,6 +160,8 @@ public class gameManager3 : MonoBehaviour
             nameText.text = GetName(0, 0);
             changeNameIcon(0);
             talkPanel.SetActive(true);
+            howTo.SetActive(false);
+
             talkText.text = "놀라라.. 너무 무서웠어.. 그 꽃이 날 속인건가?\n다시 가서 따져야겠어!!!";
 
         }

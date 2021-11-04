@@ -185,7 +185,7 @@ public class cubeMapManagerScript : MonoBehaviour
     IEnumerator goApartmentCo()
     {
 
-        AsyncOperation async = SceneManager.LoadSceneAsync("md1_3");
+        AsyncOperation async = SceneManager.LoadSceneAsync("Stage10");
         while (!async.isDone)
             yield return null;
     }
