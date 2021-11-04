@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+// 김보현 개인코드
+
 public class cubeMapManagerScript : MonoBehaviour
 {
     //1층- 큐브들관련
@@ -80,52 +82,69 @@ public class cubeMapManagerScript : MonoBehaviour
     {
         if (other.transform.tag == "Things")
         {
-            if (other.transform.name == "Cube" || other.transform.name == "_Cube")
+            cube = other.transform.gameObject.GetComponent<theCubes>();
+            if (!isHold)//들고있지않은 상태에서 애를 만났따!
             {
-                cube = other.transform.gameObject.GetComponent<theCubes>();
-                if (!isHold)//들고있지않은 상태에서 애를 만났따!
+                if (cube.name == "_Cube")
+                    Instantiate(hammer_prefab, other.transform.position, Quaternion.identity);
+                audioSource.clip = audioCubeTouch;
+                audioSource.Play();
+                grabCube.transform.gameObject.SetActive(true);//들고있게 하고
+                grabCube.GetComponent<Renderer>().material.color = cube.GetComponent<Renderer>().material.color;
+                cube.gameObject.SetActive(false);//닿은 애 없애고
+                cubeValue = cube.value;//변수에 밸류값 넣어
+                Debug.Log("닿앗다 " + cubeValue) ;
+                isHold = true;
+
+            }
+
+            else // 든 상태에서 상자를 터치해따!
+            {
+                if (cubeValue == cube.value)//들고있는애랑 닿은 애랑 값이 같다면
                 {
-                    if (other.transform.name == "_Cube")
+                    if (cube.name == "_Cube")
                         Instantiate(hammer_prefab, other.transform.position, Quaternion.identity);
-                    audioSource.clip = audioCubeTouch;
+                    Debug.Log("닿은 애: " + cube.value + "  있던 애:  " + cubeValue);
+                    audioSource.clip = audioCubeCorrect;
                     audioSource.Play();
-                    grabCube.transform.gameObject.SetActive(true);//들고있게 하고
-                    grabCube.GetComponent<Renderer>().material.color = cube.GetComponent<Renderer>().material.color;
-                    cube.gameObject.SetActive(false);//닿은 애 없애고
-                    cubeValue = cube.value;//변수에 밸류값 넣어
-                    isHold = true;
+                    cube.transform.gameObject.SetActive(false);//닿은 애 없애고,, ㅜ 존나하기싫다 쉽발
+                    grabCube.transform.gameObject.SetActive(false);//들고있는애 없애고
+                    cubeValue = -1;
+                    isHold = false;
+                    cubeNum -= 2;
                 }
-
-                else // 든 상태에서 상자를 터치해따!
+                else //값이 다르다~~~ 다른 애를 찍엇다!
                 {
-                    if (cubeValue == cube.value)//들고있는애랑 닿은 애랑 값이 같다면
-                    {
-                        if (other.transform.name == "_Cube")
-                            Instantiate(hammer_prefab, other.transform.position, other.transform.rotation);
-                        audioSource.clip = audioCubeCorrect;
-                        audioSource.Play();
-                        cube.transform.gameObject.SetActive(false);//닿은 애 없애고,, ㅜ 존나하기싫다 쉽발
-                        grabCube.transform.gameObject.SetActive(false);//들고있는애 없애고
-                        cubeValue = -1;
-                        isHold = false;
-                        cubeNum -= 2;
-                    }
-                    else //값이 다르다~~~ 다른 애를 찍엇다!
-                    {
-                        audioSource.clip = audioCubeWrong;
-                        audioSource.Play();
-                        cube.GetComponent<Renderer>().material.color = Color.red;
-                        check = 1;
-                        //한 0.5초 뒤에 색 원상복구
-                        StartCoroutine(restoreColor(cube));
+                    audioSource.clip = audioCubeWrong;
+                    audioSource.Play();
+                    cube.GetComponent<Renderer>().material.color = Color.red;
+                    check = 1;
+                    //한 0.5초 뒤에 색 원상복구
+                    StartCoroutine(restoreColor(cube));
 
-                    }
                 }
             }
 
         }
 
-        if (other.transform.tag == "Item")
+        if(other.transform.tag=="Water")
+        {
+            if (!isHold)//들고있지않은 상태에서 애를 만났따!
+            {
+                if (cube.name == "_Cube")
+                    Instantiate(hammer_prefab, other.transform.position, Quaternion.identity);
+                audioSource.clip = audioCubeTouch;
+                audioSource.Play();
+                grabCube.transform.gameObject.SetActive(true);//들고있게 하고
+                grabCube.GetComponent<Renderer>().material.color = cube.GetComponent<Renderer>().material.color;
+                cube.gameObject.SetActive(false);//닿은 애 없애고
+                cubeValue = cube.value;//변수에 밸류값 넣어
+                isHold = true;
+
+            }
+        }
+
+        if (other.transform.tag == "Item" && cubeNum==0)
         {
             hammerGrab.SetActive(true);
             goApartment = true;
