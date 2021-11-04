@@ -31,9 +31,8 @@ public class camArea : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Triger 사라져라!" + other.name);
-        other.gameObject.GetComponent<MeshRenderer>().enabled = false;
-
+        Debug.Log("Triger 사라져라!" + other.name); 
+        other.gameObject.GetComponent<MeshRenderer>().enabled = false; 
     }
 
     private void OnTriggerExit(Collider other)

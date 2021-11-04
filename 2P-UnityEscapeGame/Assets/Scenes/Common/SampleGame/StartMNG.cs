@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class StartMNG : MonoBehaviour
 {
-    public InputField playerNM;
-    public GameObject notDestroy;
+    //public InputField playerNM;
+    //public GameObject notDestroy;
  
     // Start is called before the first frame update
     void Start()
@@ -25,10 +25,10 @@ public class StartMNG : MonoBehaviour
     public void Stage_Start()
     {
 
-        notDestroy.GetComponent<SingleGameMNG>().playername = playerNM.text;
-        createFolder(playerNM.text);
+        //notDestroy.GetComponent<SingleGameMNG>().playername = playerNM.text;
+        //createFolder(playerNM.text);
 
-        SceneManager.LoadScene("Stage1");
+        SceneManager.LoadScene("Stage01");
     }
       
     private void createFolder(string playername)

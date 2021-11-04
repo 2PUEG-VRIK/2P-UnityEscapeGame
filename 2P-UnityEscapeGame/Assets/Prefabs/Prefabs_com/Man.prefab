@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 30
-  jumpPower: 200
+  jumpPower: 170
   isJump: 0
   isGRbtn: 0
   fastPos: {fileID: 9019174534868594130}
@@ -122,6 +122,13 @@ MonoBehaviour:
   maxHealth: 0
   ammo: 0
   maxAmmo: 0
+<<<<<<< Updated upstream
+=======
+  audioGunShot: {fileID: 8300000, guid: 4310474905e266640852f43bd609a1a4, type: 3}
+  audioJump: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
+  audioEatItem: {fileID: 8300000, guid: 79180f511d89441b9aa23ccae1992fe0, type: 3}
+  audioSwap: {fileID: 0}
+>>>>>>> Stashed changes
   check: -1
 --- !u!1 &3658219605795857893
 GameObject:
@@ -5313,6 +5320,7 @@ MonoBehaviour:
   bullet: {fileID: 0}
   bulletCasePos: {fileID: 0}
   bulletCase: {fileID: 0}
+  audioSwing: {fileID: 0}
 --- !u!1 &6379704766913484923
 GameObject:
   m_ObjectHideFlags: 0

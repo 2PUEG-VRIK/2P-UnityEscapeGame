@@ -41,6 +41,42 @@ public class Permanent : MonoBehaviour
         {
             for (int i = 0; i < Total-Gnum; i++)
                 GameObject.Find("Monster").transform.GetChild(i).gameObject.SetActive(true);
+<<<<<<< Updated upstream
+=======
+            time = 0.0f; isTimerOn = true; check_p = 0;
+            first = true;
+        }
+    }
+    IEnumerator popHowTo()
+    {
+        if (2f < time && time < 7f)
+        {
+            howTo.SetActive(true);
+            if (check_p == 0)
+                StartCoroutine(popUpAudioCo());
+
+        }
+        else if (time > 7f)
+        {
+            howTo.SetActive(false);
+            isTimerOn = false;
+            StopCoroutine(popHowTo());
+        }
+        yield return null;
+    }
+
+    IEnumerator popHowTo2()
+    {
+        if (2f < time && time < 7f)
+        {
+            howTo.SetActive(true);
+            howTo.transform.GetChild(0).gameObject.SetActive(false);
+            howTo.transform.GetChild(1).gameObject.SetActive(true);
+            //howTo.GetComponent<Text>().text = 
+            if (check_p == 0)
+                StartCoroutine(popUpAudioCo());
+
+>>>>>>> Stashed changes
         }
     }
 }
