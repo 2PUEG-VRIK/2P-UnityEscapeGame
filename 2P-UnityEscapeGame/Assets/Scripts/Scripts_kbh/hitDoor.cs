@@ -15,7 +15,7 @@ public class hitDoor : MonoBehaviour
     private int doorRotCheck = -1;
     private bool goBack = false;//문 열리면 뒤로 튕기렴
     private GameObject player;
-    static Vector3 prePlayerPos;//문에 튕기기 전 내 위치
+    Vector3 prePlayerPos;//문에 튕기기 전 내 위치
     //Vector3 offset;//문과 나 사이의 거리
     //float sqrLen;//거리관련 변수
 
@@ -46,12 +46,14 @@ public class hitDoor : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Melee" && value == 0)
+        if (other.tag == "Melee" &&this.value == 0)
         {
             Weapon weapon = other.GetComponent<Weapon>();
             ch -= weapon.damage;
             Vector3 reactVec = transform.position - other.transform.position;
+            Debug.Log("아프다는 ㅜ");
             StartCoroutine(OnDamage());
+
         }
 
         else if (other.tag == "Bullet")
