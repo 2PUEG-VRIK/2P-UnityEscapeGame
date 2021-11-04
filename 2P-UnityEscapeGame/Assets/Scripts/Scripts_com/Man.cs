@@ -71,6 +71,7 @@ public class Man : MonoBehaviour
 
     public AudioClip audioGunShot;
     public AudioClip audioJump;
+    public AudioClip audioEatItem;
     AudioSource audioSource;
 
     void Start()
@@ -349,6 +350,7 @@ public class Man : MonoBehaviour
         if (other.tag == "Item")
         {
             Item item = other.GetComponent<Item>();
+
             switch (item.type)
             {
                 case Item.Type.Weapon:
@@ -375,6 +377,8 @@ public class Man : MonoBehaviour
 
             }
             Interaction(other.transform.gameObject);
+            audioSource.clip = audioEatItem;
+            audioSource.Play();
             Destroy(other.gameObject);
         }
 
