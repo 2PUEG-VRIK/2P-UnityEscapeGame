@@ -72,6 +72,7 @@ public class Man : MonoBehaviour
     public AudioClip audioGunShot;
     public AudioClip audioJump;
     public AudioClip audioEatItem;
+    public AudioClip audioSwap;
     AudioSource audioSource;
 
     void Start()
@@ -267,6 +268,8 @@ public class Man : MonoBehaviour
             equipWeapon.gameObject.SetActive(true);
 
             anim.SetTrigger("Swap");
+            audioSource.clip = audioSwap; ;
+            audioSource.Play();
             isSwap = true;
 
             Invoke("SwapOut", 0.5f);

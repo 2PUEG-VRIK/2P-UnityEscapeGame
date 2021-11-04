@@ -46,7 +46,7 @@ public class hitDoor : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Melee" &&this.value == 0)
+        if (other.tag == "Weapon" &&this.value == 0)
         {
             Weapon weapon = other.GetComponent<Weapon>();
             ch -= weapon.damage;

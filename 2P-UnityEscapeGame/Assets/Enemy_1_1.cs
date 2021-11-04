@@ -6,9 +6,6 @@ using UnityEngine.AI;
 
 public class Enemy_1_1 : MonoBehaviour
 {
-
-
-
     public int maxHealth;
     public int curHealth;
     public Transform target;
@@ -19,7 +16,6 @@ public class Enemy_1_1 : MonoBehaviour
     Rigidbody rigid;
     BoxCollider boxCollider;
     Animator anim;
-
 
     void Awake()//√ ±‚»≠
     {
@@ -58,7 +54,7 @@ public class Enemy_1_1 : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Melee")
+        if (other.tag == "Weapon" && other.name=="Weapon Hammer")
         {
             Weapon weapon = other.GetComponent<Weapon>();
             curHealth -= weapon.damage;
