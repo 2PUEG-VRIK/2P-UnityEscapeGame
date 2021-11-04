@@ -35,12 +35,15 @@ public class Permanent : MonoBehaviour
         }
     }
 
+    private bool first = false;
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.transform.name == "Plain")
+        if (collision.transform.name == "Plain" && !first)
         {
-            for (int i = 0; i < Total-Gnum; i++)
+            
+            for (int i = 0; i < 5; i++)
                 GameObject.Find("Monster").transform.GetChild(i).gameObject.SetActive(true);
+            first = true;
         }
     }
 }

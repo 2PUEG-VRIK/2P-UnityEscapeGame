@@ -63,6 +63,7 @@ public class Enemy_1_1 : MonoBehaviour
             Weapon weapon = other.GetComponent<Weapon>();
             curHealth -= weapon.damage;
             Vector3 reactVec = transform.position - other.transform.position;
+            Debug.Log("아포!");
             StartCoroutine(OnDamage(reactVec));
         }
 
@@ -71,6 +72,8 @@ public class Enemy_1_1 : MonoBehaviour
             Bullet bullet = other.GetComponent<Bullet>();
             curHealth -= bullet.damage;
             Vector3 reactVec = transform.position - other.transform.position;
+            Debug.Log("아포!");
+
             Destroy(other.gameObject);//적에 닿는순간 총알 안보이게 하기~ 관통하면 안되니까
             StartCoroutine(OnDamage(reactVec));
 
