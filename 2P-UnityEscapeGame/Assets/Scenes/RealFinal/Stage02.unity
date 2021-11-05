@@ -3477,7 +3477,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uD611\uB3D9 \uBAA8\uB4DC\nStage1"
+  m_Text: '
+
+    Stage1'
 --- !u!222 &993422321
 CanvasRenderer:
   m_ObjectHideFlags: 0
