@@ -107,7 +107,7 @@ public class gameManager3 : MonoBehaviour
     AudioSource audioSource;
     private int final;
     GameObject howTo;
-
+    GameObject firstArrow;
     private void Start()
     {
         yourIndex = 0; myIndex = 0;
@@ -126,6 +126,7 @@ public class gameManager3 : MonoBehaviour
         judge = GameObject.Find("judging");
         judgeSc = judge.GetComponent<judginScript>();
         lightHidden = GameObject.Find("lightHidden");
+        firstArrow = GameObject.Find("arrow 3");
         //saveM = GameObject.Find("saveManager");
         //data = saveM.GetComponent<saveManagerScript>();
         isTimerOn = true;
@@ -157,10 +158,13 @@ public class gameManager3 : MonoBehaviour
             Debug.Log("myindex" + myIndex);
             Debug.Log("yours" + yourIndex);
             twice = true;
+            talkPanel.SetActive(true);
             nameText.text = GetName(0, 0);
             changeNameIcon(0);
-            talkPanel.SetActive(true);
             howTo.SetActive(false);
+            //firstArrow.SetActive(false);
+            isTimerOn = false;
+            time = 0.0f;
 
             talkText.text = "놀라라.. 너무 무서웠어.. 그 꽃이 날 속인건가?\n다시 가서 따져야겠어!!!";
 
@@ -179,6 +183,8 @@ public class gameManager3 : MonoBehaviour
             //this.transform.localPosition = new Vector3(150, 6, 32);
             first = false;
             twice = true; third = true;
+            isTimerOn = false;
+            time = 0.0f;
             myIndex = 6;
             yourIndex = 5;
             check = 5;
@@ -187,13 +193,15 @@ public class gameManager3 : MonoBehaviour
             man.hasWeapons[0] = true;
             man.sDown1 = true;
             man.Swap();
-            this.transform.localPosition = new Vector3(150, 6, 32);
+            GameObject.FindWithTag("Player").transform.position = new Vector3(150, 6, 32);
             Debug.Log(check);
             Debug.Log(this.transform.position);
             talkPanel.SetActive(true);
             nameText.text = GetName(0, 0);
             changeNameIcon(0);
             talkText.text = "휴~ 이제 오리한테 망치를 갖다줘야지!";
+            //firstArrow.SetActive(false);
+
             howTo.SetActive(false);
 
         }
@@ -235,6 +243,8 @@ public class gameManager3 : MonoBehaviour
             if (first)
                 StartCoroutine(popHowTo());
         }
+        if (!isTimerOn)
+            time = 0.0f;
         if (Input.GetKeyDown(KeyCode.X) && isTouch)//말하는 npc랑 닿았고 X를 눌렀다면~
         {
             myLastIndex = textGroup[value].Length;//내 대화 길이 체크하고
@@ -608,8 +618,11 @@ public class gameManager3 : MonoBehaviour
                 yourIndex = 0; myIndex = 0;
                 yourLastIndex = 0; myLastIndex = 0;
                 if (value == 1)//양이랑 대화가 끝나면
+                {
                     check = 1;
+                    firstArrow.SetActive(false);
 
+                }
                 else if (value == 2)//두더지랑 대화 끝났고 que에 저장하면서 check=-4될 예정. 이 코드 맞는코드임
                     check = 4;
                 else if (value == 4)//오리랑 아예 대화 끝났으면 이제 날 따라올 차례
@@ -733,6 +746,7 @@ public class gameManager3 : MonoBehaviour
         isTimerOn = true; value = 1;
         if (2.5f < time && time < 5f)
         {
+
             talkPanel.SetActive(true);
             panelActive = true;
             nameText.text = GetName(1, 0);
@@ -763,13 +777,13 @@ public class gameManager3 : MonoBehaviour
         }
         else if (time > 14f)
         {
-            isTimerOn = false;
             check = -1;
 
             talkPanel.SetActive(false);
             panelActive = false;
             talkText.text = "";
             time = 0.0f;
+            isTimerOn = false;
 
             yield return null;
         }
@@ -872,7 +886,7 @@ public class gameManager3 : MonoBehaviour
     {
         isTimerOn = true;
         value = 4;
-        if (2f < time && time < 4f)
+        if (1f < time && time < 3f)
         {
             talkPanel.SetActive(true);
             panelActive = true;
@@ -881,39 +895,39 @@ public class gameManager3 : MonoBehaviour
 
             talkText.text = "와~~!! 드디어 돌이 깨졌어! 집에 갈 수 있어!!";
         }
-        else if (4f < time && time < 6f)
+        else if (3f < time && time < 5f)
         {
             talkText.text = "축하해~~^3^";
             nameText.text = GetName(4, 1);
             changeNameIcon(4);
         }
-        else if (6f < time && time < 9f)
+        else if (5f < time && time <8f)
         {
             nameText.text = GetName(0, 0);
             changeNameIcon(0);
 
             talkText.text = "고마워 오리야! 고마워 동식물들아! 다 너희 덕이야~!";
         }
-        else if (9f < time && time < 13f)
+        else if (8f < time && time < 11f)
         {
             talkText.text = "헤헷, 뭘 ~!! 그나저나 밤이 깊었어. 얼른 가 봐!";
             nameText.text = GetName(4, 1);
             changeNameIcon(4);
         }
-        else if (13f < time && time < 16f)
+        else if (11f < time && time < 14f)
         {
             nameText.text = GetName(0, 0);
             changeNameIcon(0);
 
             talkText.text = "응! 고마워 얘들아! 안녕~~~";
         }
-        else if (16f<time && time<19f)
+        else if (14f<time && time<17f)
         {
             talkText.text = "안녕~!";
             nameText.text = GetName(4, 1);
             changeNameIcon(4);
         }
-        else if (time > 19f)
+        else if (time > 17f)
         {
             isTimerOn = false;
             check = -1;

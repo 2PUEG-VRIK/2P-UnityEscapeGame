@@ -64,9 +64,6 @@ public class monsterMapScript : MonoBehaviour
             }
         }
 
-
-    
-
         if (coinCheck.check == 1)//동전 들고있ㄷ고
         {
             holdPosition.transform.localPosition = new Vector3(0, 0.27f, -0.25f);
@@ -166,10 +163,7 @@ public class monsterMapScript : MonoBehaviour
         while (!async.isDone)
             yield return null;
     }
-    public void audioGunFunc()
-    {
 
-    }
 }
 
 

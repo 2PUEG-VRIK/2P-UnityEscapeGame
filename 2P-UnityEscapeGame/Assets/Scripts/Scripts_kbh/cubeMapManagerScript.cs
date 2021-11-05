@@ -48,6 +48,7 @@ public class cubeMapManagerScript : MonoBehaviour
         judge = GameObject.Find("judging").GetComponent<judginScript>();
         howTo = GameObject.Find("bbo").transform.GetChild(0).gameObject;
         time = 0.0f;
+        cubeNum = 18;
         isTimerOn = true;
 
     }
@@ -62,7 +63,7 @@ public class cubeMapManagerScript : MonoBehaviour
         if (isHold && check == 1)
             StartCoroutine("goBack");
 
-        if (cubeNum == 16)
+        if (cubeNum == 0)
         {
             GameObject.Find("Weapon Hammer").GetComponent<SphereCollider>().isTrigger = true;
             judge.yes_2 = true;
@@ -128,24 +129,24 @@ public class cubeMapManagerScript : MonoBehaviour
 
         }
 
-        if(other.transform.tag=="Water")
-        {
-            if (!isHold)//들고있지않은 상태에서 애를 만났따!
-            {
-                if (cube.name == "_Cube")
-                    Instantiate(hammer_prefab, other.transform.position, Quaternion.identity);
-                audioSource.clip = audioCubeTouch;
-                audioSource.Play();
-                grabCube.transform.gameObject.SetActive(true);//들고있게 하고
-                grabCube.GetComponent<Renderer>().material.color = cube.GetComponent<Renderer>().material.color;
-                cube.gameObject.SetActive(false);//닿은 애 없애고
-                cubeValue = cube.value;//변수에 밸류값 넣어
-                isHold = true;
+        //if(other.transform.tag=="Water")
+        //{
+        //    if (!isHold)//들고있지않은 상태에서 애를 만났따!
+        //    {
+        //        if (cube.name == "_Cube")
+        //            Instantiate(hammer_prefab, other.transform.position, Quaternion.identity);
+        //        audioSource.clip = audioCubeTouch;
+        //        audioSource.Play();
+        //        grabCube.transform.gameObject.SetActive(true);//들고있게 하고
+        //        grabCube.GetComponent<Renderer>().material.color = cube.GetComponent<Renderer>().material.color;
+        //        cube.gameObject.SetActive(false);//닿은 애 없애고
+        //        cubeValue = cube.value;//변수에 밸류값 넣어
+        //        isHold = true;
 
-            }
-        }
+        //    }
+        //}
 
-        if (other.transform.tag == "Item" && cubeNum==16)
+        if (other.transform.tag == "Item" && cubeNum==0)
         {
             hammerGrab.SetActive(true);
             goApartment = true;

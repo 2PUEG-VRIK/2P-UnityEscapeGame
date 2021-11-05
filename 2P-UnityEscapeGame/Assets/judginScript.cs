@@ -42,8 +42,7 @@ public class judginScript : MonoBehaviour
             arr1.Add(v);
             arr1.Add(6);//꽃이랑 대화이어가야하므로 내 index
             arr1.Add(5);//꽃 index 저장
-            for (int i = 0; i < arr1.Count; i++)
-                Debug.Log(arr1[i]);
+            
             gameManager.check = -4;
         }
         Debug.Log(gameManager.check);
