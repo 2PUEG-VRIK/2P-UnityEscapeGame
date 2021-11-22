@@ -20,14 +20,19 @@ public class FinishMNG : MonoBehaviour
 
     public void ExitGame()
     {
-        SingleGameMNG.Instance.Timer_Stop();
-
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit() ;
+            // 어플리케이션 종료
+#endif
     }
 
     public void RestartGame()
     {
 
         SceneManager.LoadScene("Stage01");
+
     }
 
 }

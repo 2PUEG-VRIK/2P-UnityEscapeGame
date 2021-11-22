@@ -99,7 +99,7 @@ public class Permanent : MonoBehaviour
         if (2f < time && time < 7f)
         {
             howTo.SetActive(true);
-            howTo.GetComponent<Text>().text = "몬스터는 벽을 통과하니, 조심하세요!";
+            howTo.GetComponent<Text>().text = "몬스터는 벽을 통과하니, 조심하세요!\n그리고 무기를 얻으면 1,2,3 키를 눌러보세요.";
             if (check_p == 0)
                 StartCoroutine(popUpAudioCo());
 
